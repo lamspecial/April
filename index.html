@@ -3,165 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة التوقعات وأداء الفروع - آي إم سبيشل</title>
+    <title>آي إم سبيشل - النظام الداخلي</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f3f4f6; }
-        .tooltip { position: relative; display: inline-block; cursor: help; }
-        .tooltip .tooltiptext {
-            visibility: hidden; width: 200px; background-color: #374151; color: #fff;
-            text-align: center; border-radius: 6px; padding: 5px; position: absolute;
-            z-index: 1; bottom: 125%; left: 50%; margin-left: -100px; opacity: 0; transition: opacity 0.3s;
-            font-size: 0.8rem; font-weight: normal;
-        }
-        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
-        #adminModal { display: none; }
-        .newspaper-card { border-right: 4px solid #1e40af; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #fafafa; margin: 0; padding: 0; }
+        .newspaper-card { border-right: 4px solid #1e3a8a; }
+        .pin-box { transition: all 0.2s; }
+        .pin-box:focus { transform: scale(1.05); }
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+        /* تصميم خط التايم لاين للنشرات */
+        .timeline-border { border-right: 2px dashed #cbd5e1; }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="text-slate-800 relative min-h-screen flex flex-col">
 
-<div class="max-w-5xl mx-auto space-y-6">
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="md:col-span-2 bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-            <h2 class="text-xl font-bold mb-2 text-blue-800">الحاسبة التجريبية التراكمية (نظام التوقعات)</h2>
-            <p class="text-green-600 font-bold text-sm mb-5 bg-green-50 p-2 rounded border border-green-200">
-                🔒 جميع تصرفاتك وإدخالاتك في هذه الصفحة لا تظهر إلا لك، ولن يتم مشاركتها مع الإدارة.
-            </p>
-            
-            <div class="mb-4 bg-gray-50 p-3 rounded-lg border">
-                <label class="block text-sm font-bold text-gray-800 mb-2">كم أسبوع مر من الشهر الحالي؟</label>
-                <select id="trial_weeks" onchange="calculateTrial()" class="w-full px-4 py-2 border rounded-lg bg-white font-bold text-blue-700 focus:ring-2 focus:ring-blue-500">
-                    <option value="1">أسبوع واحد (النظام سيتوقع ضرب النتائج في 4)</option>
-                    <option value="2">أسبوعين (النظام سيتوقع ضرب النتائج في 2)</option>
-                    <option value="3">3 أسابيع (النظام سيتوقع أداء الأسبوع المتبقي)</option>
-                    <option value="4">4 أسابيع (شهر كامل - نتيجة نهائية فعلية)</option>
-                </select>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">حوادث السلامة المسجلة حتى الآن</label>
-                    <input type="number" id="trial_safety" oninput="calculateTrial()" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">عدد الزوار حتى الآن</label>
-                    <input type="number" id="trial_visitors" oninput="calculateTrial()" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">الشكاوى (غير السلامة) حتى الآن</label>
-                    <input type="number" id="trial_complaints" oninput="calculateTrial()" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">التقييمات الإيجابية حتى الآن</label>
-                    <input type="number" id="trial_positive" oninput="calculateTrial()" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">التقييمات السلبية حتى الآن</label>
-                    <input type="number" id="trial_negative" oninput="calculateTrial()" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-blue-700 mb-1">الهدف الشهري للتقييمات</label>
-                    <input type="number" id="trial_target" oninput="calculateTrial()" class="w-full px-4 py-2 border-2 border-blue-200 rounded-lg bg-blue-50">
-                </div>
-            </div>
-
-            <div class="mt-6 flex gap-3">
-                <button onclick="saveTrialDataLocal()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition">حفظ مدخلاتي</button>
-                <button onclick="clearTrialData()" class="flex-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold py-2 px-4 rounded-lg shadow transition">مسح البيانات</button>
-            </div>
-        </div>
-
-        <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col justify-between">
-            <div>
-                <h2 class="text-xl font-bold mb-4 text-gray-700 text-center">التوقع النهائي لنهاية الشهر</h2>
-                <div class="text-center mb-6">
-                    <span id="totalPoints" class="text-5xl font-black text-gray-800">0</span>
-                    <span class="text-xl text-gray-500">/ 11 نقطة</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
-                    <div id="progressBar" class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-                <div class="flex justify-between text-xs text-gray-400 mb-6 font-bold">
-                    <span>0</span>
-                    <span>7 (300 ريال)</span>
-                    <span>9 (800 ريال)</span>
-                    <span>11</span>
-                </div>
-                <div class="space-y-2 text-sm border-t pt-4">
-                    <div class="flex justify-between"><span class="text-gray-600">نقاط السلامة المتوقعة:</span> <span id="resSafety" class="font-bold text-blue-700">0.00</span></div>
-                    <div class="flex justify-between"><span class="text-gray-600">نقاط الشكاوى المتوقعة:</span> <span id="resComplaints" class="font-bold text-blue-700">0.00</span></div>
-                    <div class="flex justify-between"><span class="text-gray-600">نقاط الإيجابي المتوقعة:</span> <span id="resPos" class="font-bold text-blue-700">0.00</span></div>
-                    <div class="flex justify-between"><span class="text-gray-600">نقاط السلبي المتوقعة:</span> <span id="resNeg" class="font-bold text-blue-700">0.00</span></div>
-                </div>
-            </div>
-            <div id="rewardBox" class="mt-6 p-4 rounded-xl text-center font-bold text-lg transition-colors duration-300 bg-gray-100 text-gray-600 border border-gray-300">
-                في انتظار إدخال البيانات...
-            </div>
+<header class="bg-slate-900 text-white shadow-sm p-4 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-black tracking-wide">آي إم سبيشل</h1>
+        <div class="flex gap-4">
+            <button onclick="openPredictionModal()" class="text-slate-900 bg-white hover:bg-slate-100 px-6 py-2 rounded font-bold text-sm shadow-sm transition border border-slate-200">☷ قياس الأداء</button>
+            <button onclick="openMaintenanceAuth()" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 px-4 py-2 rounded font-bold text-sm transition flex items-center gap-2">
+                ⚲ محمد عبدالعزيز الحبيب
+            </button>
         </div>
     </div>
+</header>
 
-    <hr class="border-gray-300 my-8">
-
-    <div id="newsSection" class="space-y-4">
-        <h2 class="text-xl font-bold text-gray-800 border-b-2 border-gray-300 pb-2">📰 بورصة الفروع الرياضية - التحديثات الميدانية</h2>
-        <div id="branchNewsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            </div>
+<div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
+    <div class="space-y-2 mb-10 text-center">
+        <h2 class="text-3xl font-black text-slate-800 tracking-wide">▤ النشرة التشغيلية للأداء</h2>
+        <p class="text-slate-500 font-medium">تقرير الأداء الدوري وتوقعات الإغلاق</p>
     </div>
+    
+    <div id="newsTimeline" class="space-y-12 pr-4 timeline-border relative">
+        </div>
+</div>
 
-    <div class="flex justify-center mt-12 mb-8">
-        <button onclick="openAdmin()" class="text-gray-400 hover:text-blue-600 text-xs transition-all flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
-            صيانة بيانات الفروع (للمسؤول فقط)
-        </button>
+<div id="predictionModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-slate-200">
+        <button onclick="closePredictionModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition">✕</button>
+        
+        <div class="p-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="md:col-span-2">
+                    <h2 class="text-2xl font-black mb-1 text-slate-800">حاسبة الأداء الشهري</h2>
+                    <p class="text-slate-500 font-medium text-sm mb-8">قياس الأداء من بداية الشهر (الشكاوى والسلامة أرقام ثابتة من الإدارة)</p>
+                    
+                    <div class="mb-6 bg-slate-50 p-5 rounded border border-slate-200 flex flex-col md:flex-row gap-6 items-center justify-between">
+                        <div class="w-full md:w-auto">
+                            <label class="block text-sm font-bold text-slate-700 mb-2">اختر الفرع للقياس:</label>
+                            <select id="trial_branch_select" onchange="loadTrialDataFromDB()" class="w-full px-4 py-2 border border-slate-300 rounded bg-white font-bold text-slate-800 focus:outline-none focus:border-slate-500">
+                                <option value="1">الياسمين</option>
+                                <option value="2">الملقا</option>
+                                <option value="3">الندى</option>
+                                <option value="4">النرجس</option>
+                                <option value="5">الربيع</option>
+                                <option value="6">الغدير</option>
+                            </select>
+                        </div>
+                        <div class="text-left bg-white p-4 rounded border border-slate-200 shadow-sm w-full md:w-auto">
+                            <p class="text-xs text-slate-500 font-bold mb-2">المؤقت التلقائي للشهر الحالي:</p>
+                            <div class="flex gap-6 text-sm">
+                                <div class="text-slate-700 font-bold">أيام مضت: <span id="daysPassed" class="font-black text-lg">0</span></div>
+                                <div class="text-slate-700 font-bold">أيام متبقية: <span id="daysRemaining" class="font-black text-lg">0</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div><label class="block text-sm font-bold text-slate-700 mb-2">التقييمات الإيجابية المُضافة</label><input type="number" id="trial_positive" oninput="calculateTrial()" class="w-full px-4 py-3 border border-slate-300 rounded focus:border-slate-600 focus:outline-none"></div>
+                        <div><label class="block text-sm font-bold text-slate-700 mb-2">التقييمات السلبية المُضافة</label><input type="number" id="trial_negative" oninput="calculateTrial()" class="w-full px-4 py-3 border border-slate-300 rounded focus:border-slate-600 focus:outline-none"></div>
+                    </div>
+
+                    <div class="mt-8 flex gap-4">
+                        <button onclick="clearTrialData()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded transition">إعادة ضبط الحقول</button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold mb-6 text-slate-800 text-center">التوقع النهائي لنهاية الشهر</h2>
+                        <div class="text-center mb-6">
+                            <span id="totalPoints" class="text-6xl font-black text-slate-900">0</span>
+                            <span class="text-lg text-slate-400 font-bold">/ 11</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2 mb-2 overflow-hidden">
+                            <div id="progressBar" class="bg-slate-800 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
+                        </div>
+
+                        <div class="space-y-4 text-sm pt-6 mt-6 font-bold text-slate-600">
+                            <div class="flex justify-between"><span>نقاط السلامة (ثابت):</span> <span id="resSafety" class="text-slate-900 font-black">0.00</span></div>
+                            <div class="flex justify-between"><span>نقاط الشكاوى (ثابت):</span> <span id="resComplaints" class="text-slate-900 font-black">0.00</span></div>
+                            <div class="flex justify-between"><span>نقاط الإيجابي:</span> <span id="resPos" class="text-slate-900 font-black">0.00</span></div>
+                            <div class="flex justify-between"><span>نقاط السلبي:</span> <span id="resNeg" class="text-slate-900 font-black">0.00</span></div>
+                        </div>
+                    </div>
+                    <div id="rewardBox" class="mt-8 p-4 rounded text-center font-bold text-sm leading-relaxed transition-colors duration-300 bg-white text-slate-400 border border-slate-200">
+                        في انتظار إدخال البيانات...
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div id="adminModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-        <div class="p-6 border-b flex justify-between items-center bg-gray-50 rounded-t-2xl">
-            <h2 class="text-xl font-bold text-gray-800">لوحة تحكم المسؤول (تحديث بيانات السوق)</h2>
-            <button onclick="closeAdmin()" class="text-gray-400 hover:text-red-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
+<div id="maintenanceAuthModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-xl p-8 shadow-2xl max-w-sm w-full text-center border border-slate-200">
+        <h3 class="font-black text-xl mb-2 text-slate-900">دخول الإدارة العليا</h3>
+        <p class="mb-6 font-medium text-slate-500 text-sm">الرجاء إدخال رمز المرور السري</p>
+        
+        <div class="flex gap-4 justify-center mb-8" dir="ltr">
+            <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 0)" onkeydown="handleBoxKey(event, 0)">
+            <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 1)" onkeydown="handleBoxKey(event, 1)">
+            <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 2)" onkeydown="handleBoxKey(event, 2)">
+            <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 3)" onkeydown="handleBoxKey(event, 3)">
         </div>
-        <div class="p-6 space-y-6">
-            <div class="bg-blue-50 p-4 rounded-xl flex flex-col md:flex-row gap-4 items-center">
-                <label class="font-bold text-blue-800 whitespace-nowrap">اختر المعرف:</label>
-                <select id="branchSelector" onchange="loadAdminData()" class="w-full md:w-auto p-2 rounded border-blue-200 font-bold">
-                    <option value="1">فرع 1</option>
-                    <option value="2">فرع 2</option>
-                    <option value="3">فرع 3</option>
-                    <option value="4">فرع 4</option>
-                    <option value="5">فرع 5</option>
-                    <option value="6">فرع 6</option>
+
+        <button onclick="closeMaintenanceAuth()" class="w-full py-3 bg-slate-100 text-slate-700 font-bold rounded hover:bg-slate-200 transition">إلغاء</button>
+    </div>
+</div>
+
+<div id="adminModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-xl">
+            <h2 class="text-xl font-black text-slate-900">لوحة التحكم (تحديث بيانات السوق)</h2>
+            <button onclick="closeAdmin()" class="text-slate-400 hover:text-slate-800 font-bold text-xl">✕</button>
+        </div>
+        <div class="p-8 space-y-8">
+            <div class="bg-slate-100 p-4 rounded flex flex-col md:flex-row gap-4 items-center">
+                <label class="font-bold text-slate-800 whitespace-nowrap">اختر المعرف:</label>
+                <select id="branchSelector" onchange="loadAdminData()" class="w-full md:w-auto p-2 rounded border-slate-300 font-bold focus:outline-none">
+                    <option value="1">فرع 1 (الياسمين)</option>
+                    <option value="2">فرع 2 (الملقا)</option>
+                    <option value="3">فرع 3 (الندى)</option>
+                    <option value="4">فرع 4 (النرجس)</option>
+                    <option value="5">فرع 5 (الربيع)</option>
+                    <option value="6">فرع 6 (الغدير)</option>
                 </select>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-b pb-6 border-gray-200">
-                <div><label class="block text-sm mb-1 font-bold text-gray-700">اسم الفرع:</label><input type="text" id="admin_bName" class="w-full p-2 border border-gray-300 rounded focus:border-blue-500"></div>
-                <div><label class="block text-sm mb-1 font-bold text-gray-700">اسم المديرة:</label><input type="text" id="admin_mName" class="w-full p-2 border border-gray-300 rounded focus:border-blue-500"></div>
-                <div><label class="block text-sm mb-1 font-bold text-gray-700">اسم النائبة:</label><input type="text" id="admin_dName" class="w-full p-2 border border-gray-300 rounded focus:border-blue-500"></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-slate-100 pb-8">
+                <div><label class="block text-sm mb-2 font-bold text-slate-700">اسم الفرع:</label><input type="text" id="admin_bName" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-700">اسم المديرة:</label><input type="text" id="admin_mName" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-700">اسم النائبة:</label><input type="text" id="admin_dName" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <div><label class="block text-sm mb-1">حوادث السلامة:</label><input type="number" id="admin_safety" class="w-full p-2 border rounded"></div>
-                <div><label class="block text-sm mb-1">الزوار:</label><input type="number" id="admin_visitors" class="w-full p-2 border rounded"></div>
-                <div><label class="block text-sm mb-1">الشكاوى:</label><input type="number" id="admin_complaints" class="w-full p-2 border rounded"></div>
-                <div><label class="block text-sm mb-1">إيجابي:</label><input type="number" id="admin_positive" class="w-full p-2 border rounded"></div>
-                <div><label class="block text-sm mb-1">سلبي:</label><input type="number" id="admin_negative" class="w-full p-2 border rounded"></div>
-                <div><label class="block text-sm mb-1 font-bold text-blue-700">الهدف الشهري:</label><input type="number" id="admin_target" class="w-full p-2 border border-blue-300 bg-blue-50 rounded"></div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                <div><label class="block text-sm mb-2 font-bold text-slate-700">حوادث السلامة:</label><input type="number" id="admin_safety" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-700">الزوار (مخفي عن الفرع):</label><input type="number" id="admin_visitors" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-700">الشكاوى:</label><input type="number" id="admin_complaints" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-700">إيجابي:</label><input type="number" id="admin_positive" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-700">سلبي:</label><input type="number" id="admin_negative" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-900">الهدف الشهري:</label><input type="number" id="admin_target" class="w-full p-3 border border-slate-400 bg-slate-50 rounded focus:border-slate-600 focus:outline-none"></div>
             </div>
 
-            <button onclick="saveAdminData()" class="w-full bg-blue-800 text-white py-3 rounded-xl font-bold hover:bg-blue-900 transition">حفظ التعديلات في قاعدة البيانات</button>
+            <button onclick="saveAdminData()" class="w-full bg-slate-900 text-white py-4 rounded font-black text-lg hover:bg-slate-800 transition shadow-md">حفظ التعديلات وتحديث الصحيفة</button>
         </div>
     </div>
 </div>
 
 <script>
-    // قاعدة بيانات الفروع لمعرض الأخبار
+    // قاعدة البيانات
     let branchesData = {
         1: { bName: "الياسمين", mName: "نورة", dName: "سارة", safety: 0, visitors: 1200, complaints: 2, positive: 55, negative: 1, target: 50 },
         2: { bName: "الملقا", mName: "ريم", dName: "هيفاء", safety: 1, visitors: 900, complaints: 5, positive: 40, negative: 3, target: 50 },
@@ -171,84 +176,138 @@
         6: { bName: "الغدير", mName: "نجلاء", dName: "دلال", safety: 0, visitors: 1300, complaints: 3, positive: 60, negative: 2, target: 50 }
     };
 
-    let activeBranchId = 1;
+    // تهيئة الصفحة
+    window.onload = function() {
+        generateNewspaper();
+    };
 
-    // --- قسم الحاسبة التجريبية التراكمية (المديرة) ---
-    function loadTrialDataLocal() {
-        const saved = localStorage.getItem('imSpecial_trialData');
-        if (saved) {
-            const data = JSON.parse(saved);
-            document.getElementById('trial_weeks').value = data.weeks || 1;
-            document.getElementById('trial_safety').value = data.safety || '';
-            document.getElementById('trial_visitors').value = data.visitors || '';
-            document.getElementById('trial_complaints').value = data.complaints || '';
-            document.getElementById('trial_positive').value = data.positive || '';
-            document.getElementById('trial_negative').value = data.negative || '';
-            document.getElementById('trial_target').value = data.target || 50;
-        } else {
-            document.getElementById('trial_target').value = 50; // افتراضي
+    // --- منطق الرقم السري للإدارة ---
+    const pinBoxes = document.querySelectorAll('.pin-box');
+    
+    function handleBoxInput(el, idx) {
+        el.value = el.value.replace(/[^0-9]/g, ''); 
+        if (el.value !== '') {
+            if (idx < 3) pinBoxes[idx + 1].focus();
+            checkAdminPinLength();
         }
+    }
+
+    function handleBoxKey(e, idx) {
+        if (e.key === 'Backspace' && e.target.value === '') {
+            if (idx > 0) {
+                pinBoxes[idx - 1].focus();
+                pinBoxes[idx - 1].value = '';
+            }
+        }
+    }
+
+    function checkAdminPinLength() {
+        let pin = Array.from(pinBoxes).map(b => b.value).join('');
+        if (pin.length === 4) {
+            verifyMaintenance(pin);
+        }
+    }
+
+    function verifyMaintenance(enteredPin) {
+        const today = new Date();
+        const correctPin = today.getDate().toString().padStart(2, '0') + (today.getMonth() + 1).toString().padStart(2, '0');
+        
+        if (enteredPin === correctPin) {
+            closeMaintenanceAuth();
+            document.getElementById('adminModal').style.display = 'flex';
+            loadAdminData();
+        } else {
+            alert("رمز المرور غير صحيح!");
+            pinBoxes.forEach(b => b.value = '');
+            pinBoxes[0].focus();
+        }
+    }
+
+    function openMaintenanceAuth() {
+        document.getElementById('maintenanceAuthModal').style.display = 'flex';
+        pinBoxes.forEach(b => b.value = '');
+        setTimeout(() => pinBoxes[0].focus(), 100);
+    }
+    
+    function closeMaintenanceAuth() {
+        document.getElementById('maintenanceAuthModal').style.display = 'none';
+    }
+
+    // --- نوافذ التوقعات (القياس التلقائي) ---
+    let autoMultiplier = 1;
+
+    function openPredictionModal() {
+        document.getElementById('predictionModal').style.display = 'flex';
+        setupDateCalculator();
+        loadTrialDataFromDB();
+    }
+    
+    function closePredictionModal() {
+        document.getElementById('predictionModal').style.display = 'none';
+    }
+
+    function setupDateCalculator() {
+        const today = new Date();
+        const currentDay = today.getDate();
+        const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        const remainingDays = daysInMonth - currentDay;
+        
+        document.getElementById('daysPassed').innerText = currentDay;
+        document.getElementById('daysRemaining').innerText = remainingDays;
+        
+        if (currentDay > 0) {
+            autoMultiplier = daysInMonth / currentDay;
+        } else {
+            autoMultiplier = 1;
+        }
+    }
+
+    function loadTrialDataFromDB() {
+        let branchId = document.getElementById('trial_branch_select').value;
+        let data = branchesData[branchId];
+        
+        // جلب البيانات، إخفاء الزوار والسلامة والشكاوى من المدخلات، وإظهار التقييمات فقط
+        document.getElementById('trial_positive').value = data.positive;
+        document.getElementById('trial_negative').value = data.negative;
+        
         calculateTrial();
     }
 
-    function saveTrialDataLocal() {
-        const data = {
-            weeks: document.getElementById('trial_weeks').value,
-            safety: document.getElementById('trial_safety').value,
-            visitors: document.getElementById('trial_visitors').value,
-            complaints: document.getElementById('trial_complaints').value,
-            positive: document.getElementById('trial_positive').value,
-            negative: document.getElementById('trial_negative').value,
-            target: document.getElementById('trial_target').value
-        };
-        localStorage.setItem('imSpecial_trialData', JSON.stringify(data));
-        alert('تم حفظ بياناتك بنجاح! ولن تظهر لأي شخص غيرك.');
-    }
-
     function clearTrialData() {
-        if(confirm("هل أنت متأكدة من مسح جميع البيانات المدخلة؟")) {
-            localStorage.removeItem('imSpecial_trialData');
-            document.getElementById('trial_weeks').value = 1;
-            document.getElementById('trial_safety').value = '';
-            document.getElementById('trial_visitors').value = '';
-            document.getElementById('trial_complaints').value = '';
+        if(confirm("هل تريد إعادة ضبط الحقول للقيم الصفرية؟")) {
             document.getElementById('trial_positive').value = '';
             document.getElementById('trial_negative').value = '';
-            document.getElementById('trial_target').value = 50;
             calculateTrial();
         }
     }
 
     function calculateTrial() {
-        let weeksPassed = parseInt(document.getElementById('trial_weeks').value) || 1;
-        let multiplier = 4 / weeksPassed; // معامل التوقع الشهري
+        let activeBranchId = document.getElementById('trial_branch_select').value;
+        let data = branchesData[activeBranchId];
+        let target = data.target || 50;
 
-        // قراءة وتوقع البيانات
-        let rawSafety = parseFloat(document.getElementById('trial_safety').value) || 0;
-        let rawVisitors = parseFloat(document.getElementById('trial_visitors').value) || 1;
-        let rawComplaints = parseFloat(document.getElementById('trial_complaints').value) || 0;
+        // البيانات الثابتة من النظام
+        let projSafety = data.safety; 
+        let projComplaints = data.complaints; 
+        let projVisitors = data.visitors; 
+
+        // بيانات التقييمات المدخلة من الواجهة
         let rawPositive = parseFloat(document.getElementById('trial_positive').value) || 0;
         let rawNegative = parseFloat(document.getElementById('trial_negative').value) || 0;
-        let target = parseFloat(document.getElementById('trial_target').value) || 50; // الهدف ثابت شهريا
+        
+        // يتم مضاعفة التقييم الإيجابي كمتوقع لنهاية الشهر
+        let projPositive = rawPositive * autoMultiplier;
 
-        let projSafety = rawSafety * multiplier;
-        let projVisitors = rawVisitors * multiplier;
-        let projComplaints = rawComplaints * multiplier;
-        let projPositive = rawPositive * multiplier;
-        let projNegative = rawNegative * multiplier;
-
-        // تطبيق المعادلات
         let ptsSafety = Math.max(0, 3 - projSafety);
         let complaintDeduction = projComplaints / (projVisitors * 0.003);
         let ptsComplaints = Math.max(0, 2 - complaintDeduction);
         let ptsPositive = Math.min(4, (projPositive / target) * 4);
         let negWeight = (target / Math.max(1, projPositive)) * 0.25;
-        let ptsNegative = Math.max(0, 2 - (projNegative * negWeight));
+        let ptsNegative = Math.max(0, 2 - (rawNegative * negWeight));
 
         let total = Math.round((ptsSafety + ptsComplaints + ptsPositive + ptsNegative) * 100) / 100;
         if(isNaN(total)) total = 0;
 
-        // تحديث الواجهة
         document.getElementById('resSafety').innerText = ptsSafety.toFixed(2);
         document.getElementById('resComplaints').innerText = ptsComplaints.toFixed(2);
         document.getElementById('resPos').innerText = ptsPositive.toFixed(2);
@@ -259,46 +318,37 @@
         document.getElementById('progressBar').style.width = `${progressPercentage}%`;
 
         const rewardBox = document.getElementById('rewardBox');
-        if (total >= 9) {
-            rewardBox.innerText = `التوقع: أداء مرتفع - مكافأة مستحقة (800 ريال) 🔥`;
-            rewardBox.className = "mt-6 p-4 rounded-xl text-center font-bold text-lg bg-green-100 text-green-700 border border-green-300";
-        } else if (total >= 7) {
-            rewardBox.innerText = `التوقع: أداء متوسط - مكافأة مستحقة (300 ريال) 👍`;
-            rewardBox.className = "mt-6 p-4 rounded-xl text-center font-bold text-lg bg-orange-100 text-orange-700 border border-orange-300";
-        } else {
-            rewardBox.innerText = `التوقع: أداء منخفض - لا توجد مكافأة ⚠️`;
-            rewardBox.className = "mt-6 p-4 rounded-xl text-center font-bold text-lg bg-red-100 text-red-700 border border-red-300";
-        }
-    }
-
-
-    // --- قسم الصيانة والمسؤول ---
-    function openAdmin() {
-        const today = new Date();
-        const pin = today.getDate().toString().padStart(2, '0') + (today.getMonth() + 1).toString().padStart(2, '0');
-        const entry = prompt("يرجى إدخال رمز الدخول السري (تاريخ اليوم والشهر):");
+        let additionText = "<br><span class='text-xs font-bold text-slate-500 mt-2 block'>عند الاستمرار بنفس الاداء</span>";
         
-        if (entry === pin) {
-            document.getElementById('adminModal').style.display = 'flex';
-            loadAdminData();
+        // تصميم المربع بناء على الألوان في الحدود فقط
+        if (total >= 9) {
+            rewardBox.innerHTML = `التوقع: أداء مرتفع ✓` + additionText;
+            rewardBox.className = "mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[#10b981] text-slate-800";
+        } else if (total >= 7) {
+            rewardBox.innerHTML = `التوقع: أداء متوسط ◬` + additionText;
+            rewardBox.className = "mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[#f59e0b] text-slate-800";
+        } else if (total >= 4) {
+            rewardBox.innerHTML = `التوقع: أداء منخفض ⚠` + additionText;
+            rewardBox.className = "mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[#f97316] text-slate-800";
         } else {
-            alert("رمز الدخول غير صحيح.");
+            rewardBox.innerHTML = `التوقع: أداء حرج ⨂` + additionText;
+            rewardBox.className = "mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[#ef4444] text-slate-800";
         }
     }
 
+    // --- قسم الصيانة وإدارة النظام ---
     function closeAdmin() {
         document.getElementById('adminModal').style.display = 'none';
     }
 
     function loadAdminData() {
-        activeBranchId = document.getElementById('branchSelector').value;
-        const data = branchesData[activeBranchId];
-        
+        let adminBranchId = document.getElementById('branchSelector').value;
+        const data = branchesData[adminBranchId];
         document.getElementById('admin_bName').value = data.bName;
         document.getElementById('admin_mName').value = data.mName;
         document.getElementById('admin_dName').value = data.dName;
         document.getElementById('admin_safety').value = data.safety;
-        document.getElementById('admin_visitors').value = data.visitors;
+        document.getElementById('admin_visitors').value = data.visitors; // يظهر للإدارة فقط
         document.getElementById('admin_complaints').value = data.complaints;
         document.getElementById('admin_positive').value = data.positive;
         document.getElementById('admin_negative').value = data.negative;
@@ -306,7 +356,8 @@
     }
 
     function saveAdminData() {
-        branchesData[activeBranchId] = {
+        let adminBranchId = document.getElementById('branchSelector').value;
+        branchesData[adminBranchId] = {
             bName: document.getElementById('admin_bName').value,
             mName: document.getElementById('admin_mName').value,
             dName: document.getElementById('admin_dName').value,
@@ -317,41 +368,58 @@
             negative: parseFloat(document.getElementById('admin_negative').value) || 0,
             target: parseFloat(document.getElementById('admin_target').value) || 50
         };
-        alert('تم حفظ البيانات وتحديث الصحيفة بنجاح!');
         closeAdmin();
         generateNewspaper();
     }
 
-
-    // --- قسم توليد الأخبار بأسلوب الصحافة الرياضية والاقتصادية ---
+    // --- توليد صحيفة الأداء ---
     function generateNewspaper() {
-        const container = document.getElementById('branchNewsContainer');
-        container.innerHTML = '';
+        const timelineContainer = document.getElementById('newsTimeline');
+        timelineContainer.innerHTML = '';
 
-        // قوالب الصحافة موزعة حسب الحالات المستهدفة
-        const highTemplates = [
-            { h: "أسهم '{b}' تعانق السحاب.. تكتيك استثنائي من '{m}' يكتسح السوق", l: "في قراءة تحليلية لنتائج الأداء، نجح فرع {b} في كسر حاجز المقاومة مسجلاً أرباحاً معنوية بلغت {s} نقطة.", b: "ويأتي هذا التفوق الميداني ثمرة للتناغم التكتيكي بين المديرة {m} ونائبتها {d}، حيث سجل الفرع استحواذاً كاملاً على رضا العملاء وتراجعاً حاداً في مؤشر الشكاوى." },
-            { h: "في ديربي التميز.. '{m}' و '{d}' يقودان '{b}' لمنصة التتويج بلا منازع", l: "اكتسح فرع {b} منافسيه في مؤشرات الجودة محققاً {s} نقطة، في أداء يصفه المحللون بـ 'الاستثنائي'.", b: "وأثبتت المديرة {m} أن الإدارة الهجومية في كسب التقييمات الإيجابية هي سر الصدارة، بمساندة قوية من نائبتها {d} التي أغلقت دفاعات الفرع أمام أي ثغرات تتعلق بالسلامة." },
-            { h: "مؤشرات خضراء وصدارة مستحقة.. الخطة التشغيلية لـ '{m}' تؤتي ثمارها", l: "أغلق فرع {b} تداولاته الشهرية على ارتفاع قياسي مسجلاً العلامة المميزة {s} نقطة من أصل 11.", b: "الرؤية الثاقبة للمديرة {m} والتنفيذ الدقيق من {d} رسما لوحة فنية من الجودة التشغيلية، لتصبح أسهم هذا الفرع الأغلى في بورصة آي إم سبيشل." },
-            { h: "بالأرقام والتحليل.. كيف حققت '{m}' هذه القفزة التاريخية في '{b}'؟", l: "لم يكن وصول فرع {b} إلى النقطة {s} صدفة، بل هو نتاج قراءة عبقرية لمعطيات السوق والميدان.", b: "بتوزيع أدوار دقيق، تكفلت {m} بتعزيز السمعة الرقمية، بينما تولت {d} إدارة المخاطر، لينتج عن هذا الثنائي منظومة لا تقهر اقتصادياً وخدمياً." }
-        ];
+        // استخراج التاريخ الحالي للتصنيف
+        const dateOptions = { month: 'long', day: 'numeric' };
+        const currentDateStr = new Intl.DateTimeFormat('ar-EG', dateOptions).format(new Date());
 
-        const medTemplates = [
-            { h: "أداء متذبذب لأسهم '{b}'.. هل تنجح '{m}' في كسر حاجز المقاومة قريباً؟", l: "أظهرت التقارير الدورية ثباتاً حذراً في أداء فرع {b} بحصده {s} نقطة، وسط تطلعات لرفع كفاءة الاستجابة.", b: "وتشير القراءات الفنية إلى أن الفرع يمتلك مقومات الصعود، إلا أن المحللين ينتظرون 'تكتيكاً هجومياً' جديداً من المديرة {m} ونائبتها {d} في الشوط الثاني من الشهر." },
-            { h: "فرع '{b}' يكتفي بنقطة التعادل في سباق الجودة.. و '{d}' تعد بتصحيح المسار", l: "استقر مؤشر الأداء لفرع {b} عند {s} نقطة، في نتيجة تعكس حالة من 'الركود التشغيلي' المؤقت.", b: "ورغم الجهود المبذولة من المديرة {m}، إلا أن تسرب بعض الشكاوى أثر على القيمة السوقية للفرع، مما يضع النائبة {d} أمام تحدٍ حقيقي لإعادة هيكلة خطوط الدفاع التفاعلية." },
-            { h: "استقرار حذر في مؤشرات '{b}'.. والمستثمرون يترقبون الخطوة القادمة", l: "تترقب إدارة آي إم سبيشل التحركات القادمة لفرع {b} بعد إغلاق مؤشراته عند {s} نقطة.", b: "تحتاج المديرة {m} إلى ضخ دماء جديدة في خطة العمل، بالتعاون مع {d}، لضمان عدم انزلاق الفرع نحو المؤشرات الحمراء وتعزيز مكاسب السمعة الإيجابية." }
-        ];
+        // إنشاء قسم خاص بتاريخ اليوم (سجل النشرات)
+        const dateSection = document.createElement('div');
+        dateSection.className = "relative";
+        
+        // دائرة التايم لاين وتاريخ النشرة
+        const dateHeader = `
+            <div class="absolute -right-6 top-0 w-4 h-4 rounded-full bg-slate-800 border-4 border-white shadow"></div>
+            <h3 class="text-xl font-black text-slate-800 mb-6 bg-white inline-block px-4 py-1 rounded shadow-sm border border-slate-100">نشرة ${currentDateStr}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></div>
+        `;
+        dateSection.innerHTML = dateHeader;
+        timelineContainer.appendChild(dateSection);
+        
+        const container = dateSection.querySelector('#cardsGrid');
 
-        const lowTemplates = [
-            { h: "جرس إنذار في '{b}'.. أسهم الأداء تتهاوى وتحتاج إلى 'خطة إنقاذ' عاجلة", l: "كشفت لغة الأرقام عن انهيار حاد في القيمة التشغيلية لفرع {b} مسجلاً {s} نقطة فقط، في أسوأ أداء ربعي له.", b: "تتجه الأنظار الآن نحو المديرة {m} والمطالبة بتفسير هذا التراجع المريع، في حين تُطرح تساؤلات حول فعالية الإجراءات الوقائية التي اتخذتها النائبة {d} لتجنب هذا الانزلاق الفني." },
-            { h: "هزيمة تكتيكية في ساحة الجودة.. ماذا يحدث داخل أروقة '{b}' يا '{m}'؟", l: "تعرض فرع {b} لضربة قوية أطاحت بمؤشراته إلى {s} نقطة، مما استدعى تدخلاً إدارياً فورياً.", b: "الاعتماد على خطط تقليدية كلف المديرة {m} الكثير من النقاط، ويبدو أن الافتقار للتنسيق مع النائبة {d} قد فتح ثغرات واسعة للتقييمات السلبية لتخترق شباك الفرع." },
-            { h: "الإفلاس المعنوي يهدد '{b}'.. هل حان وقت التغيير الشامل لخطط '{m}' و '{d}'؟", l: "مؤشرات حمراء وإغلاقات سلبية هي حصيلة أداء فرع {b} الذي لم يتجاوز عتبة الـ {s} نقطة.", b: "المحللون الميدانيون يؤكدون أن الاستراتيجية الحالية التي تنفذها {m} وبدعم من {d} أصبحت مستهلكة، ولا بد من 'صدمة إدارية' تعيد للفرع هيبته في بورصة الفروع." }
-        ];
+        // قوالب بدون إيموجيات
+        const articlesPool = {
+            high: [
+                { h: "أسهم '{b}' تعانق السحاب.. تكتيك استثنائي من '{m}' يكتسح السوق", l: "نجح فرع {b} في كسر حاجز المقاومة مسجلاً أرباحاً معنوية بلغت {s} نقطة.", b: "ويأتي هذا التفوق الميداني ثمرة للتناغم التكتيكي بين المديرة {m} ونائبتها {d}، حيث سجل الفرع استحواذاً كاملاً على رضا العملاء وتراجعاً حاداً في مؤشر الشكاوى." },
+                { h: "في ديربي التميز.. '{m}' و '{d}' يقودان '{b}' لمنصة التتويج", l: "اكتسح فرع {b} منافسيه في مؤشرات الجودة محققاً {s} نقطة، في أداء يُصنف كـ 'الاستثنائي'.", b: "وأثبتت المديرة {m} أن الإدارة الهجومية في كسب التقييمات هي سر الصدارة، بمساندة قوية من {d} التي أغلقت دفاعات الفرع أمام ثغرات السلامة." }
+            ],
+            med: [
+                { h: "أداء متذبذب لأسهم '{b}'.. هل تنجح '{m}' في كسر حاجز المقاومة؟", l: "أظهرت التقارير ثباتاً حذراً في أداء فرع {b} بحصده {s} نقطة.", b: "وتشير القراءات الفنية إلى أن الفرع يمتلك مقومات الصعود، إلا أن المحللين ينتظرون 'تكتيكاً هجومياً' جديداً من المديرة {m} ونائبتها {d} في قادم الأيام." },
+                { h: "استقرار حذر في مؤشرات '{b}'.. والمستثمرون يترقبون الخطوة القادمة", l: "تترقب إدارة آي إم سبيشل التحركات القادمة لفرع {b} بعد إغلاقه عند {s} نقطة.", b: "تحتاج المديرة {m} إلى ضخ دماء جديدة في خطة العمل لضمان عدم انزلاق الفرع نحو المؤشرات الحمراء وتعزيز مكاسب السمعة." }
+            ],
+            low_safety: [
+                { h: "صافرات الإنذار تدوي في '{b}'.. ثغرات السلامة تعصف بالمؤشر", l: "هبوط حاد لفرع {b} إلى {s} نقطة إثر تقارير مقلقة تتعلق باختراقات في بروتوكولات السلامة.", b: "وجهت الإدارة العليا استفسارات عاجلة للمديرة {m} حول القصور الواضح، ويُنتظر من النائبة {d} تفعيل خطة طوارئ ميدانية لضمان بيئة آمنة للعملاء فوراً." }
+            ],
+            low_complaints: [
+                { h: "عاصفة من الاستياء تضرب '{b}'.. أين إدارة الأزمات يا '{m}'؟", l: "مؤشر فرع {b} يغرق عند {s} نقطة تحت وطأة ارتفاع معدل الشكاوى وتذمر الزوار.", b: "تشير البيانات التحليلية إلى ضعف في سرعة الاستجابة لمعالجة الخلل. يجب على {m} بالتعاون مع {d} التواجد في الواجهة لاحتواء غضب العملاء قبل تفاقم الأزمة." }
+            ],
+            low_reviews: [
+                { h: "جفاف في التقييمات.. '{b}' يفقد بوصلة التواصل مع عملائه", l: "أنهى فرع {b} الجولة برصيد هزيل بلغ {s} نقطة نتيجة الفشل في حصد تقييمات إيجابية.", b: "غياب المبادرة من قبل فريق {m} و {d} في تحفيز العملاء على التقييم أفقد الفرع نقاطاً مجانية. التميز الصامت لم يعد كافياً في سوق يتنفس بلغة الأرقام الموثقة." }
+            ]
+        };
 
         for (let i = 1; i <= 6; i++) {
             const data = branchesData[i];
             
-            // الحساب لغرض الصحيفة
             let ptsSafety = Math.max(0, 3 - data.safety);
             let ptsComplaints = Math.max(0, 2 - (data.complaints / (data.visitors * 0.003)));
             let ptsPositive = Math.min(4, (data.positive / data.target) * 4);
@@ -363,47 +431,67 @@
             let headerColor = "";
 
             if (total >= 9) {
-                selectedArray = highTemplates;
-                headerColor = "text-green-700";
-            } else if (total >= 7) {
-                selectedArray = medTemplates;
-                headerColor = "text-orange-600";
+                selectedArray = articlesPool.high;
+                headerColor = "text-emerald-700 bg-emerald-50 border-emerald-200";
+            } else if (total >= 6.5) {
+                selectedArray = articlesPool.med;
+                headerColor = "text-amber-700 bg-amber-50 border-amber-200";
             } else {
-                selectedArray = lowTemplates;
-                headerColor = "text-red-700";
+                headerColor = "text-rose-800 bg-rose-50 border-rose-200";
+                if (ptsSafety < 3) {
+                    selectedArray = articlesPool.low_safety;
+                } else if (ptsComplaints < 1) {
+                    selectedArray = articlesPool.low_complaints;
+                } else {
+                    selectedArray = articlesPool.low_reviews;
+                }
             }
 
-            // اختيار قالب عشوائي من المصفوفة المناسبة
             const randomTemplate = selectedArray[Math.floor(Math.random() * selectedArray.length)];
-            
-            // استبدال المتغيرات
             const finalHead = randomTemplate.h.replace(/{b}/g, data.bName).replace(/{m}/g, data.mName).replace(/{d}/g, data.dName).replace(/{s}/g, total);
             const finalLead = randomTemplate.l.replace(/{b}/g, data.bName).replace(/{m}/g, data.mName).replace(/{d}/g, data.dName).replace(/{s}/g, total);
             const finalBody = randomTemplate.b.replace(/{b}/g, data.bName).replace(/{m}/g, data.mName).replace(/{d}/g, data.dName).replace(/{s}/g, total);
 
+            // تم إزالة عدد الزوار من القائمة وجعلها مفتوحة وبسيطة
             const article = `
-                <div class="bg-white p-5 rounded-lg shadow-sm newspaper-card flex flex-col justify-between hover:shadow-md transition">
+                <div class="bg-white p-6 rounded-xl shadow-sm newspaper-card flex flex-col justify-between hover:shadow-md transition border border-slate-100">
                     <div>
-                        <span class="${headerColor} font-black text-xs uppercase tracking-wider">تحليل الجولة | فرع ${data.bName}</span>
-                        <h3 class="font-bold text-lg mt-2 mb-3 leading-snug text-gray-900">${finalHead}</h3>
-                        <p class="text-blue-900 text-sm font-bold mb-2 leading-relaxed">${finalLead}</p>
-                        <p class="text-gray-600 text-xs leading-relaxed text-justify">${finalBody}</p>
+                        <span class="${headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1 rounded-full">تحليل السوق ◂ ${data.bName}</span>
+                        <h3 class="font-black text-xl mt-5 mb-3 leading-snug text-slate-800">${finalHead}</h3>
+                        <p class="text-slate-600 text-sm font-bold mb-4 leading-relaxed">${finalLead}</p>
+                        <p class="text-slate-500 text-sm leading-relaxed text-justify mb-6">${finalBody}</p>
                     </div>
-                    <div class="mt-5 pt-4 border-t border-gray-100 flex justify-between items-center">
-                        <span class="text-blue-800 font-black bg-blue-50 px-2 py-1 rounded">المؤشر: ${total} 📈</span>
-                        <span class="text-gray-400 text-[10px] uppercase tracking-widest font-bold italic">Market Index</span>
+                    
+                    <div class="mt-auto pt-5 border-t border-slate-100">
+                        <div class="flex justify-between items-center text-slate-800 font-black mb-4">
+                            <span>المؤشر العام</span>
+                            <span class="bg-slate-800 text-white px-3 py-1 rounded text-sm">${total} ◠</span>
+                        </div>
+                        
+                        <div class="bg-slate-50 rounded border border-slate-100 p-4 text-sm font-medium text-slate-600 space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span>حوادث السلامة</span> 
+                                <span class="font-bold ${data.safety > 0 ? 'text-rose-600' : 'text-emerald-600'}">${data.safety}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>الشكاوى المسجلة</span> 
+                                <span class="font-bold text-amber-600">${data.complaints}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>التقييمات الإيجابية</span> 
+                                <span class="font-bold text-emerald-600">${data.positive}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>التقييمات السلبية</span> 
+                                <span class="font-bold text-rose-600">${data.negative}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
             container.innerHTML += article;
         }
     }
-
-    // التهيئة المبدئية عند تحميل الصفحة
-    window.onload = () => {
-        loadTrialDataLocal(); // تحميل بيانات المديرة من جهازها
-        generateNewspaper();  // توليد صحيفة الشركات
-    };
 </script>
 
 </body>
