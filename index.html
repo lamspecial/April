@@ -16,6 +16,14 @@
         input[type="number"] { -moz-appearance: textfield; }
         /* تصميم خط التايم لاين للنشرات */
         .timeline-border { border-right: 2px dashed #cbd5e1; }
+        
+        /* إخفاء شريط التمرير للكاروسيل مع الحفاظ على إمكانية التمرير */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* تخصيص مظهر النجوم */
+        .google-star { color: #fbbc04; }
+        .google-star-empty { color: #dadce0; }
     </style>
 </head>
 <body class="text-slate-800 relative min-h-screen flex flex-col">
@@ -33,9 +41,21 @@
 </header>
 
 <div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
-    <div class="space-y-2 mb-10 text-center">
+    <div class="space-y-2 mb-8 text-center">
         <h2 class="text-3xl font-black text-slate-800 tracking-wide">▤ النشرة التشغيلية للأداء</h2>
         <p class="text-slate-500 font-medium">تقرير الأداء الدوري وتوقعات الإغلاق</p>
+    </div>
+
+    <div class="mb-12 relative w-full group">
+        <button onclick="scrollCarousel(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">
+            ❯
+        </button>
+        <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">
+            ❮
+        </button>
+
+        <div id="branchesCarousel" class="flex gap-5 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 pt-2 scroll-smooth px-2">
+            </div>
     </div>
     
     <div id="newsTimeline" class="space-y-12 pr-4 timeline-border relative">
@@ -179,7 +199,112 @@
     // تهيئة الصفحة
     window.onload = function() {
         generateNewspaper();
+        initCarousel();
     };
+
+    // --- منطق الكاروسيل وبطاقات قوقل (الجديد) ---
+    let carouselInterval;
+
+    function initCarousel() {
+        const carousel = document.getElementById('branchesCarousel');
+        carousel.innerHTML = ''; // تفريغ المحتوى السابق
+
+        // خريطة تقييمات مبدئية لتبدو واقعية بناءً على البيانات
+        const baseReviews = [1420, 890, 2100, 650, 1150, 1840];
+
+        for (let i = 1; i <= 6; i++) {
+            const data = branchesData[i];
+            
+            // حساب تقييم افتراضي مبني على نسبة الإيجابي والسلبي
+            let totalFeedbacks = data.positive + data.negative;
+            let ratingValue = totalFeedbacks > 0 
+                ? (4.0 + (data.positive / totalFeedbacks)).toFixed(1) 
+                : "4.5";
+            if(ratingValue > 5.0) ratingValue = "5.0";
+            
+            // عدد التقييمات الإجمالي التقريبي
+            let reviewsCount = baseReviews[i-1] + data.positive;
+
+            const card = document.createElement('div');
+            card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm snap-center transition-transform hover:-translate-y-1 hover:shadow-md cursor-grab active:cursor-grabbing";
+            
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-5">
+                    <div>
+                        <h3 class="font-black text-xl text-slate-800 tracking-tight">فرع ${data.bName}</h3>
+                        <p class="text-xs text-slate-500 font-bold mt-1">إدارة: ${data.mName} و ${data.dName}</p>
+                    </div>
+                    <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">
+                        <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/>
+                            <circle cx="12" cy="9" r="2.5" fill="#FFF"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl font-black text-slate-800">${ratingValue}</span>
+                        <div class="flex flex-col">
+                            <div class="flex text-lg leading-none mb-1">
+                                <span class="google-star">★</span>
+                                <span class="google-star">★</span>
+                                <span class="google-star">★</span>
+                                <span class="google-star">★</span>
+                                <span class="${ratingValue == '5.0' ? 'google-star' : 'google-star-empty'}">★</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end">
+                        <span class="text-xs font-bold text-slate-500 mb-1">المراجعات</span>
+                        <span class="text-xs font-black text-blue-700 bg-blue-100 px-2.5 py-1 rounded-md border border-blue-200">${reviewsCount.toLocaleString('en-US')}</span>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-sm">
+                    <div class="font-bold text-slate-600">النمو الشهري</div>
+                    <div class="font-black text-emerald-600 flex items-center gap-1">
+                        +${data.positive} <span class="text-xs">مراجعة جديدة</span>
+                    </div>
+                </div>
+            `;
+            carousel.appendChild(card);
+        }
+
+        setupCarouselEvents();
+    }
+
+    function scrollCarousel(direction) {
+        const carousel = document.getElementById('branchesCarousel');
+        const scrollAmount = 340; // العرض التقريبي للبطاقة
+        // في المتصفحات الداعمة لـ RTL ، التمرير لليسار (التالي) يتطلب قيمة سالبة
+        carousel.scrollBy({ left: direction * -scrollAmount, behavior: 'smooth' });
+    }
+
+    function setupCarouselEvents() {
+        const carousel = document.getElementById('branchesCarousel');
+        
+        const startAutoScroll = () => {
+            clearInterval(carouselInterval);
+            carouselInterval = setInterval(() => {
+                // إذا وصلنا لنهاية التمرير (مع الأخذ بالاعتبار RTL)
+                const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+                if (Math.abs(carousel.scrollLeft) >= maxScrollLeft - 10) {
+                    carousel.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    scrollCarousel(1); // التمرير للبطاقة التالية
+                }
+            }, 4000);
+        };
+
+        // إيقاف التشغيل عند التفاعل
+        carousel.addEventListener('mouseenter', () => clearInterval(carouselInterval));
+        carousel.addEventListener('mouseleave', startAutoScroll);
+        carousel.addEventListener('touchstart', () => clearInterval(carouselInterval));
+        carousel.addEventListener('touchend', startAutoScroll);
+
+        startAutoScroll();
+    }
 
     // --- منطق الرقم السري للإدارة ---
     const pinBoxes = document.querySelectorAll('.pin-box');
@@ -370,6 +495,7 @@
         };
         closeAdmin();
         generateNewspaper();
+        initCarousel(); // تحديث الكاروسيل أيضاً
     }
 
     // --- توليد صحيفة الأداء ---
