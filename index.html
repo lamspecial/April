@@ -5,85 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>آي إم سبيشل - النظام الداخلي</title>
 
-    <!-- Open Graph Meta Tags لمعاينة الواتساب - يتم تحديثها ديناميكياً -->
-    <meta property="og:title" id="og_title" content="النشرة التشغيلية - آي إم سبيشل">
+    <meta property="og:title" id="og_title" content="النص التشغيلية - آي إم سبيشل">
     <meta property="og:description" id="og_description" content="تقرير الأداء الدوري وتوقعات الإغلاق">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="آي إم سبيشل">
     <meta property="og:locale" content="ar_SA">
     <meta property="og:url" id="og_url" content="">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" id="twitter_title" content="النشرة التشغيلية - آي إم سبيشل">
-    <meta name="twitter:description" id="twitter_description" content="تقرير الأداء الدوري وتوقعات الإغلاق">
-    <meta name="description" id="meta_description" content="النشرة التشغيلية للأداء - آي إم سبيشل">
+    <meta name="twitter:title" id="twitter_title" content="تعزيز سمعة العلامة التجارية">
+    <meta name="twitter:description" id="twitter_description" content="تقارير الاداء والتحديثات اليومية">
+    <meta name="description" id="meta_description" content="النص التشغيلية للأداء - آي إم سبيشل">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #fafafa; margin: 0; padding: 0; }
         .newspaper-card { border-right: 4px solid #1e3a8a; }
+        .branch-stat-card { border-right: 3px solid #1e3a8a; }
         .pin-box { transition: all 0.2s; }
         .pin-box:focus { transform: scale(1.05); }
-        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
-        /* تصميم خط التايم لاين للنشرات */
         .timeline-border { border-right: 2px dashed #cbd5e1; }
-        
-        /* إخفاء شريط التمرير للكاروسيل مع الحفاظ على إمكانية التمرير */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* تخصيص مظهر النجوم */
         .google-star { color: #fbbc04; }
         .google-star-empty { color: #dadce0; }
-
-        /* صفحة النشرة المستقلة */
         #bulletinPage { display: none; }
         #bulletinPage.active { display: flex; }
-
-        /* الصفحة الرئيسية */
         #mainPageWrapper { display: flex; flex-direction: column; flex-grow: 1; }
         #mainPageWrapper.hidden-page { display: none; }
-
-        /* تأثير الظهور عند فتح صفحة النشرة */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
         .slide-up { animation: slideUp 0.35s ease forwards; }
-
-        /* بطاقة معلومات الفرع في صفحة النشرة */
-        .branch-stat-card { border-right: 3px solid #1e3a8a; }
-
-        /* زر المشاركة */
-        .share-btn {
-            transition: all 0.2s;
-        }
-        .share-btn:hover {
-            transform: scale(1.03);
-        }
-
-        /* نجاح النسخ */
+        .share-btn { transition: all 0.2s; }
+        .share-btn:hover { transform: scale(1.03); }
         @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(10px); }
-            20% { opacity: 1; transform: translateY(0); }
-            80% { opacity: 1; }
+            0%   { opacity: 0; transform: translateY(10px); }
+            20%  { opacity: 1; transform: translateY(0); }
+            80%  { opacity: 1; }
             100% { opacity: 0; }
         }
-        .copy-toast {
-            animation: fadeInOut 2.5s ease forwards;
-        }
+        .copy-toast { animation: fadeInOut 2.5s ease forwards; }
     </style>
 </head>
 <body class="text-slate-800 relative min-h-screen flex flex-col">
 
-<!-- ============================================================
-     الهيدر المشترك
-============================================================ -->
 <header class="bg-slate-900 text-white shadow-sm p-4 sticky top-0 z-40">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-black tracking-wide cursor-pointer" onclick="goToMainPage()">آي إم سبيشل</h1>
+        <h1 class="text-2xl font-black tracking-wide cursor-pointer" onclick="goToMainPage()">
+            <span class="text-yellow-400">آي إم</span> <span class="text-red-500">سبيشل</span>
+        </h1>
         <div class="flex gap-4">
             <button onclick="openPredictionModal()" class="text-slate-900 bg-white hover:bg-slate-100 px-6 py-2 rounded font-bold text-sm shadow-sm transition border border-slate-200">☷ قياس الأداء</button>
             <button onclick="openMaintenanceAuth()" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 px-4 py-2 rounded font-bold text-sm transition flex items-center gap-2">
@@ -93,82 +68,54 @@
     </div>
 </header>
 
-<!-- ============================================================
-     الصفحة الرئيسية
-============================================================ -->
 <div id="mainPageWrapper">
     <div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
         <div class="space-y-2 mb-8 text-center">
-            <h2 class="text-3xl font-black text-slate-800 tracking-wide">▤ النشرة التشغيلية للأداء</h2>
+            <h2 class="text-3xl font-black text-slate-800 tracking-wide">▤ النص التشغيلية للأداء</h2>
             <p class="text-slate-500 font-medium">تقرير الأداء الدوري وتوقعات الإغلاق</p>
         </div>
 
         <div class="mb-12 relative w-full group">
-            <button onclick="scrollCarousel(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">
-                ❯
-            </button>
-            <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">
-                ❮
-            </button>
+            <button onclick="scrollCarousel(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❯</button>
+            <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❮</button>
+            <div id="branchesCarousel" class="flex gap-5 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 pt-2 scroll-smooth px-2"></div>
+        </div>
 
-            <div id="branchesCarousel" class="flex gap-5 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 pt-2 scroll-smooth px-2">
-            </div>
-        </div>
-        
-        <div id="newsTimeline" class="space-y-12 pr-4 timeline-border relative">
-        </div>
+        <div id="newsTimeline" class="space-y-12 pr-4 timeline-border relative"></div>
     </div>
 </div>
 
-<!-- ============================================================
-     صفحة النشرة المستقلة
-============================================================ -->
 <div id="bulletinPage" class="flex-col flex-grow">
-    <!-- شريط التنقل العلوي -->
     <div class="bg-white border-b border-slate-100 shadow-sm sticky top-[65px] z-30">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
             <button onclick="goToMainPage()" class="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold text-sm transition bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-lg border border-slate-200">
-                ← العودة للنشرة الرئيسية
+                ← العودة للنص الرئيسية
             </button>
             <div class="flex-grow">
                 <span id="bulletinBreadcrumb" class="text-slate-400 text-sm font-medium">تحليل السوق</span>
                 <span class="text-slate-300 mx-2">◂</span>
                 <span id="bulletinBreadcrumbBranch" class="text-slate-700 font-bold text-sm"></span>
             </div>
-            <!-- زر المشاركة في شريط التنقل -->
-            <button onclick="shareBulletinPage()" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-700 text-white font-bold text-sm px-4 py-2 rounded-lg transition share-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                مشاركة النشرة
+            <button onclick="shareBulletinPage()" class="flex items-center justify-center share-btn text-[#25D366] hover:text-[#1ebe57] transition" title="مشاركة عبر واتساب">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </button>
         </div>
     </div>
-
-    <!-- محتوى صفحة النشرة -->
-    <div id="bulletinContent" class="max-w-6xl mx-auto w-full px-4 md:px-8 py-8 flex-grow slide-up">
-        <!-- سيتم ملؤه ديناميكياً -->
-    </div>
+    <div id="bulletinContent" class="max-w-6xl mx-auto w-full px-4 md:px-8 py-8 flex-grow slide-up"></div>
 </div>
 
-<!-- ============================================================
-     Toast نسخ الرابط
-============================================================ -->
 <div id="copyToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white font-bold px-6 py-3 rounded-xl shadow-xl z-50 hidden text-sm">
-    ✓ تم نسخ رابط النشرة
+    ✓ تم نسخ رابط النص
 </div>
 
-<!-- ============================================================
-     مودال قياس الأداء
-============================================================ -->
 <div id="predictionModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
     <div class="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-slate-200">
         <button onclick="closePredictionModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition">✕</button>
-        
         <div class="p-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <div class="md:col-span-2">
                     <h2 class="text-2xl font-black mb-1 text-slate-800">حاسبة الأداء الشهري</h2>
                     <p class="text-slate-500 font-medium text-sm mb-8">قياس الأداء من بداية الشهر (الشكاوى والسلامة أرقام ثابتة من الإدارة)</p>
-                    
                     <div class="mb-6 bg-slate-50 p-5 rounded border border-slate-200 flex flex-col md:flex-row gap-6 items-center justify-between">
                         <div class="w-full md:w-auto">
                             <label class="block text-sm font-bold text-slate-700 mb-2">اختر الفرع للقياس:</label>
@@ -189,17 +136,14 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div><label class="block text-sm font-bold text-slate-700 mb-2">التقييمات الإيجابية المُضافة</label><input type="number" id="trial_positive" oninput="calculateTrial()" class="w-full px-4 py-3 border border-slate-300 rounded focus:border-slate-600 focus:outline-none"></div>
                         <div><label class="block text-sm font-bold text-slate-700 mb-2">التقييمات السلبية المُضافة</label><input type="number" id="trial_negative" oninput="calculateTrial()" class="w-full px-4 py-3 border border-slate-300 rounded focus:border-slate-600 focus:outline-none"></div>
                     </div>
-
                     <div class="mt-8 flex gap-4">
                         <button onclick="clearTrialData()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded transition">إعادة ضبط الحقول</button>
                     </div>
                 </div>
-
                 <div class="bg-slate-50 p-6 rounded border border-slate-200 flex flex-col justify-between">
                     <div>
                         <h2 class="text-lg font-bold mb-6 text-slate-800 text-center">التوقع النهائي لنهاية الشهر</h2>
@@ -210,7 +154,6 @@
                         <div class="w-full bg-slate-200 rounded-full h-2 mb-2 overflow-hidden">
                             <div id="progressBar" class="bg-slate-800 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
                         </div>
-
                         <div class="space-y-4 text-sm pt-6 mt-6 font-bold text-slate-600">
                             <div class="flex justify-between"><span>نقاط السلامة (ثابت):</span> <span id="resSafety" class="text-slate-900 font-black">0.00</span></div>
                             <div class="flex justify-between"><span>نقاط الشكاوى (ثابت):</span> <span id="resComplaints" class="text-slate-900 font-black">0.00</span></div>
@@ -227,28 +170,20 @@
     </div>
 </div>
 
-<!-- ============================================================
-     مودال رمز الإدارة
-============================================================ -->
 <div id="maintenanceAuthModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
     <div class="bg-white rounded-xl p-8 shadow-2xl max-w-sm w-full text-center border border-slate-200">
         <h3 class="font-black text-xl mb-2 text-slate-900">دخول الإدارة العليا</h3>
         <p class="mb-6 font-medium text-slate-500 text-sm">الرجاء إدخال رمز المرور السري</p>
-        
         <div class="flex gap-4 justify-center mb-8" dir="ltr">
-            <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 0)" onkeydown="handleBoxKey(event, 0)">
-            <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 1)" onkeydown="handleBoxKey(event, 1)">
-            <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 2)" onkeydown="handleBoxKey(event, 2)">
-            <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 3)" onkeydown="handleBoxKey(event, 3)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 0)" onkeydown="handleBoxKey(event, 0)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 1)" onkeydown="handleBoxKey(event, 1)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 2)" onkeydown="handleBoxKey(event, 2)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 3)" onkeydown="handleBoxKey(event, 3)">
         </div>
-
         <button onclick="closeMaintenanceAuth()" class="w-full py-3 bg-slate-100 text-slate-700 font-bold rounded hover:bg-slate-200 transition">إلغاء</button>
     </div>
 </div>
 
-<!-- ============================================================
-     مودال لوحة التحكم
-============================================================ -->
 <div id="adminModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
     <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
         <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-xl">
@@ -267,13 +202,11 @@
                     <option value="6">فرع 6 (الغدير)</option>
                 </select>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-slate-100 pb-8">
                 <div><label class="block text-sm mb-2 font-bold text-slate-700">اسم الفرع:</label><input type="text" id="admin_bName" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-700">اسم المديرة:</label><input type="text" id="admin_mName" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-700">اسم النائبة:</label><input type="text" id="admin_dName" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
             </div>
-
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
                 <div><label class="block text-sm mb-2 font-bold text-slate-700">حوادث السلامة:</label><input type="number" id="admin_safety" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-700">الزوار (مخفي عن الفرع):</label><input type="number" id="admin_visitors" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
@@ -282,848 +215,601 @@
                 <div><label class="block text-sm mb-2 font-bold text-slate-700">سلبي:</label><input type="number" id="admin_negative" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-900">الهدف الشهري:</label><input type="number" id="admin_target" class="w-full p-3 border border-slate-400 bg-slate-50 rounded focus:border-slate-600 focus:outline-none"></div>
             </div>
-
             <button onclick="saveAdminData()" class="w-full bg-slate-900 text-white py-4 rounded font-black text-lg hover:bg-slate-800 transition shadow-md">حفظ التعديلات وتحديث الصحيفة</button>
         </div>
     </div>
 </div>
 
 <script>
-    // ============================================================
-    // قاعدة البيانات
-    // ============================================================
-    let branchesData = {
-        1: { bName: "الياسمين", mName: "نورة", dName: "سارة", safety: 0, visitors: 1200, complaints: 2, positive: 55, negative: 1, target: 50 },
-        2: { bName: "الملقا", mName: "ريم", dName: "هيفاء", safety: 1, visitors: 900, complaints: 5, positive: 40, negative: 3, target: 50 },
-        3: { bName: "الندى", mName: "لمى", dName: "شهد", safety: 0, visitors: 1500, complaints: 1, positive: 70, negative: 0, target: 50 },
-        4: { bName: "النرجس", mName: "مها", dName: "العنود", safety: 0, visitors: 800, complaints: 0, positive: 30, negative: 4, target: 50 },
-        5: { bName: "الربيع", mName: "عبير", dName: "روان", safety: 2, visitors: 1100, complaints: 8, positive: 45, negative: 6, target: 50 },
-        6: { bName: "الغدير", mName: "نجلاء", dName: "دلال", safety: 0, visitors: 1300, complaints: 3, positive: 60, negative: 2, target: 50 }
+// ============================================================
+// قاعدة البيانات
+// ============================================================
+let branchesData = {
+    1: { bName: "الياسمين", mName: "نورة",  dName: "سارة",   safety: 0, visitors: 1200, complaints: 2, positive: 55, negative: 1, target: 50 },
+    2: { bName: "الملقا",   mName: "ريم",    dName: "هيفاء",  safety: 1, visitors: 900,  complaints: 5, positive: 40, negative: 3, target: 50 },
+    3: { bName: "الندى",    mName: "لمى",    dName: "شهد",    safety: 0, visitors: 1500, complaints: 1, positive: 70, negative: 0, target: 50 },
+    4: { bName: "النرجس",   mName: "مها",    dName: "العنود", safety: 0, visitors: 800,  complaints: 0, positive: 30, negative: 4, target: 50 },
+    5: { bName: "الربيع",   mName: "عبير",   dName: "روان",   safety: 2, visitors: 1100, complaints: 8, positive: 45, negative: 6, target: 50 },
+    6: { bName: "الغدير",   mName: "نجلاء",  dName: "دلال",   safety: 0, visitors: 1300, complaints: 3, positive: 60, negative: 2, target: 50 }
+};
+
+// ============================================================
+// ثوابت مشتركة (استُخرجت من التكرار)
+// ============================================================
+
+const ARTICLES_POOL = {
+    high: [
+        { h: "أسهم '{b}' تعانق السحاب.. تكتيك استثنائي من '{m}' يكتسح السوق",         l: "نجح فرع {b} في كسر حاجز المقاومة مسجلاً أرباحاً معنوية بلغت {s} نقطة.",                                                            b: "ويأتي هذا التفوق الميداني ثمرة للتناغم التكتيكي بين المديرة {m} ونائبتها {d}، حيث سجل الفرع استحواذاً كاملاً على رضا العملاء وتراجعاً حاداً في مؤشر الشكاوى." },
+        { h: "في ديربي التميز.. '{m}' و '{d}' يقودان '{b}' لمنصة التتويج",              l: "اكتسح فرع {b} منافسيه في مؤشرات الجودة محققاً {s} نقطة، في أداء يُصنف كـ 'الاستثنائي'.",                                           b: "وأثبتت المديرة {m} أن الإدارة الهجومية في كسب التقييمات هي سر الصدارة، بمساندة قوية من {d} التي أغلقت دفاعات الفرع أمام ثغرات السلامة." }
+    ],
+    med: [
+        { h: "أداء متذبذب لأسهم '{b}'.. هل تنجح '{m}' في كسر حاجز المقاومة؟",         l: "أظهرت التقارير ثباتاً حذراً في أداء فرع {b} بحصده {s} نقطة.",                                                                     b: "وتشير القراءات الفنية إلى أن الفرع يمتلك مقومات الصعود، إلا أن المحللين ينتظرون 'تكتيكاً هجومياً' جديداً من المديرة {m} ونائبتها {d} في قادم الأيام." },
+        { h: "استقرار حذر في مؤشرات '{b}'.. والمستثمرون يترقبون الخطوة القادمة",       l: "تترقب إدارة آي إم سبيشل التحركات القادمة لفرع {b} بعد إغلاقه عند {s} نقطة.",                                                       b: "تحتاج المديرة {m} إلى ضخ دماء جديدة في خطة العمل لضمان عدم انزلاق الفرع نحو المؤشرات الحمراء وتعزيز مكاسب السمعة." }
+    ],
+    low_safety: [
+        { h: "صافرات الإنذار تدوي في '{b}'.. ثغرات السلامة تعصف بالمؤشر",             l: "هبوط حاد لفرع {b} إلى {s} نقطة إثر تقارير مقلقة تتعلق باختراقات في بروتوكولات السلامة.",                                          b: "وجهت الإدارة العليا استفسارات عاجلة للمديرة {m} حول القصور الواضح، ويُنتظر من النائبة {d} تفعيل خطة طوارئ ميدانية لضمان بيئة آمنة للعملاء فوراً." }
+    ],
+    low_complaints: [
+        { h: "عاصفة من الاستياء تضرب '{b}'.. أين إدارة الأزمات يا '{m}'؟",             l: "مؤشر فرع {b} يغرق عند {s} نقطة تحت وطأة ارتفاع معدل الشكاوى وتذمر الزوار.",                                                       b: "تشير البيانات التحليلية إلى ضعف في سرعة الاستجابة لمعالجة الخلل. يجب على {m} بالتعاون مع {d} التواجد في الواجهة لاحتواء غضب العملاء قبل تفاقم الأزمة." }
+    ],
+    low_reviews: [
+        { h: "جفاف في التقييمات.. '{b}' يفقد بوصلة التواصل مع عملائه",                l: "أنهى فرع {b} الجولة برصيد هزيل بلغ {s} نقطة نتيجة الفشل في حصد تقييمات إيجابية.",                                               b: "غياب المبادرة من قبل فريق {m} و {d} في تحفيز العملاء على التقييم أفقد الفرع نقاطاً مجانية. التميز الصامت لم يعد كافياً في سوق يتنفس بلغة الأرقام الموثقة." }
+    ]
+};
+
+const BASE_REVIEWS = [1420, 890, 2100, 650, 1150, 1840];
+
+const SHARE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
+
+const MAP_PIN_SVG = `<svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/><circle cx="12" cy="9" r="2.5" fill="#FFF"/></svg>`;
+
+let currentBulletinData = null;
+let autoMultiplier = 1;
+let carouselInterval;
+
+// ============================================================
+// الدوال المساعدة المشتركة
+// ============================================================
+
+function calcScores(data) {
+    const ptsSafety    = Math.max(0, 3 - data.safety);
+    const ptsComplaints = Math.max(0, 2 - (data.complaints / (data.visitors * 0.003)));
+    const ptsPositive  = Math.min(4, (data.positive / data.target) * 4);
+    const negWeight    = (data.target / Math.max(1, data.positive)) * 0.25;
+    const ptsNegative  = Math.max(0, 2 - (data.negative * negWeight));
+    const total        = Math.round((ptsSafety + ptsComplaints + ptsPositive + ptsNegative) * 100) / 100;
+    return { ptsSafety, ptsComplaints, ptsPositive, ptsNegative, total };
+}
+
+function getPerformanceTier(scores) {
+    const { total, ptsSafety, ptsComplaints } = scores;
+    if (total >= 9) return {
+        articles:       ARTICLES_POOL.high,
+        headerColor:    "text-emerald-700 bg-emerald-50 border-emerald-200",
+        label:          "أداء مرتفع",
+        labelBg:        "bg-emerald-50 border-emerald-200 text-emerald-800",
+        borderColor:    "border-emerald-400",
+        barColor:       "bg-emerald-500"
     };
+    if (total >= 6.5) return {
+        articles:       ARTICLES_POOL.med,
+        headerColor:    "text-amber-700 bg-amber-50 border-amber-200",
+        label:          "أداء متوسط",
+        labelBg:        "bg-amber-50 border-amber-200 text-amber-800",
+        borderColor:    "border-amber-400",
+        barColor:       "bg-amber-500"
+    };
+    const articles = ptsSafety < 3 ? ARTICLES_POOL.low_safety
+                   : ptsComplaints < 1 ? ARTICLES_POOL.low_complaints
+                   : ARTICLES_POOL.low_reviews;
+    return {
+        articles,
+        headerColor:    "text-rose-800 bg-rose-50 border-rose-200",
+        label:          "أداء منخفض",
+        labelBg:        "bg-rose-50 border-rose-200 text-rose-800",
+        borderColor:    "border-rose-400",
+        barColor:       "bg-rose-500"
+    };
+}
 
-    // متغيرات حالة صفحة النشرة
-    let currentBulletinData = null;
+function fillTemplate(tpl, data, total) {
+    const replace = (str) => str
+        .replace(/{b}/g, data.bName)
+        .replace(/{m}/g, data.mName)
+        .replace(/{d}/g, data.dName)
+        .replace(/{s}/g, total);
+    return { head: replace(tpl.h), lead: replace(tpl.l), body: replace(tpl.b) };
+}
 
-    // ============================================================
-    // تهيئة الصفحة
-    // ============================================================
-    window.onload = function() {
-        // التحقق من وجود hash في الرابط لعرض نشرة محددة
-        const hash = window.location.hash;
-        if (hash && hash.startsWith('#bulletin-')) {
-            const branchId = parseInt(hash.replace('#bulletin-', ''));
-            if (branchId >= 1 && branchId <= 6) {
-                // توليد بيانات النشرات أولاً ثم عرض الصفحة
-                generateNewspaper();
-                initCarousel();
-                // تأخير بسيط لضمان توليد البيانات
-                setTimeout(() => {
-                    openBulletinPage(branchId);
-                }, 100);
-                return;
-            }
+function calcRating(data, branchId) {
+    const total = data.positive + data.negative;
+    let ratingValue = total > 0 ? (4.0 + (data.positive / total)).toFixed(1) : "4.5";
+    if (parseFloat(ratingValue) > 5.0) ratingValue = "5.0";
+    const reviewsCount = BASE_REVIEWS[branchId - 1] + data.positive;
+    return { ratingValue, reviewsCount };
+}
+
+function buildStars(ratingValue) {
+    const isFull = parseFloat(ratingValue) >= 5.0;
+    return `<span class="google-star">★</span>`.repeat(4)
+         + `<span class="${isFull ? 'google-star' : 'google-star-empty'}">★</span>`;
+}
+
+// ============================================================
+// تهيئة الصفحة
+// ============================================================
+window.onload = function () {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#bulletin-')) {
+        const branchId = parseInt(hash.replace('#bulletin-', ''));
+        if (branchId >= 1 && branchId <= 6) {
+            generateNewspaper();
+            initCarousel();
+            setTimeout(() => openBulletinPage(branchId), 100);
+            return;
         }
-        generateNewspaper();
-        initCarousel();
-    };
-
-    // ============================================================
-    // التنقل بين الصفحات
-    // ============================================================
-    function goToMainPage() {
-        document.getElementById('bulletinPage').style.display = 'none';
-        document.getElementById('mainPageWrapper').style.display = 'flex';
-        document.getElementById('mainPageWrapper').style.flexDirection = 'column';
-        // تنظيف الـ hash من الرابط
-        history.pushState('', document.title, window.location.pathname);
-        // إعادة تعيين الـ OG tags
-        updateOGTags('النشرة التشغيلية - آي إم سبيشل', 'تقرير الأداء الدوري وتوقعات الإغلاق', window.location.href);
     }
+    generateNewspaper();
+    initCarousel();
+};
 
-    function openBulletinPage(branchId) {
-        const data = branchesData[branchId];
-        
-        // حساب النقاط
-        let ptsSafety = Math.max(0, 3 - data.safety);
-        let ptsComplaints = Math.max(0, 2 - (data.complaints / (data.visitors * 0.003)));
-        let ptsPositive = Math.min(4, (data.positive / data.target) * 4);
-        let negWeight = (data.target / Math.max(1, data.positive)) * 0.25;
-        let ptsNegative = Math.max(0, 2 - (data.negative * negWeight));
-        let total = Math.round((ptsSafety + ptsComplaints + ptsPositive + ptsNegative) * 100) / 100;
+// ============================================================
+// التنقل بين الصفحات
+// ============================================================
+function showPage(pageId) {
+    const isMain = pageId === 'main';
+    document.getElementById('mainPageWrapper').style.display = isMain ? 'flex' : 'none';
+    document.getElementById('mainPageWrapper').style.flexDirection = 'column';
+    document.getElementById('bulletinPage').style.display = isMain ? 'none' : 'flex';
+    document.getElementById('bulletinPage').style.flexDirection = 'column';
+}
 
-        // اختيار القالب والألوان
-        const articlesPool = {
-            high: [
-                { h: "أسهم '{b}' تعانق السحاب.. تكتيك استثنائي من '{m}' يكتسح السوق", l: "نجح فرع {b} في كسر حاجز المقاومة مسجلاً أرباحاً معنوية بلغت {s} نقطة.", b: "ويأتي هذا التفوق الميداني ثمرة للتناغم التكتيكي بين المديرة {m} ونائبتها {d}، حيث سجل الفرع استحواذاً كاملاً على رضا العملاء وتراجعاً حاداً في مؤشر الشكاوى." },
-                { h: "في ديربي التميز.. '{m}' و '{d}' يقودان '{b}' لمنصة التتويج", l: "اكتسح فرع {b} منافسيه في مؤشرات الجودة محققاً {s} نقطة، في أداء يُصنف كـ 'الاستثنائي'.", b: "وأثبتت المديرة {m} أن الإدارة الهجومية في كسب التقييمات هي سر الصدارة، بمساندة قوية من {d} التي أغلقت دفاعات الفرع أمام ثغرات السلامة." }
-            ],
-            med: [
-                { h: "أداء متذبذب لأسهم '{b}'.. هل تنجح '{m}' في كسر حاجز المقاومة؟", l: "أظهرت التقارير ثباتاً حذراً في أداء فرع {b} بحصده {s} نقطة.", b: "وتشير القراءات الفنية إلى أن الفرع يمتلك مقومات الصعود، إلا أن المحللين ينتظرون 'تكتيكاً هجومياً' جديداً من المديرة {m} ونائبتها {d} في قادم الأيام." },
-                { h: "استقرار حذر في مؤشرات '{b}'.. والمستثمرون يترقبون الخطوة القادمة", l: "تترقب إدارة آي إم سبيشل التحركات القادمة لفرع {b} بعد إغلاقه عند {s} نقطة.", b: "تحتاج المديرة {m} إلى ضخ دماء جديدة في خطة العمل لضمان عدم انزلاق الفرع نحو المؤشرات الحمراء وتعزيز مكاسب السمعة." }
-            ],
-            low_safety: [
-                { h: "صافرات الإنذار تدوي في '{b}'.. ثغرات السلامة تعصف بالمؤشر", l: "هبوط حاد لفرع {b} إلى {s} نقطة إثر تقارير مقلقة تتعلق باختراقات في بروتوكولات السلامة.", b: "وجهت الإدارة العليا استفسارات عاجلة للمديرة {m} حول القصور الواضح، ويُنتظر من النائبة {d} تفعيل خطة طوارئ ميدانية لضمان بيئة آمنة للعملاء فوراً." }
-            ],
-            low_complaints: [
-                { h: "عاصفة من الاستياء تضرب '{b}'.. أين إدارة الأزمات يا '{m}'؟", l: "مؤشر فرع {b} يغرق عند {s} نقطة تحت وطأة ارتفاع معدل الشكاوى وتذمر الزوار.", b: "تشير البيانات التحليلية إلى ضعف في سرعة الاستجابة لمعالجة الخلل. يجب على {m} بالتعاون مع {d} التواجد في الواجهة لاحتواء غضب العملاء قبل تفاقم الأزمة." }
-            ],
-            low_reviews: [
-                { h: "جفاف في التقييمات.. '{b}' يفقد بوصلة التواصل مع عملائه", l: "أنهى فرع {b} الجولة برصيد هزيل بلغ {s} نقطة نتيجة الفشل في حصد تقييمات إيجابية.", b: "غياب المبادرة من قبل فريق {m} و {d} في تحفيز العملاء على التقييم أفقد الفرع نقاطاً مجانية. التميز الصامت لم يعد كافياً في سوق يتنفس بلغة الأرقام الموثقة." }
-            ]
-        };
+function goToMainPage() {
+    showPage('main');
+    history.pushState('', document.title, window.location.pathname);
+    updateOGTags('النص التشغيلية - آي إم سبيشل', 'تقرير الأداء الدوري وتوقعات الإغلاق', window.location.href);
+}
 
-        let selectedArray = [];
-        let headerColor = "";
-        let performanceLabel = "";
-        let performanceBg = "";
-        let borderColor = "";
+// ============================================================
+// صفحة النص المستقلة
+// ============================================================
+function openBulletinPage(branchId) {
+    const data    = branchesData[branchId];
+    const scores  = calcScores(data);
+    const tier    = getPerformanceTier(scores);
+    const tpl     = tier.articles[Math.floor(Math.random() * tier.articles.length)];
+    const text    = fillTemplate(tpl, data, scores.total);
+    const { ratingValue, reviewsCount } = calcRating(data, branchId);
+    const dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
+    const progressPercent = Math.min(100, (scores.total / 11) * 100);
 
-        if (total >= 9) {
-            selectedArray = articlesPool.high;
-            headerColor = "text-emerald-700 bg-emerald-50 border-emerald-200";
-            performanceLabel = "أداء مرتفع";
-            performanceBg = "bg-emerald-50 border-emerald-200 text-emerald-800";
-            borderColor = "border-emerald-400";
-        } else if (total >= 6.5) {
-            selectedArray = articlesPool.med;
-            headerColor = "text-amber-700 bg-amber-50 border-amber-200";
-            performanceLabel = "أداء متوسط";
-            performanceBg = "bg-amber-50 border-amber-200 text-amber-800";
-            borderColor = "border-amber-400";
-        } else {
-            headerColor = "text-rose-800 bg-rose-50 border-rose-200";
-            performanceLabel = "أداء منخفض";
-            performanceBg = "bg-rose-50 border-rose-200 text-rose-800";
-            borderColor = "border-rose-400";
-            if (ptsSafety < 3) {
-                selectedArray = articlesPool.low_safety;
-            } else if (ptsComplaints < 1) {
-                selectedArray = articlesPool.low_complaints;
-            } else {
-                selectedArray = articlesPool.low_reviews;
-            }
-        }
+    currentBulletinData = { branchId, bName: data.bName, ...text, performanceLabel: tier.label, dateStr };
 
-        const randomTemplate = selectedArray[Math.floor(Math.random() * selectedArray.length)];
-        const finalHead = randomTemplate.h.replace(/{b}/g, data.bName).replace(/{m}/g, data.mName).replace(/{d}/g, data.dName).replace(/{s}/g, total);
-        const finalLead = randomTemplate.l.replace(/{b}/g, data.bName).replace(/{m}/g, data.mName).replace(/{d}/g, data.dName).replace(/{s}/g, total);
-        const finalBody = randomTemplate.b.replace(/{b}/g, data.bName).replace(/{m}/g, data.mName).replace(/{d}/g, data.dName).replace(/{s}/g, total);
+    document.getElementById('bulletinBreadcrumbBranch').textContent = `فرع ${data.bName}`;
+    history.pushState('', '', `#bulletin-${branchId}`);
+    updateOGTags(
+        `نص فرع ${data.bName} - ${text.head}`,
+        `${text.lead} ${text.body} | المؤشر العام: ${scores.total}/11 | ${tier.label}`,
+        window.location.href
+    );
 
-        // حساب تقييم قوقل
-        const baseReviews = [1420, 890, 2100, 650, 1150, 1840];
-        let totalFeedbacks = data.positive + data.negative;
-        let ratingValue = totalFeedbacks > 0 ? (4.0 + (data.positive / totalFeedbacks)).toFixed(1) : "4.5";
-        if(parseFloat(ratingValue) > 5.0) ratingValue = "5.0";
-        let reviewsCount = baseReviews[branchId - 1] + data.positive;
+    document.getElementById('bulletinContent').innerHTML = buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, dateStr, progressPercent);
 
-        // التاريخ
-        const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
-        const currentDateStr = new Intl.DateTimeFormat('ar-EG', dateOptions).format(new Date());
+    showPage('bulletin');
 
-        // حفظ البيانات الحالية للمشاركة
-        currentBulletinData = {
-            branchId,
-            bName: data.bName,
-            mName: data.mName,
-            dName: data.dName,
-            total,
-            finalHead,
-            finalLead,
-            finalBody,
-            performanceLabel,
-            dateStr: currentDateStr
-        };
+    const contentEl = document.getElementById('bulletinContent');
+    contentEl.classList.remove('slide-up');
+    void contentEl.offsetWidth;
+    contentEl.classList.add('slide-up');
 
-        // تحديث الـ breadcrumb
-        document.getElementById('bulletinBreadcrumbBranch').textContent = `فرع ${data.bName}`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-        // تحديث الـ hash في الرابط
-        history.pushState('', '', `#bulletin-${branchId}`);
-
-        // تحديث الـ OG tags للمعاينة
-        const shareUrl = window.location.href;
-        updateOGTags(
-            `نشرة فرع ${data.bName} - ${finalHead}`,
-            `${finalLead} ${finalBody} | المؤشر العام: ${total}/11 | ${performanceLabel}`,
-            shareUrl
-        );
-
-        // توليد محتوى الصفحة
-        const progressPercent = Math.min(100, (total / 11) * 100);
-        const progressBarColor = total >= 9 ? 'bg-emerald-500' : total >= 6.5 ? 'bg-amber-500' : 'bg-rose-500';
-
-        const content = `
-            <!-- ترويسة صفحة النشرة -->
-            <div class="mb-8">
-                <div class="flex flex-wrap items-center gap-3 mb-4">
-                    <span class="${headerColor} border font-bold text-sm px-4 py-1.5 rounded-full">تحليل السوق ◂ ${data.bName}</span>
-                    <span class="text-slate-400 text-sm font-medium">${currentDateStr}</span>
-                </div>
-                <h1 class="text-3xl md:text-4xl font-black text-slate-800 leading-tight mb-4">${finalHead}</h1>
-                <p class="text-lg text-slate-600 font-bold leading-relaxed mb-3">${finalLead}</p>
-                <p class="text-slate-500 leading-relaxed text-justify">${finalBody}</p>
+function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, dateStr, progressPercent) {
+    return `
+        <div class="mb-8">
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+                <span class="${tier.headerColor} border font-bold text-sm px-4 py-1.5 rounded-full">تحليل السوق ◂ ${data.bName}</span>
+                <span class="text-slate-400 text-sm font-medium">${dateStr}</span>
             </div>
+            <h1 class="text-3xl md:text-4xl font-black text-slate-800 leading-tight mb-4">${text.head}</h1>
+            <p class="text-lg text-slate-600 font-bold leading-relaxed mb-3">${text.lead}</p>
+            <p class="text-slate-500 leading-relaxed text-justify">${text.body}</p>
+        </div>
 
-            <!-- شريط فاصل -->
-            <div class="border-t border-slate-100 my-8"></div>
-
-            <!-- بطاقة المؤشر العام -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="md:col-span-1 bg-slate-800 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-md">
-                    <p class="text-slate-400 font-bold text-sm mb-2">المؤشر العام للأداء</p>
-                    <div class="text-7xl font-black mb-1">${total}</div>
-                    <p class="text-slate-400 text-sm font-bold">من أصل 11 نقطة</p>
-                    <div class="w-full bg-slate-600 rounded-full h-2 mt-4 overflow-hidden">
-                        <div class="${progressBarColor} h-2 rounded-full transition-all" style="width: ${progressPercent}%"></div>
-                    </div>
-                    <span class="mt-4 font-bold text-sm px-3 py-1 rounded-full ${performanceBg} border">${performanceLabel}</span>
-                </div>
-
-                <div class="md:col-span-2 grid grid-cols-2 gap-4">
-                    <!-- نقاط السلامة -->
-                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 branch-stat-card flex flex-col justify-between">
-                        <p class="text-slate-500 font-bold text-xs mb-1">نقاط السلامة</p>
-                        <p class="text-3xl font-black text-slate-800">${ptsSafety.toFixed(2)}</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-xs font-bold ${data.safety > 0 ? 'text-rose-600 bg-rose-50' : 'text-emerald-600 bg-emerald-50'} px-2 py-0.5 rounded">${data.safety} حوادث</span>
-                        </div>
-                        <p class="text-slate-400 text-xs mt-1">من أصل 3 نقاط</p>
-                    </div>
-
-                    <!-- نقاط الشكاوى -->
-                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 branch-stat-card flex flex-col justify-between">
-                        <p class="text-slate-500 font-bold text-xs mb-1">نقاط الشكاوى</p>
-                        <p class="text-3xl font-black text-slate-800">${ptsComplaints.toFixed(2)}</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">${data.complaints} شكوى</span>
-                        </div>
-                        <p class="text-slate-400 text-xs mt-1">من أصل 2 نقطة</p>
-                    </div>
-
-                    <!-- نقاط التقييمات الإيجابية -->
-                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 branch-stat-card flex flex-col justify-between">
-                        <p class="text-slate-500 font-bold text-xs mb-1">نقاط التقييمات الإيجابية</p>
-                        <p class="text-3xl font-black text-slate-800">${ptsPositive.toFixed(2)}</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">${data.positive} تقييم</span>
-                        </div>
-                        <p class="text-slate-400 text-xs mt-1">من أصل 4 نقاط</p>
-                    </div>
-
-                    <!-- نقاط التقييمات السلبية -->
-                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 branch-stat-card flex flex-col justify-between">
-                        <p class="text-slate-500 font-bold text-xs mb-1">نقاط التقييمات السلبية</p>
-                        <p class="text-3xl font-black text-slate-800">${ptsNegative.toFixed(2)}</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded">${data.negative} تقييم</span>
-                        </div>
-                        <p class="text-slate-400 text-xs mt-1">من أصل 2 نقطة</p>
-                    </div>
-                </div>
+        <div class="mb-8 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+            <h2 class="text-xl font-black text-slate-800 mb-6">نسبة إنجاز الهدف الشهري</h2>
+            <div class="flex justify-between items-center mb-3">
+                <span class="font-bold text-slate-600 text-sm">التقييمات الإيجابية المحققة</span>
+                <span class="font-black text-slate-800">${data.positive} / ${data.target}</span>
             </div>
-
-            <!-- شريط فاصل -->
-            <div class="border-t border-slate-100 my-8"></div>
-
-            <!-- معلومات الفرع التفصيلية -->
-            <div class="mb-8">
-                <h2 class="text-xl font-black text-slate-800 mb-6">معلومات الفرع</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- بطاقة الفريق -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                        <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">فريق الإدارة</h3>
-                        <div class="flex items-center gap-4 mb-4 pb-4 border-b border-slate-50">
-                            <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center font-black text-slate-600 text-lg">${data.mName.charAt(0)}</div>
-                            <div>
-                                <p class="font-black text-slate-800 text-base">${data.mName}</p>
-                                <p class="text-slate-400 text-sm font-medium">مديرة الفرع</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center font-black text-slate-600 text-lg">${data.dName.charAt(0)}</div>
-                            <div>
-                                <p class="font-black text-slate-800 text-base">${data.dName}</p>
-                                <p class="text-slate-400 text-sm font-medium">نائبة المديرة</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- بطاقة تقييم قوقل -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                        <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">تقييم جوجل</h3>
-                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-3">
-                                <span class="text-4xl font-black text-slate-800">${ratingValue}</span>
-                                <div class="flex flex-col">
-                                    <div class="flex text-2xl leading-none mb-1">
-                                        <span class="google-star">★</span>
-                                        <span class="google-star">★</span>
-                                        <span class="google-star">★</span>
-                                        <span class="google-star">★</span>
-                                        <span class="${parseFloat(ratingValue) >= 5.0 ? 'google-star' : 'google-star-empty'}">★</span>
-                                    </div>
-                                    <span class="text-xs text-slate-500 font-bold">${reviewsCount.toLocaleString('en-US')} مراجعة</span>
-                                </div>
-                            </div>
-                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-slate-200 shadow-inner">
-                                <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/>
-                                    <circle cx="12" cy="9" r="2.5" fill="#FFF"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-slate-500 font-bold">النمو الشهري</span>
-                            <span class="font-black text-emerald-600">+${data.positive} مراجعة جديدة</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden mb-2">
+                <div class="${data.positive >= data.target ? 'bg-emerald-500' : 'bg-slate-700'} h-3 rounded-full transition-all" style="width:${Math.min(100, (data.positive / data.target) * 100)}%"></div>
             </div>
+            <p class="text-xs text-slate-400 font-bold text-left">${Math.round((data.positive / data.target) * 100)}% من الهدف</p>
+        </div>
 
-            <!-- شريط فاصل -->
-            <div class="border-t border-slate-100 my-8"></div>
+        <div class="border-t border-slate-100 my-8"></div>
 
-            <!-- أهداف الفرع ونسبة الإنجاز -->
-            <div class="mb-8">
-                <h2 class="text-xl font-black text-slate-800 mb-6">نسبة إنجاز الهدف الشهري</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="md:col-span-1 bg-slate-800 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-md">
+                <p class="text-slate-400 font-bold text-sm mb-2">المؤشر العام للأداء</p>
+                <div class="text-7xl font-black mb-1">${scores.total}</div>
+                <p class="text-slate-400 text-sm font-bold">من أصل 11 نقطة</p>
+                <div class="w-full bg-slate-600 rounded-full h-2 mt-4 overflow-hidden">
+                    <div class="${tier.barColor} h-2 rounded-full transition-all" style="width:${progressPercent}%"></div>
+                </div>
+                <span class="mt-4 font-bold text-sm px-3 py-1 rounded-full ${tier.labelBg} border">${tier.label}</span>
+            </div>
+            <div class="md:col-span-2 grid grid-cols-2 gap-4">
+                ${buildStatCard('نقاط السلامة', scores.ptsSafety, data.safety > 0 ? `text-rose-600 bg-rose-50` : `text-emerald-600 bg-emerald-50`, `${data.safety} حوادث`, 3)}
+                ${buildStatCard('نقاط الشكاوى', scores.ptsComplaints, 'text-amber-600 bg-amber-50', `${data.complaints} شكوى`, 2)}
+                ${buildStatCard('نقاط التقييمات الإيجابية', scores.ptsPositive, 'text-emerald-600 bg-emerald-50', `${data.positive} تقييم`, 4)}
+                ${buildStatCard('نقاط التقييمات السلبية', scores.ptsNegative, 'text-rose-600 bg-rose-50', `${data.negative} تقييم`, 2)}
+            </div>
+        </div>
+
+        <div class="border-t border-slate-100 my-8"></div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-black text-slate-800 mb-6">معلومات الفرع</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-bold text-slate-600 text-sm">التقييمات الإيجابية المحققة</span>
-                        <span class="font-black text-slate-800">${data.positive} / ${data.target}</span>
+                    <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">فريق الإدارة</h3>
+                    ${buildPersonRow(data.mName, 'مديرة الفرع', true)}
+                    ${buildPersonRow(data.dName, 'نائبة المديرة', false)}
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">تقييم جوجل</h3>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-4xl font-black text-slate-800">${ratingValue}</span>
+                            <div class="flex flex-col">
+                                <div class="flex text-2xl leading-none mb-1">${buildStars(ratingValue)}</div>
+                                <span class="text-xs text-slate-500 font-bold">${reviewsCount.toLocaleString('en-US')} مراجعة</span>
+                            </div>
+                        </div>
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-slate-200 shadow-inner">${MAP_PIN_SVG}</div>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden mb-2">
-                        <div class="${data.positive >= data.target ? 'bg-emerald-500' : 'bg-slate-700'} h-3 rounded-full transition-all" style="width: ${Math.min(100, (data.positive / data.target) * 100)}%"></div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-slate-500 font-bold">النمو الشهري</span>
+                        <span class="font-black text-emerald-600">+${data.positive} مراجعة جديدة</span>
                     </div>
-                    <p class="text-xs text-slate-400 font-bold text-left">${Math.round((data.positive / data.target) * 100)}% من الهدف</p>
                 </div>
             </div>
+        </div>
+    `;
+}
 
-            <!-- شريط المشاركة السفلي -->
-            <div class="mt-10 p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
+function buildStatCard(title, pts, badgeClass, badgeText, maxPts) {
+    return `
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 branch-stat-card flex flex-col justify-between">
+            <p class="text-slate-500 font-bold text-xs mb-1">${title}</p>
+            <p class="text-3xl font-black text-slate-800">${pts.toFixed(2)}</p>
+            <div class="flex items-center gap-2 mt-2">
+                <span class="text-xs font-bold ${badgeClass} px-2 py-0.5 rounded">${badgeText}</span>
+            </div>
+            <p class="text-slate-400 text-xs mt-1">من أصل ${maxPts} نقاط</p>
+        </div>`;
+}
+
+function buildPersonRow(name, role, withBorder) {
+    return `
+        <div class="flex items-center gap-4 ${withBorder ? 'mb-4 pb-4 border-b border-slate-50' : ''}">
+            <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center font-black text-slate-600 text-lg">${name.charAt(0)}</div>
+            <div>
+                <p class="font-black text-slate-800 text-base">${name}</p>
+                <p class="text-slate-400 text-sm font-medium">${role}</p>
+            </div>
+        </div>`;
+}
+
+// ============================================================
+// تحديث Open Graph Meta Tags
+// ============================================================
+function updateOGTags(title, description, url) {
+    ['og_title', 'twitter_title'].forEach(id => document.getElementById(id).setAttribute('content', title));
+    ['og_description', 'twitter_description', 'meta_description'].forEach(id => document.getElementById(id).setAttribute('content', description));
+    document.getElementById('og_url').setAttribute('content', url);
+    document.title = title;
+}
+
+// ============================================================
+// مشاركة صفحة النص
+// ============================================================
+function shareBulletinPage() {
+    const url = window.location.href;
+    if (navigator.share) {
+        navigator.share({
+            title: currentBulletinData ? `نص فرع ${currentBulletinData.bName} - آي إم سبيشل` : 'النص التشغيلية',
+            text:  currentBulletinData ? currentBulletinData.lead : 'تقرير الأداء الدوري',
+            url
+        }).catch(() => copyShareLink(url));
+    } else {
+        copyShareLink(url);
+    }
+}
+
+function copyShareLink(url) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(showCopyToast);
+    } else {
+        const el = document.createElement('textarea');
+        el.value = url;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        showCopyToast();
+    }
+}
+
+function showCopyToast() {
+    const toast = document.getElementById('copyToast');
+    toast.classList.remove('hidden');
+    toast.classList.add('copy-toast');
+    setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('copy-toast'); }, 2500);
+}
+
+// ============================================================
+// الكاروسيل
+// ============================================================
+function initCarousel() {
+    const carousel = document.getElementById('branchesCarousel');
+    carousel.innerHTML = '';
+
+    for (let i = 1; i <= 6; i++) {
+        const data = branchesData[i];
+        const { ratingValue, reviewsCount } = calcRating(data, i);
+
+        const card = document.createElement('div');
+        card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm snap-center transition-transform hover:-translate-y-1 hover:shadow-md cursor-grab active:cursor-grabbing";
+        card.innerHTML = `
+            <div class="flex justify-between items-start mb-5">
                 <div>
-                    <p class="font-black text-slate-800 text-base">شارك نشرة فرع ${data.bName}</p>
-                    <p class="text-slate-400 text-sm font-medium mt-1">انسخ الرابط وأرسله عبر واتساب - ستظهر معاينة كاملة للنشرة</p>
+                    <h3 class="font-black text-xl text-slate-800 tracking-tight">فرع ${data.bName}</h3>
+                    <p class="text-xs text-slate-500 font-bold mt-1">إدارة: ${data.mName} و ${data.dName}</p>
                 </div>
-                <button onclick="shareBulletinPage()" class="flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe57] text-white font-black px-6 py-3 rounded-xl transition share-btn shadow-md whitespace-nowrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                    مشاركة عبر واتساب
-                </button>
+                <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">${MAP_PIN_SVG}</div>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl font-black text-slate-800">${ratingValue}</span>
+                    <div class="flex text-lg leading-none mb-1">${buildStars(ratingValue)}</div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <span class="text-xs font-bold text-slate-500 mb-1">المراجعات</span>
+                    <span class="text-xs font-black text-blue-700 bg-blue-100 px-2.5 py-1 rounded-md border border-blue-200">${reviewsCount.toLocaleString('en-US')}</span>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-sm">
+                <div class="font-bold text-slate-600">النمو الشهري</div>
+                <div class="font-black text-emerald-600">+${data.positive} <span class="text-xs">مراجعة جديدة</span></div>
             </div>
         `;
-
-        document.getElementById('bulletinContent').innerHTML = content;
-
-        // إظهار صفحة النشرة وإخفاء الرئيسية
-        document.getElementById('mainPageWrapper').style.display = 'none';
-        const bulletinPage = document.getElementById('bulletinPage');
-        bulletinPage.style.display = 'flex';
-        bulletinPage.style.flexDirection = 'column';
-
-        // إعادة تطبيق الأنيميشن
-        const contentEl = document.getElementById('bulletinContent');
-        contentEl.classList.remove('slide-up');
-        void contentEl.offsetWidth;
-        contentEl.classList.add('slide-up');
-
-        // التمرير للأعلى
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        carousel.appendChild(card);
     }
+    setupCarouselEvents();
+}
 
-    // ============================================================
-    // تحديث Open Graph Meta Tags
-    // ============================================================
-    function updateOGTags(title, description, url) {
-        document.getElementById('og_title').setAttribute('content', title);
-        document.getElementById('og_description').setAttribute('content', description);
-        document.getElementById('og_url').setAttribute('content', url);
-        document.getElementById('twitter_title').setAttribute('content', title);
-        document.getElementById('twitter_description').setAttribute('content', description);
-        document.getElementById('meta_description').setAttribute('content', description);
-        document.title = title;
-    }
+function scrollCarousel(direction) {
+    document.getElementById('branchesCarousel').scrollBy({ left: direction * -340, behavior: 'smooth' });
+}
 
-    // ============================================================
-    // مشاركة صفحة النشرة
-    // ============================================================
-    function shareBulletinPage() {
-        const shareUrl = window.location.href;
-        
-        if (navigator.share) {
-            navigator.share({
-                title: currentBulletinData ? `نشرة فرع ${currentBulletinData.bName} - آي إم سبيشل` : 'النشرة التشغيلية',
-                text: currentBulletinData ? `${currentBulletinData.finalLead}` : 'تقرير الأداء الدوري',
-                url: shareUrl
-            }).catch(() => {
-                copyShareLink(shareUrl);
-            });
-        } else {
-            copyShareLink(shareUrl);
-        }
-    }
-
-    function copyShareLink(url) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(url).then(() => {
-                showCopyToast();
-            });
-        } else {
-            // fallback للمتصفحات القديمة
-            const el = document.createElement('textarea');
-            el.value = url;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            showCopyToast();
-        }
-    }
-
-    function showCopyToast() {
-        const toast = document.getElementById('copyToast');
-        toast.classList.remove('hidden');
-        toast.classList.add('copy-toast');
-        setTimeout(() => {
-            toast.classList.add('hidden');
-            toast.classList.remove('copy-toast');
-        }, 2500);
-    }
-
-    // ============================================================
-    // منطق الكاروسيل وبطاقات قوقل
-    // ============================================================
-    let carouselInterval;
-
-    function initCarousel() {
-        const carousel = document.getElementById('branchesCarousel');
-        carousel.innerHTML = '';
-
-        const baseReviews = [1420, 890, 2100, 650, 1150, 1840];
-
-        for (let i = 1; i <= 6; i++) {
-            const data = branchesData[i];
-            
-            let totalFeedbacks = data.positive + data.negative;
-            let ratingValue = totalFeedbacks > 0 
-                ? (4.0 + (data.positive / totalFeedbacks)).toFixed(1) 
-                : "4.5";
-            if(ratingValue > 5.0) ratingValue = "5.0";
-            
-            let reviewsCount = baseReviews[i-1] + data.positive;
-
-            const card = document.createElement('div');
-            card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm snap-center transition-transform hover:-translate-y-1 hover:shadow-md cursor-grab active:cursor-grabbing";
-            
-            card.innerHTML = `
-                <div class="flex justify-between items-start mb-5">
-                    <div>
-                        <h3 class="font-black text-xl text-slate-800 tracking-tight">فرع ${data.bName}</h3>
-                        <p class="text-xs text-slate-500 font-bold mt-1">إدارة: ${data.mName} و ${data.dName}</p>
-                    </div>
-                    <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">
-                        <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/>
-                            <circle cx="12" cy="9" r="2.5" fill="#FFF"/>
-                        </svg>
-                    </div>
-                </div>
-                
-                <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <span class="text-2xl font-black text-slate-800">${ratingValue}</span>
-                        <div class="flex flex-col">
-                            <div class="flex text-lg leading-none mb-1">
-                                <span class="google-star">★</span>
-                                <span class="google-star">★</span>
-                                <span class="google-star">★</span>
-                                <span class="google-star">★</span>
-                                <span class="${ratingValue == '5.0' ? 'google-star' : 'google-star-empty'}">★</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end">
-                        <span class="text-xs font-bold text-slate-500 mb-1">المراجعات</span>
-                        <span class="text-xs font-black text-blue-700 bg-blue-100 px-2.5 py-1 rounded-md border border-blue-200">${reviewsCount.toLocaleString('en-US')}</span>
-                    </div>
-                </div>
-                
-                <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-sm">
-                    <div class="font-bold text-slate-600">النمو الشهري</div>
-                    <div class="font-black text-emerald-600 flex items-center gap-1">
-                        +${data.positive} <span class="text-xs">مراجعة جديدة</span>
-                    </div>
-                </div>
-            `;
-            carousel.appendChild(card);
-        }
-
-        setupCarouselEvents();
-    }
-
-    function scrollCarousel(direction) {
-        const carousel = document.getElementById('branchesCarousel');
-        const scrollAmount = 340;
-        carousel.scrollBy({ left: direction * -scrollAmount, behavior: 'smooth' });
-    }
-
-    function setupCarouselEvents() {
-        const carousel = document.getElementById('branchesCarousel');
-        
-        const startAutoScroll = () => {
-            clearInterval(carouselInterval);
-            carouselInterval = setInterval(() => {
-                const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
-                if (Math.abs(carousel.scrollLeft) >= maxScrollLeft - 10) {
-                    carousel.scrollTo({ left: 0, behavior: 'smooth' });
-                } else {
-                    scrollCarousel(1);
-                }
-            }, 4000);
-        };
-
-        carousel.addEventListener('mouseenter', () => clearInterval(carouselInterval));
-        carousel.addEventListener('mouseleave', startAutoScroll);
-        carousel.addEventListener('touchstart', () => clearInterval(carouselInterval));
-        carousel.addEventListener('touchend', startAutoScroll);
-
-        startAutoScroll();
-    }
-
-    // ============================================================
-    // منطق الرقم السري للإدارة
-    // ============================================================
-    const pinBoxes = document.querySelectorAll('.pin-box');
-    
-    function handleBoxInput(el, idx) {
-        el.value = el.value.replace(/[^0-9]/g, ''); 
-        if (el.value !== '') {
-            if (idx < 3) pinBoxes[idx + 1].focus();
-            checkAdminPinLength();
-        }
-    }
-
-    function handleBoxKey(e, idx) {
-        if (e.key === 'Backspace' && e.target.value === '') {
-            if (idx > 0) {
-                pinBoxes[idx - 1].focus();
-                pinBoxes[idx - 1].value = '';
+function setupCarouselEvents() {
+    const carousel = document.getElementById('branchesCarousel');
+    const startAutoScroll = () => {
+        clearInterval(carouselInterval);
+        carouselInterval = setInterval(() => {
+            const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+            if (Math.abs(carousel.scrollLeft) >= maxScroll - 10) {
+                carousel.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                scrollCarousel(1);
             }
-        }
-    }
+        }, 4000);
+    };
+    carousel.addEventListener('mouseenter', () => clearInterval(carouselInterval));
+    carousel.addEventListener('mouseleave', startAutoScroll);
+    carousel.addEventListener('touchstart', () => clearInterval(carouselInterval));
+    carousel.addEventListener('touchend', startAutoScroll);
+    startAutoScroll();
+}
 
-    function checkAdminPinLength() {
-        let pin = Array.from(pinBoxes).map(b => b.value).join('');
-        if (pin.length === 4) {
-            verifyMaintenance(pin);
-        }
-    }
+// ============================================================
+// توليد صحيفة الأداء
+// ============================================================
+function generateNewspaper() {
+    const timelineContainer = document.getElementById('newsTimeline');
+    timelineContainer.innerHTML = '';
 
-    function verifyMaintenance(enteredPin) {
-        const today = new Date();
-        const correctPin = today.getDate().toString().padStart(2, '0') + (today.getMonth() + 1).toString().padStart(2, '0');
-        
-        if (enteredPin === correctPin) {
-            closeMaintenanceAuth();
-            document.getElementById('adminModal').style.display = 'flex';
-            loadAdminData();
-        } else {
-            alert("رمز المرور غير صحيح!");
-            pinBoxes.forEach(b => b.value = '');
-            pinBoxes[0].focus();
-        }
-    }
+    const dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric' }).format(new Date());
+    const dateSection = document.createElement('div');
+    dateSection.className = "relative";
+    dateSection.innerHTML = `
+        <div class="absolute -right-6 top-0 w-4 h-4 rounded-full bg-slate-800 border-4 border-white shadow"></div>
+        <h3 class="text-xl font-black text-slate-800 mb-6 bg-white inline-block px-4 py-1 rounded shadow-sm border border-slate-100">نص ${dateStr}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></div>
+    `;
+    timelineContainer.appendChild(dateSection);
+    const container = dateSection.querySelector('#cardsGrid');
 
-    function openMaintenanceAuth() {
-        document.getElementById('maintenanceAuthModal').style.display = 'flex';
+    for (let i = 1; i <= 6; i++) {
+        const data   = branchesData[i];
+        const scores = calcScores(data);
+        const tier   = getPerformanceTier(scores);
+        const tpl    = tier.articles[Math.floor(Math.random() * tier.articles.length)];
+        const text   = fillTemplate(tpl, data, scores.total);
+
+        // تم التعديل هنا: عنوان النص قابل للنقر وإخفاء أرقام التفاصيل وأزرار السفلية
+        container.innerHTML += `
+            <div class="bg-white p-6 rounded-xl shadow-sm newspaper-card flex flex-col justify-between hover:shadow-md transition border border-slate-100">
+                <div>
+                    <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1 rounded-full">تحليل السوق ◂ ${data.bName}</span>
+                    <h3 onclick="openBulletinPage(${i})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-800 cursor-pointer hover:text-blue-600 transition">${text.head}</h3>
+                    <p class="text-slate-600 text-sm font-bold mb-4 leading-relaxed">${text.lead}</p>
+                    <p class="text-slate-500 text-sm leading-relaxed text-justify mb-6">${text.body}</p>
+                </div>
+                <div class="mt-auto pt-5 border-t border-slate-100">
+                    <div class="flex justify-between items-center text-slate-800 font-black">
+                        <span>النقاط</span>
+                        <span class="bg-slate-800 text-white px-3 py-1 rounded text-sm">${scores.total} ◠</span>
+                    </div>
+                </div>
+            </div>`;
+    }
+}
+
+// ============================================================
+// رمز الإدارة (PIN)
+// ============================================================
+const pinBoxes = document.querySelectorAll('.pin-box');
+
+function handleBoxInput(el, idx) {
+    el.value = el.value.replace(/[^0-9]/g, '');
+    if (el.value !== '') {
+        if (idx < 3) pinBoxes[idx + 1].focus();
+        checkAdminPinLength();
+    }
+}
+
+function handleBoxKey(e, idx) {
+    if (e.key === 'Backspace' && e.target.value === '' && idx > 0) {
+        pinBoxes[idx - 1].focus();
+        pinBoxes[idx - 1].value = '';
+    }
+}
+
+function checkAdminPinLength() {
+    const pin = Array.from(pinBoxes).map(b => b.value).join('');
+    if (pin.length === 4) verifyMaintenance(pin);
+}
+
+function verifyMaintenance(enteredPin) {
+    const today = new Date();
+    const correctPin = today.getDate().toString().padStart(2, '0') + (today.getMonth() + 1).toString().padStart(2, '0');
+    if (enteredPin === correctPin) {
+        closeMaintenanceAuth();
+        document.getElementById('adminModal').style.display = 'flex';
+        loadAdminData();
+    } else {
+        alert("رمز المرور غير صحيح!");
         pinBoxes.forEach(b => b.value = '');
-        setTimeout(() => pinBoxes[0].focus(), 100);
+        pinBoxes[0].focus();
     }
-    
-    function closeMaintenanceAuth() {
-        document.getElementById('maintenanceAuthModal').style.display = 'none';
-    }
+}
 
-    // ============================================================
-    // نوافذ التوقعات (القياس التلقائي)
-    // ============================================================
-    let autoMultiplier = 1;
+function openMaintenanceAuth() {
+    document.getElementById('maintenanceAuthModal').style.display = 'flex';
+    pinBoxes.forEach(b => b.value = '');
+    setTimeout(() => pinBoxes[0].focus(), 100);
+}
 
-    function openPredictionModal() {
-        document.getElementById('predictionModal').style.display = 'flex';
-        setupDateCalculator();
-        loadTrialDataFromDB();
-    }
-    
-    function closePredictionModal() {
-        document.getElementById('predictionModal').style.display = 'none';
-    }
+function closeMaintenanceAuth() {
+    document.getElementById('maintenanceAuthModal').style.display = 'none';
+}
 
-    function setupDateCalculator() {
-        const today = new Date();
-        const currentDay = today.getDate();
-        const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-        const remainingDays = daysInMonth - currentDay;
-        
-        document.getElementById('daysPassed').innerText = currentDay;
-        document.getElementById('daysRemaining').innerText = remainingDays;
-        
-        if (currentDay > 0) {
-            autoMultiplier = daysInMonth / currentDay;
-        } else {
-            autoMultiplier = 1;
-        }
-    }
+// ============================================================
+// لوحة التحكم (Admin)
+// ============================================================
+function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
 
-    function loadTrialDataFromDB() {
-        let branchId = document.getElementById('trial_branch_select').value;
-        let data = branchesData[branchId];
-        
-        document.getElementById('trial_positive').value = data.positive;
-        document.getElementById('trial_negative').value = data.negative;
-        
+function loadAdminData() {
+    const id = document.getElementById('branchSelector').value;
+    const d  = branchesData[id];
+    const fields = { admin_bName: d.bName, admin_mName: d.mName, admin_dName: d.dName,
+                     admin_safety: d.safety, admin_visitors: d.visitors, admin_complaints: d.complaints,
+                     admin_positive: d.positive, admin_negative: d.negative, admin_target: d.target };
+    Object.entries(fields).forEach(([id, val]) => document.getElementById(id).value = val);
+}
+
+function saveAdminData() {
+    const id = document.getElementById('branchSelector').value;
+    const num = (fieldId, def = 0) => parseFloat(document.getElementById(fieldId).value) || def;
+    branchesData[id] = {
+        bName:      document.getElementById('admin_bName').value,
+        mName:      document.getElementById('admin_mName').value,
+        dName:      document.getElementById('admin_dName').value,
+        safety:     num('admin_safety'),
+        visitors:   num('admin_visitors', 1),
+        complaints: num('admin_complaints'),
+        positive:   num('admin_positive'),
+        negative:   num('admin_negative'),
+        target:     num('admin_target', 50)
+    };
+    closeAdmin();
+    generateNewspaper();
+    initCarousel();
+}
+
+// ============================================================
+// حاسبة الأداء (Prediction Modal)
+// ============================================================
+function openPredictionModal() {
+    document.getElementById('predictionModal').style.display = 'flex';
+    setupDateCalculator();
+    loadTrialDataFromDB();
+}
+
+function closePredictionModal() {
+    document.getElementById('predictionModal').style.display = 'none';
+}
+
+function setupDateCalculator() {
+    const today       = new Date();
+    const currentDay  = today.getDate();
+    const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    document.getElementById('daysPassed').innerText    = currentDay;
+    document.getElementById('daysRemaining').innerText = daysInMonth - currentDay;
+    autoMultiplier = currentDay > 0 ? daysInMonth / currentDay : 1;
+}
+
+function loadTrialDataFromDB() {
+    const data = branchesData[document.getElementById('trial_branch_select').value];
+    document.getElementById('trial_positive').value = data.positive;
+    document.getElementById('trial_negative').value = data.negative;
+    calculateTrial();
+}
+
+function clearTrialData() {
+    if (confirm("هل تريد إعادة ضبط الحقول للقيم الصفرية؟")) {
+        document.getElementById('trial_positive').value = '';
+        document.getElementById('trial_negative').value = '';
         calculateTrial();
     }
+}
 
-    function clearTrialData() {
-        if(confirm("هل تريد إعادة ضبط الحقول للقيم الصفرية؟")) {
-            document.getElementById('trial_positive').value = '';
-            document.getElementById('trial_negative').value = '';
-            calculateTrial();
-        }
-    }
+function calculateTrial() {
+    const data       = branchesData[document.getElementById('trial_branch_select').value];
+    const rawPositive = parseFloat(document.getElementById('trial_positive').value) || 0;
+    const rawNegative = parseFloat(document.getElementById('trial_negative').value) || 0;
 
-    function calculateTrial() {
-        let activeBranchId = document.getElementById('trial_branch_select').value;
-        let data = branchesData[activeBranchId];
-        let target = data.target || 50;
+    const projData = { ...data, positive: rawPositive * autoMultiplier, negative: rawNegative };
+    const scores = calcScores(projData);
+    const negWeight  = (data.target / Math.max(1, rawPositive * autoMultiplier)) * 0.25;
+    const ptsNegative = Math.max(0, 2 - (rawNegative * negWeight));
+    let total = Math.round((scores.ptsSafety + scores.ptsComplaints + scores.ptsPositive + ptsNegative) * 100) / 100;
+    if (isNaN(total)) total = 0;
 
-        let projSafety = data.safety; 
-        let projComplaints = data.complaints; 
-        let projVisitors = data.visitors; 
+    document.getElementById('resSafety').innerText    = scores.ptsSafety.toFixed(2);
+    document.getElementById('resComplaints').innerText = scores.ptsComplaints.toFixed(2);
+    document.getElementById('resPos').innerText        = scores.ptsPositive.toFixed(2);
+    document.getElementById('resNeg').innerText        = ptsNegative.toFixed(2);
+    document.getElementById('totalPoints').innerText   = total;
+    document.getElementById('progressBar').style.width = `${Math.min(100, (total / 11) * 100)}%`;
 
-        let rawPositive = parseFloat(document.getElementById('trial_positive').value) || 0;
-        let rawNegative = parseFloat(document.getElementById('trial_negative').value) || 0;
-        
-        let projPositive = rawPositive * autoMultiplier;
-
-        let ptsSafety = Math.max(0, 3 - projSafety);
-        let complaintDeduction = projComplaints / (projVisitors * 0.003);
-        let ptsComplaints = Math.max(0, 2 - complaintDeduction);
-        let ptsPositive = Math.min(4, (projPositive / target) * 4);
-        let negWeight = (target / Math.max(1, projPositive)) * 0.25;
-        let ptsNegative = Math.max(0, 2 - (rawNegative * negWeight));
-
-        let total = Math.round((ptsSafety + ptsComplaints + ptsPositive + ptsNegative) * 100) / 100;
-        if(isNaN(total)) total = 0;
-
-        document.getElementById('resSafety').innerText = ptsSafety.toFixed(2);
-        document.getElementById('resComplaints').innerText = ptsComplaints.toFixed(2);
-        document.getElementById('resPos').innerText = ptsPositive.toFixed(2);
-        document.getElementById('resNeg').innerText = ptsNegative.toFixed(2);
-        document.getElementById('totalPoints').innerText = total;
-
-        const progressPercentage = Math.min(100, (total / 11) * 100);
-        document.getElementById('progressBar').style.width = `${progressPercentage}%`;
-
-        const rewardBox = document.getElementById('rewardBox');
-        let additionText = "<br><span class='text-xs font-bold text-slate-500 mt-2 block'>عند الاستمرار بنفس الاداء</span>";
-        
-        if (total >= 9) {
-            rewardBox.innerHTML = `التوقع: أداء مرتفع ✓` + additionText;
-            rewardBox.className = "mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[#10b981] text-slate-800";
-        } else if (total >= 7) {
-            rewardBox.innerHTML = `التوقع: أداء متوسط ◬` + additionText;
-            rewardBox.className = "mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[#f59e0b] text-slate-800";
-        } else if (total >= 4) {
-            rewardBox.innerHTML = `التوقع: أداء منخفض ⚠` + additionText;
-            rewardBox.className = "mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[#f97316] text-slate-800";
-        } else {
-            rewardBox.innerHTML = `التوقع: أداء حرج ⨂` + additionText;
-            rewardBox.className = "mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[#ef4444] text-slate-800";
-        }
-    }
-
-    // ============================================================
-    // قسم الإدارة
-    // ============================================================
-    function closeAdmin() {
-        document.getElementById('adminModal').style.display = 'none';
-    }
-
-    function loadAdminData() {
-        let adminBranchId = document.getElementById('branchSelector').value;
-        const data = branchesData[adminBranchId];
-        document.getElementById('admin_bName').value = data.bName;
-        document.getElementById('admin_mName').value = data.mName;
-        document.getElementById('admin_dName').value = data.dName;
-        document.getElementById('admin_safety').value = data.safety;
-        document.getElementById('admin_visitors').value = data.visitors;
-        document.getElementById('admin_complaints').value = data.complaints;
-        document.getElementById('admin_positive').value = data.positive;
-        document.getElementById('admin_negative').value = data.negative;
-        document.getElementById('admin_target').value = data.target;
-    }
-
-    function saveAdminData() {
-        let adminBranchId = document.getElementById('branchSelector').value;
-        branchesData[adminBranchId] = {
-            bName: document.getElementById('admin_bName').value,
-            mName: document.getElementById('admin_mName').value,
-            dName: document.getElementById('admin_dName').value,
-            safety: parseFloat(document.getElementById('admin_safety').value) || 0,
-            visitors: parseFloat(document.getElementById('admin_visitors').value) || 1,
-            complaints: parseFloat(document.getElementById('admin_complaints').value) || 0,
-            positive: parseFloat(document.getElementById('admin_positive').value) || 0,
-            negative: parseFloat(document.getElementById('admin_negative').value) || 0,
-            target: parseFloat(document.getElementById('admin_target').value) || 50
-        };
-        closeAdmin();
-        generateNewspaper();
-        initCarousel();
-    }
-
-    // ============================================================
-    // توليد صحيفة الأداء
-    // ============================================================
-    function generateNewspaper() {
-        const timelineContainer = document.getElementById('newsTimeline');
-        timelineContainer.innerHTML = '';
-
-        const dateOptions = { month: 'long', day: 'numeric' };
-        const currentDateStr = new Intl.DateTimeFormat('ar-EG', dateOptions).format(new Date());
-
-        const dateSection = document.createElement('div');
-        dateSection.className = "relative";
-        
-        const dateHeader = `
-            <div class="absolute -right-6 top-0 w-4 h-4 rounded-full bg-slate-800 border-4 border-white shadow"></div>
-            <h3 class="text-xl font-black text-slate-800 mb-6 bg-white inline-block px-4 py-1 rounded shadow-sm border border-slate-100">نشرة ${currentDateStr}</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></div>
-        `;
-        dateSection.innerHTML = dateHeader;
-        timelineContainer.appendChild(dateSection);
-        
-        const container = dateSection.querySelector('#cardsGrid');
-
-        const articlesPool = {
-            high: [
-                { h: "أسهم '{b}' تعانق السحاب.. تكتيك استثنائي من '{m}' يكتسح السوق", l: "نجح فرع {b} في كسر حاجز المقاومة مسجلاً أرباحاً معنوية بلغت {s} نقطة.", b: "ويأتي هذا التفوق الميداني ثمرة للتناغم التكتيكي بين المديرة {m} ونائبتها {d}، حيث سجل الفرع استحواذاً كاملاً على رضا العملاء وتراجعاً حاداً في مؤشر الشكاوى." },
-                { h: "في ديربي التميز.. '{m}' و '{d}' يقودان '{b}' لمنصة التتويج", l: "اكتسح فرع {b} منافسيه في مؤشرات الجودة محققاً {s} نقطة، في أداء يُصنف كـ 'الاستثنائي'.", b: "وأثبتت المديرة {m} أن الإدارة الهجومية في كسب التقييمات هي سر الصدارة، بمساندة قوية من {d} التي أغلقت دفاعات الفرع أمام ثغرات السلامة." }
-            ],
-            med: [
-                { h: "أداء متذبذب لأسهم '{b}'.. هل تنجح '{m}' في كسر حاجز المقاومة؟", l: "أظهرت التقارير ثباتاً حذراً في أداء فرع {b} بحصده {s} نقطة.", b: "وتشير القراءات الفنية إلى أن الفرع يمتلك مقومات الصعود، إلا أن المحللين ينتظرون 'تكتيكاً هجومياً' جديداً من المديرة {m} ونائبتها {d} في قادم الأيام." },
-                { h: "استقرار حذر في مؤشرات '{b}'.. والمستثمرون يترقبون الخطوة القادمة", l: "تترقب إدارة آي إم سبيشل التحركات القادمة لفرع {b} بعد إغلاقه عند {s} نقطة.", b: "تحتاج المديرة {m} إلى ضخ دماء جديدة في خطة العمل لضمان عدم انزلاق الفرع نحو المؤشرات الحمراء وتعزيز مكاسب السمعة." }
-            ],
-            low_safety: [
-                { h: "صافرات الإنذار تدوي في '{b}'.. ثغرات السلامة تعصف بالمؤشر", l: "هبوط حاد لفرع {b} إلى {s} نقطة إثر تقارير مقلقة تتعلق باختراقات في بروتوكولات السلامة.", b: "وجهت الإدارة العليا استفسارات عاجلة للمديرة {m} حول القصور الواضح، ويُنتظر من النائبة {d} تفعيل خطة طوارئ ميدانية لضمان بيئة آمنة للعملاء فوراً." }
-            ],
-            low_complaints: [
-                { h: "عاصفة من الاستياء تضرب '{b}'.. أين إدارة الأزمات يا '{m}'؟", l: "مؤشر فرع {b} يغرق عند {s} نقطة تحت وطأة ارتفاع معدل الشكاوى وتذمر الزوار.", b: "تشير البيانات التحليلية إلى ضعف في سرعة الاستجابة لمعالجة الخلل. يجب على {m} بالتعاون مع {d} التواجد في الواجهة لاحتواء غضب العملاء قبل تفاقم الأزمة." }
-            ],
-            low_reviews: [
-                { h: "جفاف في التقييمات.. '{b}' يفقد بوصلة التواصل مع عملائه", l: "أنهى فرع {b} الجولة برصيد هزيل بلغ {s} نقطة نتيجة الفشل في حصد تقييمات إيجابية.", b: "غياب المبادرة من قبل فريق {m} و {d} في تحفيز العملاء على التقييم أفقد الفرع نقاطاً مجانية. التميز الصامت لم يعد كافياً في سوق يتنفس بلغة الأرقام الموثقة." }
-            ]
-        };
-
-        for (let i = 1; i <= 6; i++) {
-            const data = branchesData[i];
-            
-            let ptsSafety = Math.max(0, 3 - data.safety);
-            let ptsComplaints = Math.max(0, 2 - (data.complaints / (data.visitors * 0.003)));
-            let ptsPositive = Math.min(4, (data.positive / data.target) * 4);
-            let negWeight = (data.target / Math.max(1, data.positive)) * 0.25;
-            let ptsNegative = Math.max(0, 2 - (data.negative * negWeight));
-            let total = Math.round((ptsSafety + ptsComplaints + ptsPositive + ptsNegative) * 100) / 100;
-
-            let selectedArray = [];
-            let headerColor = "";
-
-            if (total >= 9) {
-                selectedArray = articlesPool.high;
-                headerColor = "text-emerald-700 bg-emerald-50 border-emerald-200";
-            } else if (total >= 6.5) {
-                selectedArray = articlesPool.med;
-                headerColor = "text-amber-700 bg-amber-50 border-amber-200";
-            } else {
-                headerColor = "text-rose-800 bg-rose-50 border-rose-200";
-                if (ptsSafety < 3) {
-                    selectedArray = articlesPool.low_safety;
-                } else if (ptsComplaints < 1) {
-                    selectedArray = articlesPool.low_complaints;
-                } else {
-                    selectedArray = articlesPool.low_reviews;
-                }
-            }
-
-            const randomTemplate = selectedArray[Math.floor(Math.random() * selectedArray.length)];
-            const finalHead = randomTemplate.h.replace(/{b}/g, data.bName).replace(/{m}/g, data.mName).replace(/{d}/g, data.dName).replace(/{s}/g, total);
-            const finalLead = randomTemplate.l.replace(/{b}/g, data.bName).replace(/{m}/g, data.mName).replace(/{d}/g, data.dName).replace(/{s}/g, total);
-            const finalBody = randomTemplate.b.replace(/{b}/g, data.bName).replace(/{m}/g, data.mName).replace(/{d}/g, data.dName).replace(/{s}/g, total);
-
-            const branchIndex = i; // حفظ الـ index للاستخدام في onclick
-
-            const article = `
-                <div class="bg-white p-6 rounded-xl shadow-sm newspaper-card flex flex-col justify-between hover:shadow-md transition border border-slate-100">
-                    <div>
-                        <span class="${headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1 rounded-full">تحليل السوق ◂ ${data.bName}</span>
-                        <h3 class="font-black text-xl mt-5 mb-3 leading-snug text-slate-800">${finalHead}</h3>
-                        <p class="text-slate-600 text-sm font-bold mb-4 leading-relaxed">${finalLead}</p>
-                        <p class="text-slate-500 text-sm leading-relaxed text-justify mb-6">${finalBody}</p>
-                    </div>
-                    
-                    <div class="mt-auto pt-5 border-t border-slate-100">
-                        <div class="flex justify-between items-center text-slate-800 font-black mb-4">
-                            <span>المؤشر العام</span>
-                            <span class="bg-slate-800 text-white px-3 py-1 rounded text-sm">${total} ◠</span>
-                        </div>
-                        
-                        <div class="bg-slate-50 rounded border border-slate-100 p-4 text-sm font-medium text-slate-600 space-y-3 mb-4">
-                            <div class="flex justify-between items-center">
-                                <span>حوادث السلامة</span> 
-                                <span class="font-bold ${data.safety > 0 ? 'text-rose-600' : 'text-emerald-600'}">${data.safety}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span>الشكاوى المسجلة</span> 
-                                <span class="font-bold text-amber-600">${data.complaints}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span>التقييمات الإيجابية</span> 
-                                <span class="font-bold text-emerald-600">${data.positive}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span>التقييمات السلبية</span> 
-                                <span class="font-bold text-rose-600">${data.negative}</span>
-                            </div>
-                        </div>
-
-                        <!-- أزرار الإجراءات -->
-                        <div class="flex gap-2">
-                            <button onclick="openBulletinPage(${branchIndex})" class="flex-1 flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm py-2.5 px-4 rounded-lg transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                                عرض النشرة كاملة
-                            </button>
-                            <button onclick="openBulletinAndShare(${branchIndex})" class="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm py-2.5 px-4 rounded-lg transition border border-slate-200 share-btn" title="مشاركة النشرة">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                                مشاركة
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            container.innerHTML += article;
-        }
-    }
-
-    // ============================================================
-    // فتح النشرة ثم المشاركة مباشرة
-    // ============================================================
-    function openBulletinAndShare(branchId) {
-        openBulletinPage(branchId);
-        // تأخير بسيط لضمان تحديث الرابط أولاً
-        setTimeout(() => {
-            shareBulletinPage();
-        }, 300);
-    }
-
+    const additionText = "<br><span class='text-xs font-bold text-slate-500 mt-2 block'>عند الاستمرار بنفس الاداء</span>";
+    const rewardBox = document.getElementById('rewardBox');
+    const levels = [
+        { min: 9,   text: "التوقع: أداء مرتفع ✓",    border: "#10b981" },
+        { min: 7,   text: "التوقع: أداء متوسط ◬",    border: "#f59e0b" },
+        { min: 4,   text: "التوقع: أداء منخفض ⚠",   border: "#f97316" },
+        { min: -Infinity, text: "التوقع: أداء حرج ⨂", border: "#ef4444" }
+    ];
+    const level = levels.find(l => total >= l.min);
+    rewardBox.innerHTML   = level.text + additionText;
+    rewardBox.className   = `mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[${level.border}] text-slate-800`;
+}
 </script>
 
 </body>
