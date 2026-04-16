@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آي إم سبيشل - النظام الداخلي</title>
+    <title>آي أم سبيشل - النظام الداخلي</title>
 
-    <meta property="og:title" id="og_title" content="النص التشغيلية - آي إم سبيشل">
+    <meta property="og:title" id="og_title" content="التقرير الأسبوعي - آي أم سبيشل">
     <meta property="og:description" id="og_description" content="تقرير الأداء الدوري وتوقعات الإغلاق">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="آي إم سبيشل">
@@ -14,7 +14,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" id="twitter_title" content="تعزيز سمعة العلامة التجارية">
     <meta name="twitter:description" id="twitter_description" content="تقارير الاداء والتحديثات اليومية">
-    <meta name="description" id="meta_description" content="النص التشغيلية للأداء - آي إم سبيشل">
+    <meta name="description" id="meta_description" content="التقرير الأسبوعي للأداء - آي إم سبيشل">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -71,7 +71,7 @@
 <div id="mainPageWrapper">
     <div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
         <div class="space-y-2 mb-8 text-center">
-            <h2 class="text-3xl font-black text-slate-800 tracking-wide">▤ النص التشغيلية للأداء</h2>
+            <h2 class="text-3xl font-black text-slate-800 tracking-wide">▤ التقرير الأسبوعي للأداء</h2>
             <p class="text-slate-500 font-medium">تقرير الأداء الدوري وتوقعات الإغلاق</p>
         </div>
 
@@ -89,7 +89,7 @@
     <div class="bg-white border-b border-slate-100 shadow-sm sticky top-[65px] z-30">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
             <button onclick="goToMainPage()" class="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold text-sm transition bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-lg border border-slate-200">
-                ← العودة للنص الرئيسية
+                ← العودة للتقرير الرئيسية
             </button>
             <div class="flex-grow">
                 <span id="bulletinBreadcrumb" class="text-slate-400 text-sm font-medium">تحليل السوق</span>
@@ -105,7 +105,7 @@
 </div>
 
 <div id="copyToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white font-bold px-6 py-3 rounded-xl shadow-xl z-50 hidden text-sm">
-    ✓ تم نسخ رابط النص
+    ✓ تم نسخ رابط التقرير
 </div>
 
 <div id="predictionModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
@@ -240,7 +240,7 @@ let branchesData = {
 const ARTICLES_POOL = {
     high: [
         { h: "أسهم '{b}' تعانق السحاب.. تكتيك استثنائي من '{m}' يكتسح السوق",         l: "نجح فرع {b} في كسر حاجز المقاومة مسجلاً أرباحاً معنوية بلغت {s} نقطة.",                                                            b: "ويأتي هذا التفوق الميداني ثمرة للتناغم التكتيكي بين المديرة {m} ونائبتها {d}، حيث سجل الفرع استحواذاً كاملاً على رضا العملاء وتراجعاً حاداً في مؤشر الشكاوى." },
-        { h: "في ديربي التميز.. '{m}' و '{d}' يقودان '{b}' لمنصة التتويج",              l: "اكتسح فرع {b} منافسيه في مؤشرات الجودة محققاً {s} نقطة، في أداء يُصنف كـ 'الاستثنائي'.",                                           b: "وأثبتت المديرة {m} أن الإدارة الهجومية في كسب التقييمات هي سر الصدارة، بمساندة قوية من {d} التي أغلقت دفاعات الفرع أمام ثغرات السلامة." }
+        { h: "في ديربي التميز.. '{m}' و '{d}' يقودان '{b}' لمتقريرة التتويج",              l: "اكتسح فرع {b} منافسيه في مؤشرات الجودة محققاً {s} نقطة، في أداء يُصنف كـ 'الاستثنائي'.",                                           b: "وأثبتت المديرة {m} أن الإدارة الهجومية في كسب التقييمات هي سر الصدارة، بمساندة قوية من {d} التي أغلقت دفاعات الفرع أمام ثغرات السلامة." }
     ],
     med: [
         { h: "أداء متذبذب لأسهم '{b}'.. هل تنجح '{m}' في كسر حاجز المقاومة؟",         l: "أظهرت التقارير ثباتاً حذراً في أداء فرع {b} بحصده {s} نقطة.",                                                                     b: "وتشير القراءات الفنية إلى أن الفرع يمتلك مقومات الصعود، إلا أن المحللين ينتظرون 'تكتيكاً هجومياً' جديداً من المديرة {m} ونائبتها {d} في قادم الأيام." },
@@ -367,11 +367,11 @@ function showPage(pageId) {
 function goToMainPage() {
     showPage('main');
     history.pushState('', document.title, window.location.pathname);
-    updateOGTags('النص التشغيلية - آي إم سبيشل', 'تقرير الأداء الدوري وتوقعات الإغلاق', window.location.href);
+    updateOGTags('التقرير الأسبوعي - آي إم سبيشل', 'تقرير الأداء الدوري وتوقعات الإغلاق', window.location.href);
 }
 
 // ============================================================
-// صفحة النص المستقلة
+// صفحة التقرير المستقلة
 // ============================================================
 function openBulletinPage(branchId) {
     const data    = branchesData[branchId];
@@ -388,7 +388,7 @@ function openBulletinPage(branchId) {
     document.getElementById('bulletinBreadcrumbBranch').textContent = `فرع ${data.bName}`;
     history.pushState('', '', `#bulletin-${branchId}`);
     updateOGTags(
-        `نص فرع ${data.bName} - ${text.head}`,
+        `تقرير فرع ${data.bName} - ${text.head}`,
         `${text.lead} ${text.body} | المؤشر العام: ${scores.total}/11 | ${tier.label}`,
         window.location.href
     );
@@ -515,13 +515,13 @@ function updateOGTags(title, description, url) {
 }
 
 // ============================================================
-// مشاركة صفحة النص
+// مشاركة صفحة التقرير
 // ============================================================
 function shareBulletinPage() {
     const url = window.location.href;
     if (navigator.share) {
         navigator.share({
-            title: currentBulletinData ? `نص فرع ${currentBulletinData.bName} - آي إم سبيشل` : 'النص التشغيلية',
+            title: currentBulletinData ? `تقرير فرع ${currentBulletinData.bName} - آي إم سبيشل` : 'التقرير الأسبوعي',
             text:  currentBulletinData ? currentBulletinData.lead : 'تقرير الأداء الدوري',
             url
         }).catch(() => copyShareLink(url));
@@ -628,7 +628,7 @@ function generateNewspaper() {
     dateSection.className = "relative";
     dateSection.innerHTML = `
         <div class="absolute -right-6 top-0 w-4 h-4 rounded-full bg-slate-800 border-4 border-white shadow"></div>
-        <h3 class="text-xl font-black text-slate-800 mb-6 bg-white inline-block px-4 py-1 rounded shadow-sm border border-slate-100">نص ${dateStr}</h3>
+        <h3 class="text-xl font-black text-slate-800 mb-6 bg-white inline-block px-4 py-1 rounded shadow-sm border border-slate-100">تقرير ${dateStr}</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></div>
     `;
     timelineContainer.appendChild(dateSection);
@@ -641,7 +641,7 @@ function generateNewspaper() {
         const tpl    = tier.articles[Math.floor(Math.random() * tier.articles.length)];
         const text   = fillTemplate(tpl, data, scores.total);
 
-        // تم التعديل هنا: عنوان النص قابل للنقر وإخفاء أرقام التفاصيل وأزرار السفلية
+        // تم التعديل هنا: عنوان التقرير قابل للنقر وإخفاء أرقام التفاصيل وأزرار السفلية
         container.innerHTML += `
             <div class="bg-white p-6 rounded-xl shadow-sm newspaper-card flex flex-col justify-between hover:shadow-md transition border border-slate-100">
                 <div>
