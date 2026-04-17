@@ -735,12 +735,12 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     ` : `
         <div class="mb-8 ${isAdminLoggedIn ? 'bg-amber-50 border-amber-200' : 'bg-slate-50 border-slate-200'} border rounded-2xl p-6">
             <div class="flex items-start gap-4">
-                <span class="text-3xl">${isAdminLoggedIn ? '✍️' : '⏳'}</span>
+                <span class="text-3xl">${isAdminLoggedIn ? '<' : '<'}</span>
                 <div>
                     ${isAdminLoggedIn ?
                     `
                         <h3 class="font-black text-amber-800 text-lg mb-1">لم يُكتب مقال هذا الفرع بعد</h3>
-                        <p class="text-amber-700 text-sm font-medium mb-4">يمكنك توليد أمر الذكاء الاصطناعي لكتابة مقال احترافي، ثم لصق النتيجة هنا.</p>
+                        <p class="text-amber-700 text-sm font-medium mb-4">اكتب مقالا</p>
                         <button onclick="openArticleModal(${branchId})" class="bg-amber-700 hover:bg-amber-800 text-white font-black px-5 py-2.5 rounded-lg text-sm transition shadow">✦ كتابة المقال</button>
                     ` : `
                         <p class="text-slate-700 text-lg font-bold mt-1">بانتظار تحركات المديرة ${data.mName} ونائبتها ${data.dName}</p>
@@ -886,12 +886,12 @@ function shareBulletinPage() {
     const lead       = currentBulletinData ? currentBulletinData.lead : 'تقرير الأداء الدوري';
 
     const waText = encodeURIComponent(
-        `📊 *تقرير أداء فرع ${branchName}*\n`
+        ` *تقرير أداء فرع ${branchName}*\n`
       + `آي إم سبيشل\n\n`
       + `${head}\n\n`
       + `${lead}\n\n`
       + `تصنيف: ${scoreLabel}\n\n`
-      + `🔗 ${url}`
+      + ` ${url}`
     );
     const waUrl = `https://api.whatsapp.com/send?text=${waText}`;
     window.open(waUrl, '_blank');
@@ -930,7 +930,7 @@ function initCarousel() {
                     <p class="text-xs text-slate-500 font-bold mt-1">إدارة: ${data.mName} و ${data.dName}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    ${hasArticle ? '<span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">✓ مقال</span>' : ''}
+                    ${hasArticle ? '<span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">✓ </span>' : ''}
                     <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">${MAP_PIN_SVG}</div>
                 </div>
             </div>
@@ -1020,7 +1020,7 @@ function generateNewspaper() {
             <div class="mt-5 mb-3">
                 <h3 onclick="openBulletinPage(${i})" class="font-black text-xl leading-snug text-slate-800 cursor-pointer hover:text-blue-600 transition mb-2">تقرير فرع ${data.bName}</h3>
                 ${isAdminLoggedIn ? `
-                    <p class="text-slate-500 text-sm leading-relaxed mb-3">لم يُكتب مقال هذا الفرع بعد. انقر على "كتابة المقال" لتوليد أمر الذكاء الاصطناعي.</p>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-3">لم يُكتب مقال هذا الفرع .</p>
                     <button onclick="openArticleModal(${i})" class="text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded transition">✦ كتابة المقال</button>
                 ` : `
                     <p class="text-slate-500 text-sm font-bold leading-relaxed mb-3">بانتظار تحركات المديرة ${data.mName} ونائبتها ${data.dName}</p>
