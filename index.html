@@ -692,7 +692,7 @@ function verifyMaintenance(enteredPin) {
         document.getElementById('adminModal').style.display = 'flex';
         loadAdminData();
     } else {
-        alert( غير صحيح!");
+        alert( "غير صحيح!");
         pinBoxes.forEach(b => b.value = '');
         pinBoxes[0].focus();
     }
