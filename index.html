@@ -192,7 +192,7 @@
         </div>
         <div class="p-8 space-y-8">
             <div class="bg-slate-100 p-4 rounded flex flex-col md:flex-row gap-4 items-center">
-                <label class="font-bold text-slate-800 whitespace-nowrap">اختر المعرف:</label>
+                <label class="font-bold text-slate-800 whitespace-nowrap">اختر الفرع:</label>
                 <select id="branchSelector" onchange="loadAdminData()" class="w-full md:w-auto p-2 rounded border-slate-300 font-bold focus:outline-none">
                     <option value="1">فرع 1 (الياسمين)</option>
                     <option value="2">فرع 2 (الملقا)</option>
@@ -225,12 +225,12 @@
 // قاعدة البيانات
 // ============================================================
 let branchesData = {
-    1: { bName: "الياسمين", mName: "نورة",  dName: "سارة",   safety: 0, visitors: 1200, complaints: 2, positive: 55, negative: 1, target: 50 },
-    2: { bName: "الملقا",   mName: "ريم",    dName: "هيفاء",  safety: 1, visitors: 900,  complaints: 5, positive: 40, negative: 3, target: 50 },
-    3: { bName: "الندى",    mName: "لمى",    dName: "شهد",    safety: 0, visitors: 1500, complaints: 1, positive: 70, negative: 0, target: 50 },
-    4: { bName: "النرجس",   mName: "مها",    dName: "العنود", safety: 0, visitors: 800,  complaints: 0, positive: 30, negative: 4, target: 50 },
-    5: { bName: "الربيع",   mName: "عبير",   dName: "روان",   safety: 2, visitors: 1100, complaints: 8, positive: 45, negative: 6, target: 50 },
-    6: { bName: "الغدير",   mName: "نجلاء",  dName: "دلال",   safety: 0, visitors: 1300, complaints: 3, positive: 60, negative: 2, target: 50 }
+    1: { bName: "شرق بلازا", mName: "فاطمة",  dName: "نورة",   safety: 0, visitors: 1200, complaints: 2, positive: 55, negative: 1, target: 50 },
+    2: { bName: "الرياض جاليري",   mName: "فاطمة",    dName: ".",  safety: 1, visitors: 900,  complaints: 5, positive: 40, negative: 3, target: 50 },
+    3: { bName: "ذافيو",    mName: "اسمهان الغامدي",    dName: "فاطمه الحارثي",    safety: 0, visitors: 1500, complaints: 1, positive: 70, negative: 0, target: 50 },
+    4: { bName: "القصر",   mName: "فاطمة",    dName: "العنود", safety: 0, visitors: 800,  complaints: 0, positive: 30, negative: 4, target: 50 },
+    5: { bName: "سلام مول",   mName: "عبير",   dName: "روان",   safety: 2, visitors: 1100, complaints: 8, positive: 45, negative: 6, target: 50 },
+    6: { bName: "مركز المملكة",   mName: "نجلاء",  dName: "دلال",   safety: 0, visitors: 1300, complaints: 3, positive: 60, negative: 2, target: 50 }
 };
 
 // ============================================================
@@ -286,7 +286,7 @@ function getPerformanceTier(scores) {
     if (total >= 9) return {
         articles:       ARTICLES_POOL.high,
         headerColor:    "text-emerald-700 bg-emerald-50 border-emerald-200",
-        label:          "أداء مرتفع",
+        label:          "أخضر",
         labelBg:        "bg-emerald-50 border-emerald-200 text-emerald-800",
         borderColor:    "border-emerald-400",
         barColor:       "bg-emerald-500"
@@ -294,7 +294,7 @@ function getPerformanceTier(scores) {
     if (total >= 6.5) return {
         articles:       ARTICLES_POOL.med,
         headerColor:    "text-amber-700 bg-amber-50 border-amber-200",
-        label:          "أداء متوسط",
+        label:          "أصفر",
         labelBg:        "bg-amber-50 border-amber-200 text-amber-800",
         borderColor:    "border-amber-400",
         barColor:       "bg-amber-500"
@@ -305,7 +305,7 @@ function getPerformanceTier(scores) {
     return {
         articles,
         headerColor:    "text-rose-800 bg-rose-50 border-rose-200",
-        label:          "أداء منخفض",
+        label:          "أحمر",
         labelBg:        "bg-rose-50 border-rose-200 text-rose-800",
         borderColor:    "border-rose-400",
         barColor:       "bg-rose-500"
@@ -409,7 +409,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     return `
         <div class="mb-8">
             <div class="flex flex-wrap items-center gap-3 mb-4">
-                <span class="${tier.headerColor} border font-bold text-sm px-4 py-1.5 rounded-full">تحليل السوق ◂ ${data.bName}</span>
+                <span class="${tier.headerColor} border font-bold text-sm px-4 py-1.5 rounded-full">الأداء الاسبوعي ◂ ${data.bName}</span>
                 <span class="text-slate-400 text-sm font-medium">${dateStr}</span>
             </div>
             <h1 class="text-3xl md:text-4xl font-black text-slate-800 leading-tight mb-4">${text.head}</h1>
@@ -418,7 +418,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
         </div>
 
         <div class="mb-8 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-            <h2 class="text-xl font-black text-slate-800 mb-6">نسبة إنجاز الهدف الشهري</h2>
+            <h2 class="text-xl font-black text-slate-800 mb-6">الإنجاز الشهري</h2>
             <div class="flex justify-between items-center mb-3">
                 <span class="font-bold text-slate-600 text-sm">التقييمات الإيجابية المحققة</span>
                 <span class="font-black text-slate-800">${data.positive} / ${data.target}</span>
@@ -433,9 +433,9 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="md:col-span-1 bg-slate-800 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-md">
-                <p class="text-slate-400 font-bold text-sm mb-2">المؤشر العام للأداء</p>
+                <p class="text-slate-400 font-bold text-sm mb-2">الأداء العام</p>
                 <div class="text-7xl font-black mb-1">${scores.total}</div>
-                <p class="text-slate-400 text-sm font-bold">من أصل 11 نقطة</p>
+                <p class="text-slate-400 text-sm font-bold">من 11</p>
                 <div class="w-full bg-slate-600 rounded-full h-2 mt-4 overflow-hidden">
                     <div class="${tier.barColor} h-2 rounded-full transition-all" style="width:${progressPercent}%"></div>
                 </div>
@@ -460,7 +460,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                     ${buildPersonRow(data.dName, 'نائبة المديرة', false)}
                 </div>
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                    <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">تقييم جوجل</h3>
+                    <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">تقييم Google</h3>
                     <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
                             <span class="text-4xl font-black text-slate-800">${ratingValue}</span>
@@ -472,7 +472,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                         <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-slate-200 shadow-inner">${MAP_PIN_SVG}</div>
                     </div>
                     <div class="flex justify-between items-center text-sm">
-                        <span class="text-slate-500 font-bold">النمو الشهري</span>
+                        <span class="text-slate-500 font-bold">من بداية الشهر</span>
                         <span class="font-black text-emerald-600">+${data.positive} مراجعة جديدة</span>
                     </div>
                 </div>
