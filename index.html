@@ -1,95 +1,92 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl" prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آي أم سبيشل - النظام الداخلي</title>
+    <title>آي أم سبيشل | تقرير الأداء الأسبوعي للفروع</title>
 
-<meta property="og:title" id="og_title" content="التقرير الأسبوعي الشامل لأداء فروع آي إم سبيشل - النظام الداخلي">
-<meta property="og:description" id="og_description" content="تابع التقرير الأسبوعي المفصل لأداء جميع فروع آي إم سبيشل. يتضمن التقرير تحليلاً دقيقاً لمؤشرات السلامة، تقييمات العملاء الإيجابية والسلبية، شكاوى الزوار، ونسب تحقيق الأهداف الشهرية للوصول لأعلى معايير الجودة.">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="آي إم سبيشل">
-<meta property="og:locale" content="ar_SA">
-<meta property="og:url" id="og_url" content="">
-<meta property="og:image" id="og_image" content="https://yourwebsite.com/special.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" id="twitter_title" content="التقرير الأسبوعي الشامل لأداء فروع آي إم سبيشل - النظام الداخلي">
-<meta name="twitter:description" id="twitter_description" content="تابع التقرير الأسبوعي المفصل لأداء جميع فروع آي إم سبيشل. يتضمن التقرير تحليلاً دقيقاً لمؤشرات السلامة، تقييمات العملاء الإيجابية والسلبية، شكاوى الزوار، ونسب تحقيق الأهداف الشهرية للوصول لأعلى معايير الجودة.">
-<meta name="twitter:image" id="twitter_image" content="https://yourwebsite.com/special.png">
-<meta name="description" id="meta_description" content="التقرير الأسبوعي الشامل لأداء فروع آي إم سبيشل - النظام الداخلي">
+    <meta property="og:title" id="og_title" content="آي أم سبيشل | تقرير الأداء الأسبوعي للفروع">
+    <meta property="og:description" id="og_description" content="تابع تقرير الأداء الأسبوعي لمجموعة فروع آي إم سبيشل، حيث نستعرض بشفافية واحترافية نتائج التقييمات ومؤشرات الجودة والخدمة لضمان التميز الدائم والارتقاء المستمر.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="آي إم سبيشل">
+    <meta property="og:locale" content="ar_SA">
+    <meta property="og:url" id="og_url" content="">
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-<style>
-    body { font-family: 'Tajawal', sans-serif; background-color: #fafafa; margin: 0; padding: 0; }
-    .newspaper-card { border-right: 4px solid #1e3a8a; }
-    .branch-stat-card { border-right: 3px solid #1e3a8a; }
-    .pin-box { transition: all 0.2s; }
-    .pin-box:focus { transform: scale(1.05); }
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-    input[type="number"] { -moz-appearance: textfield; }
-    .timeline-border { border-right: 2px dashed #cbd5e1; }
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .google-star { color: #fbbc04; }
-    .google-star-empty { color: #dadce0; }
-    #bulletinPage { display: none; }
-    #bulletinPage.active { display: flex; }
-    #mainPageWrapper { display: flex; flex-direction: column; flex-grow: 1; }
-    #mainPageWrapper.hidden-page { display: none; }
-    @keyframes slideUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-    .slide-up { animation: slideUp 0.35s ease forwards; }
-    .share-btn { transition: all 0.2s; }
-    .share-btn:hover { transform: scale(1.03); }
-    @keyframes fadeInOut {
-        0%   { opacity: 0; transform: translateY(10px); }
-        20%  { opacity: 1; transform: translateY(0); }
-        80%  { opacity: 1; }
-        100% { opacity: 0; }
-    }
-    .copy-toast { animation: fadeInOut 2.5s ease forwards; }
-    .prompt-box {
-        background: #f8fafc;
-        border: 1.5px dashed #94a3b8;
-        border-radius: 12px;
-        font-family: 'Tajawal', monospace;
-        font-size: 13px;
-        line-height: 1.8;
-        color: #334155;
-        white-space: pre-wrap;
-        word-break: break-word;
-        direction: rtl;
-        text-align: right;
-    }
-    .history-item { border-right: 3px solid #e2e8f0; transition: border-color 0.2s; }
-    .history-item:hover { border-right-color: #1e3a8a; }
-    textarea.article-input {
-        font-family: 'Tajawal', sans-serif;
-        font-size: 14px;
-        line-height: 1.9;
-        resize: vertical;
-        min-height: 180px;
-    }
-</style>
+    <meta property="og:image" id="og_image" content="special.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="twitter_title" content="آي أم سبيشل | تقرير الأداء الأسبوعي">
+    <meta name="twitter:description" id="twitter_description" content="تقارير الأداء والتحديثات اليومية لجودة الخدمات في الفروع.">
+    <meta name="twitter:image" id="twitter_image" content="special.png">
+    <meta name="description" id="meta_description" content="التقرير الأسبوعي للأداء - آي أم سبيشل">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #fafafa; margin: 0; padding: 0; }
+        .newspaper-card { border-right: 4px solid #1e3a8a; }
+        .branch-stat-card { border-right: 3px solid #1e3a8a; }
+        .pin-box { transition: all 0.2s; }
+        .pin-box:focus { transform: scale(1.05); }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+        .timeline-border { border-right: 2px dashed #cbd5e1; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .google-star { color: #fbbc04; }
+        .google-star-empty { color: #dadce0; }
+        #bulletinPage { display: none; }
+        #bulletinPage.active { display: flex; }
+        #mainPageWrapper { display: flex; flex-direction: column; flex-grow: 1; }
+        #mainPageWrapper.hidden-page { display: none; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .slide-up { animation: slideUp 0.35s ease forwards; }
+        .share-btn { transition: all 0.2s; }
+        .share-btn:hover { transform: scale(1.03); }
+        @keyframes fadeInOut {
+            0%   { opacity: 0; transform: translateY(10px); }
+            20%  { opacity: 1; transform: translateY(0); }
+            80%  { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .copy-toast { animation: fadeInOut 2.5s ease forwards; }
+        .prompt-box {
+            background: #f8fafc; border: 1.5px dashed #94a3b8;
+            border-radius: 12px;
+            font-family: 'Tajawal', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            color: #334155;
+            white-space: pre-wrap;
+            word-break: break-word; direction: rtl;
+            text-align: right;
+        }
+        .history-item { border-right: 3px solid #e2e8f0; transition: border-color 0.2s; }
+        .history-item:hover { border-right-color: #1e3a8a; }
+        textarea.article-input {
+            font-family: 'Tajawal', sans-serif; font-size: 14px;
+            line-height: 1.9;
+            resize: vertical;
+            min-height: 180px;
+        }
+    </style>
 </head>
 <body class="text-slate-800 relative min-h-screen flex flex-col">
 
-<header class="bg-slate-900 text-white shadow-sm p-4 sticky top-0 z-40">
+<header class="bg-slate-900 text-white p-4 sticky top-0 z-40">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
         <h1 class="text-2xl font-black tracking-wide cursor-pointer" onclick="goToMainPage()">
             <span class="text-yellow-400">آي إم</span> <span class="text-red-500">سبيشل</span>
         </h1>
         <div class="flex gap-4">
-            <button onclick="openPredictionModal()" class="text-slate-900 bg-white hover:bg-slate-100 px-6 py-2 rounded font-bold text-sm shadow-sm transition border border-slate-200">☷</button>
-            <button onclick="openMaintenanceAuth()" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 px-4 py-2 rounded font-bold text-sm transition flex items-center gap-2">
+            <button onclick="openPredictionModal()" class="text-slate-900 bg-white hover:bg-slate-100 px-6 py-2 rounded font-bold text-sm transition">☷</button>
+            <button onclick="openMaintenanceAuth()" class="bg-slate-800 hover:bg-slate-700 text-slate-100 px-4 py-2 rounded font-bold text-sm transition flex items-center gap-2">
                  محمد عبدالعزيز الحبيب
             </button>
         </div>
@@ -103,19 +100,18 @@
             <p class="text-slate-500 font-medium">إدارات الفروع</p>
         </div>
 
-    <div class="mb-12 relative w-full group">
-        <button onclick="scrollCarousel(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❯</button>
-        <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❮</button>
-        <div id="branchesCarousel" class="flex gap-5 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 pt-2 scroll-smooth px-2"></div>
+        <div class="mb-12 relative w-full group">
+            <button onclick="scrollCarousel(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❯</button>
+            <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❮</button>
+            <div id="branchesCarousel" class="flex gap-5 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 pt-2 scroll-smooth px-2"></div>
+        </div>
+
+        <div id="newsTimeline" class="space-y-12 pr-4 timeline-border relative"></div>
     </div>
-
-    <div id="newsTimeline" class="space-y-12 pr-4 timeline-border relative"></div>
-</div>
-
 </div>
 
 <div id="bulletinPage" class="flex-col flex-grow">
-    <div class="bg-white border-b border-slate-100 shadow-sm sticky top-[65px] z-30">
+    <div class="bg-white shadow-sm sticky top-[65px] z-30">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
             <button onclick="goToMainPage()" class="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold text-sm transition bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-lg border border-slate-200">الرئيسية</button>
             <div class="flex-grow">
@@ -251,37 +247,36 @@
     <div class="bg-white rounded-xl w-full max-w-3xl max-h-[92vh] overflow-y-auto relative shadow-2xl border border-slate-200">
         <button onclick="closeArticleModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition z-10">✕</button>
 
-    <div class="p-6 border-b border-slate-100 bg-slate-50 rounded-t-xl">
-        <h2 class="text-xl font-black text-slate-900 mb-1" id="articleModalTitle">كتابة مقال الفرع</h2>
-        <p class="text-slate-500 text-sm font-medium" id="articleModalSubtitle">الفرع: —</p>
+        <div class="p-6 border-b border-slate-100 bg-slate-50 rounded-t-xl">
+            <h2 class="text-xl font-black text-slate-900 mb-1" id="articleModalTitle">كتابة مقال الفرع</h2>
+            <p class="text-slate-500 text-sm font-medium" id="articleModalSubtitle">الفرع: —</p>
+        </div>
+
+        <div id="step1_prompt" class="p-6 space-y-5">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center">1</span>
+                <span class="font-bold text-slate-700">انسخ الأمر التالي وأرسله لنموذج الذكاء الاصطناعي</span>
+            </div>
+            <div class="relative">
+                <pre id="generatedPrompt" class="prompt-box p-4 text-sm overflow-auto max-h-72"></pre>
+                <button onclick="copyPrompt()" class="absolute top-3 left-3 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3 py-1.5 rounded transition flex items-center gap-1.5">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                    نسخ
+                </button>
+            </div>
+
+            <div class="flex items-center gap-3 mt-6 mb-2">
+                <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center">2</span>
+                <span class="font-bold text-slate-700">بعد الحصول على المقال من الذكاء الاصطناعي، الصقه هنا</span>
+            </div>
+            <textarea id="articlePasteInput" class="article-input w-full border border-slate-300 rounded-lg p-4 focus:border-slate-600 focus:outline-none text-slate-800 font-medium" placeholder="الصق المقال هنا..."></textarea>
+
+            <div class="flex gap-3 pt-2">
+                <button onclick="saveArticleFromInput()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-black py-3 rounded-lg transition shadow">حفظ المقال ✓</button>
+                <button onclick="closeArticleModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-5 rounded-lg transition">إلغاء</button>
+            </div>
+        </div>
     </div>
-
-    <div id="step1_prompt" class="p-6 space-y-5">
-        <div class="flex items-center gap-3 mb-4">
-            <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center">1</span>
-            <span class="font-bold text-slate-700">انسخ الأمر التالي وأرسله لنموذج الذكاء الاصطناعي</span>
-        </div>
-        <div class="relative">
-            <pre id="generatedPrompt" class="prompt-box p-4 text-sm overflow-auto max-h-72"></pre>
-            <button onclick="copyPrompt()" class="absolute top-3 left-3 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3 py-1.5 rounded transition flex items-center gap-1.5">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                نسخ
-            </button>
-        </div>
-
-        <div class="flex items-center gap-3 mt-6 mb-2">
-            <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center">2</span>
-            <span class="font-bold text-slate-700">بعد الحصول على المقال من الذكاء الاصطناعي، الصقه هنا</span>
-        </div>
-        <textarea id="articlePasteInput" class="article-input w-full border border-slate-300 rounded-lg p-4 focus:border-slate-600 focus:outline-none text-slate-800 font-medium" placeholder="الصق المقال هنا..."></textarea>
-
-        <div class="flex gap-3 pt-2">
-            <button onclick="saveArticleFromInput()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-black py-3 rounded-lg transition shadow">حفظ المقال ✓</button>
-            <button onclick="closeArticleModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-5 rounded-lg transition">إلغاء</button>
-        </div>
-    </div>
-</div>
-
 </div>
 
 <div id="historyModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
@@ -299,6 +294,11 @@
 
 <script>
 // ============================================================
+// حالة الإدارة
+// ============================================================
+let isAdminLoggedIn = false;
+
+// ============================================================
 // قاعدة البيانات
 // ============================================================
 let branchesData = {
@@ -310,8 +310,6 @@ let branchesData = {
     6: { bName: "مركز المملكة",   mName: "نجلاء",  dName: "دلال",   safety: 0, visitors: 1300, complaints: 3, positive: 60, negative: 2, target: 50 }
 };
 
-// سجل تاريخ الفروع - مخزن في localStorage
-// الهيكل: { branchId: [ { date, snapshot, article } ] }
 let branchHistory = {};
 
 function loadHistoryFromStorage() {
@@ -327,10 +325,9 @@ function saveHistoryToStorage() {
     } catch(e) { console.error('فشل حفظ السجل:', e); }
 }
 
-// حفظ لقطة يومية تلقائياً عند فتح الصفحة (مرة واحدة في اليوم لكل فرع)
 function autoSaveDailySnapshot() {
     const today = new Date();
-    const dateKey = today.toISOString().split('T')[0]; // YYYY-MM-DD
+    const dateKey = today.toISOString().split('T')[0]; 
     let changed = false;
     for (let id = 1; id <= 6; id++) {
         if (!branchHistory[id]) branchHistory[id] = [];
@@ -350,7 +347,6 @@ function autoSaveDailySnapshot() {
     if (changed) saveHistoryToStorage();
 }
 
-// مقالات الفروع - مخزنة في localStorage
 let branchArticles = {};
 
 function loadArticlesFromStorage() {
@@ -371,11 +367,8 @@ function saveArticlesToStorage() {
 // ============================================================
 
 const BASE_REVIEWS = [1420, 890, 2100, 650, 1150, 1840];
-
 const SHARE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
-
 const MAP_PIN_SVG = `<svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/><circle cx="12" cy="9" r="2.5" fill="#FFF"/></svg>`;
-
 let currentBulletinData = null;
 let autoMultiplier = 1;
 let carouselInterval;
@@ -462,7 +455,6 @@ function generatePromptText(branchId) {
         : "✓ لا حوادث سلامة مسجلة";
 
     const prompt = `أنت محرر محتوى متخصص في كتابة تقارير الأداء لمراكز ترفيه الأطفال بأسلوب صحفي احترافي ومشوق باللغة العربية.
-
 اكتب تقرير أداء أسبوعي لفرع "${data.bName}" التابع لسلسلة "آي إم سبيشل" لمراكز ترفيه الأطفال، بناءً على البيانات التالية:
 
 ═══════════════════════════════════
@@ -505,7 +497,8 @@ function generatePromptText(branchId) {
 جملة افتتاحية واحدة تلخص الأداء بشكل مكثف (50-70 كلمة).
 
 [التحليل]
-تحليل موضوعي ودقيق لأداء الفرع يشمل نقاط القوة والضعف، مع الإشارة المباشرة إلى المديرة ${data.mName} ونائبتها ${data.dName}. اجعله بين 80 و 120 كلمة بأسلوب صحفي احترافي.
+تحليل موضوعي ودقيق لأداء الفرع يشمل نقاط القوة والضعف، مع الإشارة المباشرة إلى المديرة ${data.mName} ونائبتها ${data.dName}.
+اجعله بين 80 و 120 كلمة بأسلوب صحفي احترافي.
 
 ملاحظات أسلوبية مهمة:
 - استخدم أسلوب النشرات الاقتصادية الاحترافية، لا أسلوب التقارير الرسمية الجافة
@@ -527,8 +520,6 @@ function openArticleModal(branchId) {
 
     const promptText = generatePromptText(branchId);
     document.getElementById('generatedPrompt').textContent = promptText;
-
-    // إن كان يوجد مقال محفوظ مسبقاً، اعرضه
     document.getElementById('articlePasteInput').value = branchArticles[branchId] || '';
 
     document.getElementById('articleModal').style.display = 'flex';
@@ -559,6 +550,7 @@ function saveArticleFromInput() {
     const text    = document.getElementById('articlePasteInput').value.trim();
     if (!id) return;
     if (!text) { alert('الرجاء لصق المقال أولاً'); return; }
+    
     branchArticles[id] = text;
     saveArticlesToStorage();
     closeArticleModal();
@@ -609,7 +601,8 @@ function openHistoryModal(branchId) {
                         <p class="text-xl font-black text-amber-600">${entry.snapshot.complaints}</p>
                     </div>
                 </div>
-                ${entry.article ? `<div class="mt-3 bg-slate-50 rounded-lg p-3 border border-slate-100"><p class="text-xs text-slate-500 font-bold mb-1.5">المقال المحفوظ:</p><p class="text-slate-600 text-sm leading-relaxed line-clamp-3">${entry.article.substring(0, 200)}${entry.article.length > 200 ? '...' : ''}</p></div>` : ''}
+                ${entry.article ?
+`<div class="mt-3 bg-slate-50 rounded-lg p-3 border border-slate-100"><p class="text-xs text-slate-500 font-bold mb-1.5">المقال المحفوظ:</p><p class="text-slate-600 text-sm leading-relaxed line-clamp-3">${entry.article.substring(0, 200)}${entry.article.length > 200 ? '...' : ''}</p></div>` : ''}
             </div>`;
         }).join('');
     }
@@ -658,7 +651,7 @@ function showPage(pageId) {
 function goToMainPage() {
     showPage('main');
     history.pushState('', document.title, window.location.pathname);
-    updateOGTags('التقرير الأسبوعي الشامل لأداء فروع آي إم سبيشل - النظام الداخلي', 'تابع التقرير الأسبوعي المفصل لأداء جميع فروع آي إم سبيشل. يتضمن التقرير تحليلاً دقيقاً لمؤشرات السلامة، تقييمات العملاء الإيجابية والسلبية، شكاوى الزوار، ونسب تحقيق الأهداف الشهرية للوصول لأعلى معايير الجودة.', window.location.href);
+    updateOGTags('التقرير الأسبوعي - آي أم سبيشل', 'تقرير الأداء', window.location.href);
 }
 
 // ============================================================
@@ -669,12 +662,13 @@ function openBulletinPage(branchId) {
     const scores  = calcScores(data);
     const tier    = getPerformanceTier(scores);
     const { ratingValue, reviewsCount } = calcRating(data, branchId);
+
     const dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
     const progressPercent = Math.min(100, (scores.total / 11) * 100);
     const article = branchArticles[branchId] || null;
 
-    // استخراج أجزاء المقال إن وجد
     let articleHead = '', articleLead = '', articleBody = '';
+
     if (article) {
         const lines = article.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         if (lines.length >= 1) articleHead = lines[0];
@@ -693,6 +687,8 @@ function openBulletinPage(branchId) {
 
     document.getElementById('bulletinBreadcrumbBranch').textContent = `فرع ${data.bName}`;
     history.pushState('', '', `#bulletin-${branchId}`);
+    
+    // تحديث ديناميكي للوصف في Open Graph
     updateOGTags(
         `تقرير فرع ${data.bName} - آي إم سبيشل`,
         `${currentBulletinData.head} | المؤشر العام: ${scores.total}/11 | تصنيف: ${tier.label}`,
@@ -712,6 +708,20 @@ function openBulletinPage(branchId) {
 }
 
 function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, dateStr, progressPercent, branchId, hasArticle) {
+    const adminButtons = isAdminLoggedIn ?
+    `
+        <div class="flex gap-2">
+            <button onclick="openHistoryModal(${branchId})" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg border border-slate-200 transition flex items-center gap-1.5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                السجل التاريخي
+            </button>
+            <button onclick="openArticleModal(${branchId})" class="text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                ${hasArticle ? 'تعديل المقال' : 'كتابة المقال'}
+            </button>
+        </div>
+    ` : ``;
+
     const articleSection = hasArticle ? `
         <div class="mb-8">
             <div class="flex flex-wrap items-center gap-3 mb-4">
@@ -723,13 +733,18 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
             <p class="text-slate-500 leading-relaxed text-justify">${text.body}</p>
         </div>
     ` : `
-        <div class="mb-8 bg-amber-50 border border-amber-200 rounded-2xl p-6">
+        <div class="mb-8 ${isAdminLoggedIn ? 'bg-amber-50 border-amber-200' : 'bg-slate-50 border-slate-200'} border rounded-2xl p-6">
             <div class="flex items-start gap-4">
-                <span class="text-3xl">✍️</span>
+                <span class="text-3xl">${isAdminLoggedIn ? '✍️' : '⏳'}</span>
                 <div>
-                    <h3 class="font-black text-amber-800 text-lg mb-1">لم يُكتب مقال هذا الفرع بعد</h3>
-                    <p class="text-amber-700 text-sm font-medium mb-4">يمكنك توليد أمر الذكاء الاصطناعي لكتابة مقال احترافي، ثم لصق النتيجة هنا.</p>
-                    <button onclick="openArticleModal(${branchId})" class="bg-amber-700 hover:bg-amber-800 text-white font-black px-5 py-2.5 rounded-lg text-sm transition shadow">✦ كتابة المقال</button>
+                    ${isAdminLoggedIn ?
+                    `
+                        <h3 class="font-black text-amber-800 text-lg mb-1">لم يُكتب مقال هذا الفرع بعد</h3>
+                        <p class="text-amber-700 text-sm font-medium mb-4">يمكنك توليد أمر الذكاء الاصطناعي لكتابة مقال احترافي، ثم لصق النتيجة هنا.</p>
+                        <button onclick="openArticleModal(${branchId})" class="bg-amber-700 hover:bg-amber-800 text-white font-black px-5 py-2.5 rounded-lg text-sm transition shadow">✦ كتابة المقال</button>
+                    ` : `
+                        <p class="text-slate-700 text-lg font-bold mt-1">بانتظار تحركات المديرة ${data.mName} ونائبتها ${data.dName}</p>
+                    `}
                 </div>
             </div>
         </div>
@@ -741,17 +756,9 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
         <div class="mb-8 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-black text-slate-800">الإنجاز الشهري</h2>
-                <div class="flex gap-2">
-                    <button onclick="openHistoryModal(${branchId})" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg border border-slate-200 transition flex items-center gap-1.5">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        السجل التاريخي
-                    </button>
-                    <button onclick="openArticleModal(${branchId})" class="text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                        ${hasArticle ? 'تعديل المقال' : 'كتابة المقال'}
-                    </button>
-                </div>
+                ${adminButtons}
             </div>
+            
             <div class="flex justify-between items-center mb-3">
                 <span class="font-bold text-slate-600 text-sm">التقييمات الإيجابية المحققة</span>
                 <span class="font-black text-slate-800">${data.positive} / ${data.target}</span>
@@ -841,13 +848,31 @@ function buildPersonRow(name, role, withBorder) {
 // تحديث Open Graph Meta Tags
 // ============================================================
 function updateOGTags(title, description, url) {
-    ['og_title', 'twitter_title'].forEach(id => document.getElementById(id).setAttribute('content', title));
-    ['og_description', 'twitter_description', 'meta_description'].forEach(id => document.getElementById(id).setAttribute('content', description));
-    document.getElementById('og_url').setAttribute('content', url);
+    // تحديث العناوين
+    ['og_title', 'twitter_title'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('content', title);
+    });
+
+    // تحديث الوصف (النبذة التعريفية) ليظهر فيها ملخص التقرير بدلاً من الوصف الثابت
+    ['og_description', 'twitter_description', 'meta_description'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('content', description);
+    });
+
+    // تحديث الرابط
+    const urlEl = document.getElementById('og_url');
+    if (urlEl) urlEl.setAttribute('content', url);
+
+    // تحديث عنوان الصفحة في المتصفح
     document.title = title;
-    // الصورة ثابتة دائماً لصورة special
-    document.getElementById('og_image').setAttribute('content', 'https://yourwebsite.com/special.png');
-    document.getElementById('twitter_image').setAttribute('content', 'https://yourwebsite.com/special.png');
+
+    // تحديث الصورة إلى الاسم المطلوب (special.png)
+    const ogImg = document.getElementById('og_image');
+    if (ogImg) ogImg.setAttribute('content', 'special.png');
+    
+    const twImg = document.getElementById('twitter_image');
+    if (twImg) twImg.setAttribute('content', 'special.png');
 }
 
 // ============================================================
@@ -868,7 +893,6 @@ function shareBulletinPage() {
       + `تصنيف: ${scoreLabel}\n\n`
       + `🔗 ${url}`
     );
-
     const waUrl = `https://api.whatsapp.com/send?text=${waText}`;
     window.open(waUrl, '_blank');
 }
@@ -890,7 +914,7 @@ function showCopyToast(msg) {
 function initCarousel() {
     const carousel = document.getElementById('branchesCarousel');
     carousel.innerHTML = '';
-
+    
     for (let i = 1; i <= 6; i++) {
         const data = branchesData[i];
         const { ratingValue, reviewsCount } = calcRating(data, i);
@@ -898,6 +922,7 @@ function initCarousel() {
 
         const card = document.createElement('div');
         card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm snap-center transition-transform hover:-translate-y-1 hover:shadow-md cursor-grab active:cursor-grabbing";
+        
         card.innerHTML = `
             <div class="flex justify-between items-start mb-5">
                 <div>
@@ -968,6 +993,7 @@ function generateNewspaper() {
         <h3 class="text-xl font-black text-slate-800 mb-6 bg-white inline-block px-4 py-1 rounded shadow-sm border border-slate-100">تقرير ${dateStr}</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></div>
     `;
+    
     timelineContainer.appendChild(dateSection);
     const container = dateSection.querySelector('#cardsGrid');
 
@@ -976,26 +1002,32 @@ function generateNewspaper() {
         const scores  = calcScores(data);
         const tier    = getPerformanceTier(scores);
         const article = branchArticles[i] || null;
-
+        
         let headLine  = '';
         let leadLine  = '';
+        
         if (article) {
             const lines = article.split('\n').map(l => l.trim()).filter(l => l.length > 0);
             headLine = lines[0] || '';
             leadLine = lines[1] || '';
         }
 
-        const cardContent = article ? `
+        const cardContent = article ?
+        `
             <h3 onclick="openBulletinPage(${i})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-800 cursor-pointer hover:text-blue-600 transition">${headLine}</h3>
             <p class="text-slate-600 text-sm font-bold mb-4 leading-relaxed">${leadLine}</p>
         ` : `
             <div class="mt-5 mb-3">
                 <h3 onclick="openBulletinPage(${i})" class="font-black text-xl leading-snug text-slate-800 cursor-pointer hover:text-blue-600 transition mb-2">تقرير فرع ${data.bName}</h3>
-                <p class="text-slate-500 text-sm leading-relaxed mb-3">لم يُكتب مقال هذا الفرع بعد. انقر على "كتابة المقال" لتوليد أمر الذكاء الاصطناعي.</p>
-                <button onclick="openArticleModal(${i})" class="text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded transition">✦ كتابة المقال</button>
+                ${isAdminLoggedIn ? `
+                    <p class="text-slate-500 text-sm leading-relaxed mb-3">لم يُكتب مقال هذا الفرع بعد. انقر على "كتابة المقال" لتوليد أمر الذكاء الاصطناعي.</p>
+                    <button onclick="openArticleModal(${i})" class="text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded transition">✦ كتابة المقال</button>
+                ` : `
+                    <p class="text-slate-500 text-sm font-bold leading-relaxed mb-3">بانتظار تحركات المديرة ${data.mName} ونائبتها ${data.dName}</p>
+                `}
             </div>
         `;
-
+        
         container.innerHTML += `
             <div class="bg-white p-6 rounded-xl shadow-sm newspaper-card flex flex-col justify-between hover:shadow-md transition border border-slate-100">
                 <div>
@@ -1043,10 +1075,16 @@ function checkAdminPinLength() {
 function verifyMaintenance(enteredPin) {
     const today = new Date();
     const correctPin = today.getDate().toString().padStart(2, '0') + (today.getMonth() + 1).toString().padStart(2, '0');
+    
     if (enteredPin === correctPin) {
+        isAdminLoggedIn = true;
         closeMaintenanceAuth();
         document.getElementById('adminModal').style.display = 'flex';
         loadAdminData();
+        generateNewspaper();
+        if (currentBulletinData && currentBulletinData.branchId) {
+            openBulletinPage(currentBulletinData.branchId);
+        }
     } else {
         alert("غير صحيح!");
         pinBoxes.forEach(b => b.value = '');
@@ -1072,15 +1110,18 @@ function closeAdmin() { document.getElementById('adminModal').style.display = 'n
 function loadAdminData() {
     const id = document.getElementById('branchSelector').value;
     const d  = branchesData[id];
+    
     const fields = { admin_bName: d.bName, admin_mName: d.mName, admin_dName: d.dName,
                      admin_safety: d.safety, admin_visitors: d.visitors, admin_complaints: d.complaints,
                      admin_positive: d.positive, admin_negative: d.negative, admin_target: d.target };
+                     
     Object.entries(fields).forEach(([id, val]) => document.getElementById(id).value = val);
 }
 
 function saveAdminData() {
     const id = document.getElementById('branchSelector').value;
     const num = (fieldId, def = 0) => parseFloat(document.getElementById(fieldId).value) || def;
+    
     branchesData[id] = {
         bName:      document.getElementById('admin_bName').value,
         mName:      document.getElementById('admin_mName').value,
@@ -1093,14 +1134,15 @@ function saveAdminData() {
         target:     num('admin_target', 50)
     };
     closeAdmin();
-    // حفظ لقطة عند تحديث البيانات
+    
     const today   = new Date();
     const dateKey = today.toISOString().split('T')[0];
     if (!branchHistory[id]) branchHistory[id] = [];
-    // تحديث اللقطة الموجودة لليوم أو إضافة جديدة
+    
     const todayIdx = branchHistory[id].findIndex(r => r.date === dateKey);
     const scores   = calcScores(branchesData[id]);
     const entry    = { date: dateKey, snapshot: { ...branchesData[id] }, scores: { ...scores }, article: branchArticles[id] || '' };
+    
     if (todayIdx >= 0) {
         branchHistory[id][todayIdx] = entry;
     } else {
@@ -1152,12 +1194,13 @@ function calculateTrial() {
     const data        = branchesData[document.getElementById('trial_branch_select').value];
     const rawPositive = parseFloat(document.getElementById('trial_positive').value) || 0;
     const rawNegative = parseFloat(document.getElementById('trial_negative').value) || 0;
-
+    
     const projData    = { ...data, positive: rawPositive * autoMultiplier, negative: rawNegative };
     const scores      = calcScores(projData);
     const negWeight   = (data.target / Math.max(1, rawPositive * autoMultiplier)) * 0.25;
     const ptsNegative = Math.max(0, 2 - (rawNegative * negWeight));
     let total         = Math.round((scores.ptsSafety + scores.ptsComplaints + scores.ptsPositive + ptsNegative) * 100) / 100;
+    
     if (isNaN(total)) total = 0;
 
     document.getElementById('resSafety').innerText     = scores.ptsSafety.toFixed(2);
@@ -1166,7 +1209,7 @@ function calculateTrial() {
     document.getElementById('resNeg').innerText        = ptsNegative.toFixed(2);
     document.getElementById('totalPoints').innerText   = total;
     document.getElementById('progressBar').style.width = `${Math.min(100, (total / 11) * 100)}%`;
-
+    
     const additionText = "<br><span class='text-xs font-bold text-slate-500 mt-2 block'>عند الاستمرار بنفس الاداء</span>";
     const rewardBox = document.getElementById('rewardBox');
     const levels = [
