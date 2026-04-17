@@ -13,6 +13,7 @@
     <meta property="og:url" id="og_url" content="">
 
     <meta property="og:image" id="og_image" content="special.png">
+    
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
@@ -81,7 +82,7 @@
 
 <header class="bg-slate-900 text-white p-4 sticky top-0 z-40">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-black tracking-wide cursor-pointer" onclick="goToMainPage()">
+        <h1 class="text-2xl font-black tracking-wide cursor-pointer flex items-center gap-1 whitespace-nowrap" onclick="goToMainPage()">
             <span class="text-yellow-400">أي آم</span> <span class="text-red-500">سبيشل</span>
         </h1>
         <div class="flex gap-4">
@@ -96,7 +97,7 @@
 <div id="mainPageWrapper">
     <div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
         <div class="space-y-2 mb-8 text-center">
-            <h2 class="text-3xl font-black text-slate-800 tracking-wide">تعزيز الثقة الرقمية </h2>
+            <h2 class="text-3xl font-black text-slate-800 tracking-wide whitespace-nowrap">تعزيز الثقة الرقمية </h2>
             <p class="text-slate-500 font-medium">بروتوكول إدارات الفروع</p>
         </div>
 
@@ -104,6 +105,7 @@
             <button onclick="scrollCarousel(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❯</button>
             <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❮</button>
             <div id="branchesCarousel" class="flex gap-5 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 pt-2 scroll-smooth px-2"></div>
+            <div id="carouselDots" class="flex justify-center items-center gap-2 mt-4 w-full"></div>
         </div>
 
         <div id="newsTimeline" class="space-y-12 pr-4 timeline-border relative"></div>
@@ -128,7 +130,7 @@
 </div>
 
 <div id="copyToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white font-bold px-6 py-3 rounded-xl shadow-xl z-50 hidden text-sm">
-    ✓ تم النسخ
+    تم النسخ
 </div>
 
 <div id="predictionModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
@@ -272,7 +274,7 @@
             <textarea id="articlePasteInput" class="article-input w-full border border-slate-300 rounded-lg p-4 focus:border-slate-600 focus:outline-none text-slate-800 font-medium" placeholder="الصق المقال هنا..."></textarea>
 
             <div class="flex gap-3 pt-2">
-                <button onclick="saveArticleFromInput()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-black py-3 rounded-lg transition shadow">حفظ المقال ✓</button>
+                <button onclick="saveArticleFromInput()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-black py-3 rounded-lg transition shadow">حفظ المقال </button>
                 <button onclick="closeArticleModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-5 rounded-lg transition">إلغاء</button>
             </div>
         </div>
@@ -339,7 +341,7 @@ function autoSaveDailySnapshot() {
                 date:     dateKey,
                 snapshot: { ...data },
                 scores:   { ...scores },
-                article:  branchArticles[id] || ''
+                article:  getArticleData(id)?.text || ''
             });
             changed = true;
         }
@@ -362,6 +364,14 @@ function saveArticlesToStorage() {
     } catch(e) { console.error('فشل حفظ المقالات:', e); }
 }
 
+// دالة لجلب بيانات المقال (مراعاة التوافق مع النسخ القديمة التي كانت تحفظ كنص فقط)
+function getArticleData(id) {
+    const article = branchArticles[id];
+    if (!article) return null;
+    if (typeof article === 'string') return { text: article, date: 0 };
+    return article;
+}
+
 // ============================================================
 // ثوابت مشتركة
 // ============================================================
@@ -369,6 +379,7 @@ function saveArticlesToStorage() {
 const BASE_REVIEWS = [1420, 890, 2100, 650, 1150, 1840];
 const SHARE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
 const MAP_PIN_SVG = `<svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/><circle cx="12" cy="9" r="2.5" fill="#FFF"/></svg>`;
+
 let currentBulletinData = null;
 let autoMultiplier = 1;
 let carouselInterval;
@@ -415,7 +426,8 @@ function getPerformanceTier(scores) {
 
 function calcRating(data, branchId) {
     const total = data.positive + data.negative;
-    let ratingValue = total > 0 ? (4.0 + (data.positive / total)).toFixed(1) : "4.5";
+    let ratingValue = total > 0 ?
+        (4.0 + (data.positive / total)).toFixed(1) : "4.5";
     if (parseFloat(ratingValue) > 5.0) ratingValue = "5.0";
     const reviewsCount = BASE_REVIEWS[branchId - 1] + data.positive;
     return { ratingValue, reviewsCount };
@@ -452,7 +464,7 @@ function generatePromptText(branchId) {
 
     const safetyNote = data.safety > 0
         ? `⚠️ تسجيل ${data.safety} حادثة سلامة هذا الشهر`
-        : "✓ لا حوادث سلامة مسجلة";
+        : "لا حوادث سلامة مسجلة";
 
     const prompt = `أنت محرر محتوى متخصص في كتابة تقارير الأداء لمراكز ترفيه الأطفال بأسلوب صحفي احترافي ومشوق باللغة العربية.
 اكتب تقرير أداء أسبوعي لفرع "${data.bName}" التابع لسلسلة "آي إم سبيشل" لمراكز ترفيه الأطفال، بناءً على البيانات التالية:
@@ -515,12 +527,15 @@ function generatePromptText(branchId) {
 function openArticleModal(branchId) {
     currentArticleModalBranchId = branchId;
     const data = branchesData[branchId];
+
     document.getElementById('articleModalTitle').textContent = `مقال فرع ${data.bName}`;
     document.getElementById('articleModalSubtitle').textContent = `الفرع: ${data.bName} — المديرة: ${data.mName}`;
 
     const promptText = generatePromptText(branchId);
     document.getElementById('generatedPrompt').textContent = promptText;
-    document.getElementById('articlePasteInput').value = branchArticles[branchId] || '';
+
+    const articleData = getArticleData(branchId);
+    document.getElementById('articlePasteInput').value = articleData ? articleData.text : '';
 
     document.getElementById('articleModal').style.display = 'flex';
 }
@@ -551,12 +566,13 @@ function saveArticleFromInput() {
     if (!id) return;
     if (!text) { alert('الرجاء لصق المقال أولاً'); return; }
     
-    branchArticles[id] = text;
+    // تم الحفظ مع التاريخ للترتيب
+    branchArticles[id] = { text: text, date: new Date().getTime() };
     saveArticlesToStorage();
     closeArticleModal();
     generateNewspaper();
     initCarousel();
-    showCopyToast('✓ تم حفظ المقال');
+    showCopyToast('تم حفظ المقال');
 }
 
 // ============================================================
@@ -602,7 +618,7 @@ function openHistoryModal(branchId) {
                     </div>
                 </div>
                 ${entry.article ?
-`<div class="mt-3 bg-slate-50 rounded-lg p-3 border border-slate-100"><p class="text-xs text-slate-500 font-bold mb-1.5">المقال المحفوظ:</p><p class="text-slate-600 text-sm leading-relaxed line-clamp-3">${entry.article.substring(0, 200)}${entry.article.length > 200 ? '...' : ''}</p></div>` : ''}
+                `<div class="mt-3 bg-slate-50 rounded-lg p-3 border border-slate-100"><p class="text-xs text-slate-500 font-bold mb-1.5">المقال المحفوظ:</p><p class="text-slate-600 text-sm leading-relaxed line-clamp-3">${entry.article.substring(0, 200)}${entry.article.length > 200 ? '...' : ''}</p></div>` : ''}
             </div>`;
         }).join('');
     }
@@ -662,11 +678,11 @@ function openBulletinPage(branchId) {
     const scores  = calcScores(data);
     const tier    = getPerformanceTier(scores);
     const { ratingValue, reviewsCount } = calcRating(data, branchId);
-
     const dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
     const progressPercent = Math.min(100, (scores.total / 11) * 100);
-    const article = branchArticles[branchId] || null;
-
+    
+    const articleData = getArticleData(branchId);
+    const article = articleData ? articleData.text : null;
     let articleHead = '', articleLead = '', articleBody = '';
 
     if (article) {
@@ -709,7 +725,7 @@ function openBulletinPage(branchId) {
 
 function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, dateStr, progressPercent, branchId, hasArticle) {
     const adminButtons = isAdminLoggedIn ?
-    `
+        `
         <div class="flex gap-2">
             <button onclick="openHistoryModal(${branchId})" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg border border-slate-200 transition flex items-center gap-1.5">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -728,6 +744,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                 <span class="${tier.headerColor} border font-bold text-sm px-4 py-1.5 rounded-full">الأداء الاسبوعي ◂ ${data.bName}</span>
                 <span class="text-slate-400 text-sm font-medium">${dateStr}</span>
             </div>
+            
             <h1 class="text-3xl md:text-4xl font-black text-slate-800 leading-tight mb-4">${text.head}</h1>
             <p class="text-lg text-slate-600 font-bold leading-relaxed mb-3">${text.lead}</p>
             <p class="text-slate-500 leading-relaxed text-justify">${text.body}</p>
@@ -848,29 +865,24 @@ function buildPersonRow(name, role, withBorder) {
 // تحديث Open Graph Meta Tags
 // ============================================================
 function updateOGTags(title, description, url) {
-    // تحديث العناوين
     ['og_title', 'twitter_title'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.setAttribute('content', title);
     });
 
-    // تحديث الوصف (النبذة التعريفية) ليظهر فيها ملخص التقرير بدلاً من الوصف الثابت
     ['og_description', 'twitter_description', 'meta_description'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.setAttribute('content', description);
     });
 
-    // تحديث الرابط
     const urlEl = document.getElementById('og_url');
     if (urlEl) urlEl.setAttribute('content', url);
 
-    // تحديث عنوان الصفحة في المتصفح
     document.title = title;
 
-    // تحديث الصورة إلى الاسم المطلوب (special.png)
     const ogImg = document.getElementById('og_image');
     if (ogImg) ogImg.setAttribute('content', 'special.png');
-    
+
     const twImg = document.getElementById('twitter_image');
     if (twImg) twImg.setAttribute('content', 'special.png');
 }
@@ -893,6 +905,7 @@ function shareBulletinPage() {
       + `تصنيف: ${scoreLabel}\n\n`
       + ` ${url}`
     );
+
     const waUrl = `https://api.whatsapp.com/send?text=${waText}`;
     window.open(waUrl, '_blank');
 }
@@ -902,27 +915,28 @@ function shareBulletinPage() {
 // ============================================================
 function showCopyToast(msg) {
     const toast = document.getElementById('copyToast');
-    toast.textContent = msg || '✓ تم النسخ';
+    toast.textContent = msg || 'تم النسخ';
     toast.classList.remove('hidden');
     toast.classList.add('copy-toast');
     setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('copy-toast'); }, 2500);
 }
 
 // ============================================================
-// الكاروسيل
+// الكاروسيل والنقاط التفاعلية
 // ============================================================
 function initCarousel() {
     const carousel = document.getElementById('branchesCarousel');
     carousel.innerHTML = '';
-    
+
     for (let i = 1; i <= 6; i++) {
         const data = branchesData[i];
         const { ratingValue, reviewsCount } = calcRating(data, i);
-        const hasArticle = !!branchArticles[i];
+        const articleData = getArticleData(i);
+        const hasArticle = !!articleData;
 
         const card = document.createElement('div');
-        card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm snap-center transition-transform hover:-translate-y-1 hover:shadow-md cursor-grab active:cursor-grabbing";
-        
+        card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm snap-center transition-transform hover:-translate-y-1 hover:shadow-md cursor-pointer active:cursor-grabbing";
+        card.onclick = () => openBulletinPage(i);
         card.innerHTML = `
             <div class="flex justify-between items-start mb-5">
                 <div>
@@ -930,7 +944,7 @@ function initCarousel() {
                     <p class="text-xs text-slate-500 font-bold mt-1">إدارة: ${data.mName} و ${data.dName}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    ${hasArticle ? '<span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">✓ </span>' : ''}
+                    ${hasArticle ? '<span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">مكتوب</span>' : ''}
                     <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">${MAP_PIN_SVG}</div>
                 </div>
             </div>
@@ -951,7 +965,58 @@ function initCarousel() {
         `;
         carousel.appendChild(card);
     }
+    setupCarouselDots();
     setupCarouselEvents();
+}
+
+function setupCarouselDots() {
+    const dotsContainer = document.getElementById('carouselDots');
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < 6; i++) {
+        dotsContainer.innerHTML += `<button onclick="scrollToCard(${i})" class="carousel-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all duration-300"></button>`;
+    }
+    updateActiveDot();
+}
+
+function scrollToCard(index) {
+    const carousel = document.getElementById('branchesCarousel');
+    const cards = carousel.children;
+    if(cards[index]) {
+        cards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+}
+
+function updateActiveDot() {
+    const carousel = document.getElementById('branchesCarousel');
+    const dots = document.querySelectorAll('.carousel-dot');
+    if (!dots.length || !carousel.children.length) return;
+    
+    const cards = carousel.children;
+    let closestIndex = 0;
+    let minDistance = Infinity;
+    
+    const carouselRect = carousel.getBoundingClientRect();
+    const carouselCenter = carouselRect.left + carouselRect.width / 2;
+    
+    for(let i=0; i < cards.length; i++) {
+        const cardRect = cards[i].getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const distance = Math.abs(carouselCenter - cardCenter);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = i;
+        }
+    }
+    
+    dots.forEach((dot, idx) => {
+        if (idx === closestIndex) {
+            dot.classList.remove('bg-slate-300', 'w-2.5');
+            dot.classList.add('bg-slate-800', 'w-6');
+        } else {
+            dot.classList.remove('bg-slate-800', 'w-6');
+            dot.classList.add('bg-slate-300', 'w-2.5');
+        }
+    });
 }
 
 function scrollCarousel(direction) {
@@ -960,6 +1025,11 @@ function scrollCarousel(direction) {
 
 function setupCarouselEvents() {
     const carousel = document.getElementById('branchesCarousel');
+    
+    carousel.addEventListener('scroll', () => {
+        requestAnimationFrame(updateActiveDot);
+    });
+
     const startAutoScroll = () => {
         clearInterval(carouselInterval);
         carouselInterval = setInterval(() => {
@@ -979,7 +1049,7 @@ function setupCarouselEvents() {
 }
 
 // ============================================================
-// توليد صحيفة الأداء
+// توليد صحيفة الأداء (للتقارير المكتوبة فقط)
 // ============================================================
 function generateNewspaper() {
     const timelineContainer = document.getElementById('newsTimeline');
@@ -993,47 +1063,52 @@ function generateNewspaper() {
         <h3 class="text-xl font-black text-slate-800 mb-6 bg-white inline-block px-4 py-1 rounded shadow-sm border border-slate-100">تقرير ${dateStr}</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></div>
     `;
-    
     timelineContainer.appendChild(dateSection);
     const container = dateSection.querySelector('#cardsGrid');
 
+    let writtenReports = [];
+    
     for (let i = 1; i <= 6; i++) {
-        const data    = branchesData[i];
+        const articleData = getArticleData(i);
+        if (articleData) {
+            writtenReports.push({ id: i, data: branchesData[i], article: articleData.text, date: articleData.date });
+        }
+    }
+
+    // الترتيب حسب الأحدث فالأقدم
+    writtenReports.sort((a, b) => b.date - a.date);
+
+    if (writtenReports.length === 0) {
+        container.innerHTML = `<p class="col-span-full text-center text-slate-500 font-bold py-8">لا توجد تقارير مكتوبة حتى الآن</p>`;
+        return;
+    }
+
+    writtenReports.forEach(item => {
+        const i = item.id;
+        const data = item.data;
         const scores  = calcScores(data);
         const tier    = getPerformanceTier(scores);
-        const article = branchArticles[i] || null;
+        const article = item.article;
         
         let headLine  = '';
         let leadLine  = '';
-        
         if (article) {
             const lines = article.split('\n').map(l => l.trim()).filter(l => l.length > 0);
             headLine = lines[0] || '';
             leadLine = lines[1] || '';
         }
 
-        const cardContent = article ?
-        `
+        const cardContent = `
             <h3 onclick="openBulletinPage(${i})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-800 cursor-pointer hover:text-blue-600 transition">${headLine}</h3>
             <p class="text-slate-600 text-sm font-bold mb-4 leading-relaxed">${leadLine}</p>
-        ` : `
-            <div class="mt-5 mb-3">
-                <h3 onclick="openBulletinPage(${i})" class="font-black text-xl leading-snug text-slate-800 cursor-pointer hover:text-blue-600 transition mb-2">تقرير فرع ${data.bName}</h3>
-                ${isAdminLoggedIn ? `
-                    <p class="text-slate-500 text-sm leading-relaxed mb-3">لم يُكتب مقال هذا الفرع .</p>
-                    <button onclick="openArticleModal(${i})" class="text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded transition">✦ كتابة المقال</button>
-                ` : `
-                    <p class="text-slate-500 text-sm font-bold leading-relaxed mb-3">بانتظار تحركات المديرة ${data.mName} ونائبتها ${data.dName}</p>
-                `}
-            </div>
         `;
-        
+
         container.innerHTML += `
             <div class="bg-white p-6 rounded-xl shadow-sm newspaper-card flex flex-col justify-between hover:shadow-md transition border border-slate-100">
                 <div>
                     <div class="flex justify-between items-start">
                         <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1 rounded-full">الفروع ◂ ${data.bName}</span>
-                        ${article ? '<span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">✓</span>' : ''}
+                        <span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">مكتوب</span>
                     </div>
                     ${cardContent}
                 </div>
@@ -1044,7 +1119,7 @@ function generateNewspaper() {
                     </div>
                 </div>
             </div>`;
-    }
+    });
 }
 
 // ============================================================
@@ -1075,7 +1150,6 @@ function checkAdminPinLength() {
 function verifyMaintenance(enteredPin) {
     const today = new Date();
     const correctPin = today.getDate().toString().padStart(2, '0') + (today.getMonth() + 1).toString().padStart(2, '0');
-    
     if (enteredPin === correctPin) {
         isAdminLoggedIn = true;
         closeMaintenanceAuth();
@@ -1110,18 +1184,15 @@ function closeAdmin() { document.getElementById('adminModal').style.display = 'n
 function loadAdminData() {
     const id = document.getElementById('branchSelector').value;
     const d  = branchesData[id];
-    
     const fields = { admin_bName: d.bName, admin_mName: d.mName, admin_dName: d.dName,
                      admin_safety: d.safety, admin_visitors: d.visitors, admin_complaints: d.complaints,
                      admin_positive: d.positive, admin_negative: d.negative, admin_target: d.target };
-                     
     Object.entries(fields).forEach(([id, val]) => document.getElementById(id).value = val);
 }
 
 function saveAdminData() {
     const id = document.getElementById('branchSelector').value;
     const num = (fieldId, def = 0) => parseFloat(document.getElementById(fieldId).value) || def;
-    
     branchesData[id] = {
         bName:      document.getElementById('admin_bName').value,
         mName:      document.getElementById('admin_mName').value,
@@ -1134,14 +1205,16 @@ function saveAdminData() {
         target:     num('admin_target', 50)
     };
     closeAdmin();
-    
+
     const today   = new Date();
     const dateKey = today.toISOString().split('T')[0];
     if (!branchHistory[id]) branchHistory[id] = [];
     
     const todayIdx = branchHistory[id].findIndex(r => r.date === dateKey);
     const scores   = calcScores(branchesData[id]);
-    const entry    = { date: dateKey, snapshot: { ...branchesData[id] }, scores: { ...scores }, article: branchArticles[id] || '' };
+    
+    const articleData = getArticleData(id);
+    const entry    = { date: dateKey, snapshot: { ...branchesData[id] }, scores: { ...scores }, article: articleData ? articleData.text : '' };
     
     if (todayIdx >= 0) {
         branchHistory[id][todayIdx] = entry;
@@ -1194,7 +1267,6 @@ function calculateTrial() {
     const data        = branchesData[document.getElementById('trial_branch_select').value];
     const rawPositive = parseFloat(document.getElementById('trial_positive').value) || 0;
     const rawNegative = parseFloat(document.getElementById('trial_negative').value) || 0;
-    
     const projData    = { ...data, positive: rawPositive * autoMultiplier, negative: rawNegative };
     const scores      = calcScores(projData);
     const negWeight   = (data.target / Math.max(1, rawPositive * autoMultiplier)) * 0.25;
@@ -1212,12 +1284,14 @@ function calculateTrial() {
     
     const additionText = "<br><span class='text-xs font-bold text-slate-500 mt-2 block'>عند الاستمرار بنفس الاداء</span>";
     const rewardBox = document.getElementById('rewardBox');
+    
     const levels = [
-        { min: 9,         text: "التوقع: أداء مرتفع ✓",    border: "#10b981" },
+        { min: 9,         text: "التوقع: أداء مرتفع",    border: "#10b981" },
         { min: 7,         text: "التوقع: أداء متوسط ◬",    border: "#f59e0b" },
         { min: 4,         text: "التوقع: أداء منخفض ⚠",   border: "#f97316" },
         { min: -Infinity, text: "التوقع: أداء حرج ⨂",      border: "#ef4444" }
     ];
+    
     const level = levels.find(l => total >= l.min);
     rewardBox.innerHTML = level.text + additionText;
     rewardBox.className = `mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[${level.border}] text-slate-800`;
