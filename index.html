@@ -582,8 +582,8 @@ function initCarousel() {
                 </div>
             </div>
             <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-sm">
-                <div class="font-bold text-slate-600">النمو الشهري</div>
-                <div class="font-black text-emerald-600">+${data.positive} <span class="text-xs">مراجعة جديدة</span></div>
+                <div class="font-bold text-slate-600">من بداية الشهر</div>
+                <div class="font-black text-emerald-600">+${data.positive} <span class="text-xs">مراجعة ايجابية</span></div>
             </div>
         `;
         carousel.appendChild(card);
@@ -644,7 +644,7 @@ function generateNewspaper() {
         container.innerHTML += `
             <div class="bg-white p-6 rounded-xl shadow-sm newspaper-card flex flex-col justify-between hover:shadow-md transition border border-slate-100">
                 <div>
-                    <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1 rounded-full">تحليل السوق ◂ ${data.bName}</span>
+                    <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1 rounded-full">الفروع ◂ ${data.bName}</span>
                     <h3 onclick="openBulletinPage(${i})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-800 cursor-pointer hover:text-blue-600 transition">${text.head}</h3>
                     <p class="text-slate-600 text-sm font-bold mb-4 leading-relaxed">${text.lead}</p>
                     <p class="text-slate-500 text-sm leading-relaxed text-justify mb-6">${text.body}</p>
@@ -692,7 +692,7 @@ function verifyMaintenance(enteredPin) {
         document.getElementById('adminModal').style.display = 'flex';
         loadAdminData();
     } else {
-        alert("رمز المرور غير صحيح!");
+        alert( غير صحيح!");
         pinBoxes.forEach(b => b.value = '');
         pinBoxes[0].focus();
     }
