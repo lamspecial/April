@@ -311,12 +311,15 @@
                 <div><label class="block text-sm mb-2 font-bold text-slate-800 bg-white/30 inline-block px-2 py-0.5 rounded backdrop-blur">اسم النائبة:</label><input type="text" id="admin_dName" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
             </div>
             
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
                 <div><label class="block text-sm mb-2 font-bold text-slate-800">حوادث السلامة:</label><input type="number" id="admin_safety" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-800">الزوار (مخفي عن الفرع):</label><input type="number" id="admin_visitors" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-800">الشكاوى:</label><input type="number" id="admin_complaints" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-800">إيجابي:</label><input type="number" id="admin_positive" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-800">سلبي:</label><input type="number" id="admin_negative" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">تقييمات بداية الشهر:</label><input type="number" id="admin_startReviews" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">التقييمات الحالية الاجمالية:</label><input type="number" id="admin_currentReviews" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">تقييم سلبي (يدوي):</label><input type="number" id="admin_negative" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">التقييم العام للفرع:</label><input type="number" id="admin_baseRating" step="0.1" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">الزوار (مخفي عن الفرع):</label><input type="number" id="admin_visitors" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-900 bg-amber-100/50 px-2 py-0.5 rounded backdrop-blur">الهدف الشهري:</label><input type="number" id="admin_target" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-amber-400" style="background: rgba(255, 251, 235, 0.6);"></div>
             </div>
             
@@ -1385,15 +1388,35 @@ function closeAdmin() { document.getElementById('adminModal').style.display = 'n
 function loadAdminData() {
     const id = document.getElementById('branchSelector').value;
     const d  = branchesData[id];
-    const fields = { admin_bName: d.bName, admin_mName: d.mName, admin_dName: d.dName,
-                     admin_safety: d.safety, admin_visitors: d.visitors, admin_complaints: d.complaints,
-                     admin_positive: d.positive, admin_negative: d.negative, admin_target: d.target };
-    Object.entries(fields).forEach(([id, val]) => document.getElementById(id).value = val);
+    const fields = { 
+        admin_bName: d.bName, 
+        admin_mName: d.mName, 
+        admin_dName: d.dName,
+        admin_safety: d.safety, 
+        admin_visitors: d.visitors, 
+        admin_complaints: d.complaints,
+        admin_negative: d.negative, 
+        admin_target: d.target,
+        admin_startReviews: d.baseReviews,
+        admin_currentReviews: d.baseReviews + d.positive,
+        admin_baseRating: d.baseRating
+    };
+    Object.entries(fields).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+    });
 }
 
 async function saveAdminData() {
     const id = document.getElementById('branchSelector').value;
     const num = (fieldId, def = 0) => parseFloat(document.getElementById(fieldId).value) || def;
+    
+    // حساب التقييمات الإيجابية بناءً على مدخلات البداية والتقييمات الحالية
+    const startReviews = num('admin_startReviews', branchesData[id].baseReviews);
+    const currentReviews = num('admin_currentReviews', startReviews + branchesData[id].positive);
+    let positiveReviews = currentReviews - startReviews;
+    if (positiveReviews < 0) positiveReviews = 0; // لضمان عدم ظهور أرقام سالبة في حال إدخال خاطئ
+
     branchesData[id] = {
         bName:      document.getElementById('admin_bName').value,
         mName:      document.getElementById('admin_mName').value,
@@ -1401,11 +1424,11 @@ async function saveAdminData() {
         safety:     num('admin_safety'),
         visitors:   num('admin_visitors', 1),
         complaints: num('admin_complaints'),
-        positive:   num('admin_positive'),
+        positive:   positiveReviews,
         negative:   num('admin_negative'),
         target:     num('admin_target', 50),
-        baseRating: branchesData[id].baseRating,
-        baseReviews: branchesData[id].baseReviews,
+        baseRating: num('admin_baseRating', branchesData[id].baseRating),
+        baseReviews: startReviews,
         iframeSrc: branchesData[id].iframeSrc
     };
     closeAdmin();
