@@ -853,7 +853,7 @@ function showPage(pageId) {
 function goToMainPage() {
     showPage('main');
     history.pushState('', document.title, window.location.pathname);
-    updateOGTags('التقرير الأسبوعي - آي أم سبيشل', 'تقرير الأداء', window.location.href);
+    updateOGTags('التقارير - آي أم سبيشل', 'تقرير الأداء', window.location.href);
 }
 
 // ============================================================
@@ -931,7 +931,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     const articleSection = hasArticle ? `
         <div class="mb-8">
             <div class="flex flex-wrap items-center gap-3 mb-4">
-                <span class="${tier.headerColor} border font-bold text-sm px-4 py-1.5 rounded-full shadow-sm">الأداء الاسبوعي ◂ ${data.bName}</span>
+                <span class="${tier.headerColor} border font-bold text-sm px-4 py-1.5 rounded-full shadow-sm">الأداء ◂ ${data.bName}</span>
                 <span class="text-slate-500 bg-white/40 backdrop-blur px-3 py-1 rounded-full text-sm font-bold border border-white/50">${dateStr}</span>
             </div>
             
@@ -1091,7 +1091,7 @@ function shareBulletinPage() {
     const url = window.location.href;
     const branchName = currentBulletinData ? currentBulletinData.bName : '';
     const scoreLabel = currentBulletinData ? currentBulletinData.performanceLabel : '';
-    const head       = currentBulletinData ? currentBulletinData.head : 'التقرير الأسبوعي';
+    const head       = currentBulletinData ? currentBulletinData.head : 'التقارير ';
     const lead       = currentBulletinData ? currentBulletinData.lead : 'تقرير الأداء الدوري';
 
     const waText = encodeURIComponent(
