@@ -30,30 +30,77 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #fafafa; margin: 0; padding: 0; }
-        .newspaper-card { border-right: 4px solid #1e3a8a; }
-        .branch-stat-card { border-right: 3px solid #1e3a8a; }
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            background-attachment: fixed;
+            margin: 0; padding: 0; 
+        }
+
+        /* مؤثرات الإضاءة الخلفية للتصميم الزجاجي */
+        .bg-blob-1 { position: fixed; top: -10%; right: -5%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
+        .bg-blob-2 { position: fixed; bottom: -20%; left: -10%; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
+        .bg-blob-3 { position: fixed; top: 40%; left: 40%; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(234,179,8,0.1) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
+
+        /* التصميم الزجاجي */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        }
+        
+        /* هيدر شديد الشفافية */
+        .glass-header {
+            background: rgba(15, 23, 42, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* مدخلات زجاجية */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: #64748b;
+        }
+
+        .newspaper-card { border-right: 4px solid rgba(30, 58, 138, 0.8); }
+        .branch-stat-card { border-right: 3px solid rgba(30, 58, 138, 0.6); }
+        
         .pin-box { transition: all 0.2s; }
         .pin-box:focus { transform: scale(1.05); }
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
-        .timeline-border { border-right: 2px dashed #cbd5e1; }
+        
+        .timeline-border { border-right: 2px dashed rgba(203, 213, 225, 0.7); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .google-star { color: #fbbc04; }
-        .google-star-empty { color: #dadce0; }
+        
+        .google-star { color: #fbbc04; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .google-star-empty { color: rgba(218, 220, 224, 0.6); }
+        
         #bulletinPage { display: none; }
         #bulletinPage.active { display: flex; }
         #mainPageWrapper { display: flex; flex-direction: column; flex-grow: 1; }
         #mainPageWrapper.hidden-page { display: none; }
+        
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(30px); }
             to   { opacity: 1; transform: translateY(0); }
         }
         .slide-up { animation: slideUp 0.35s ease forwards; }
+        
         .share-btn { transition: all 0.2s; }
         .share-btn:hover { transform: scale(1.03); }
+        
         @keyframes fadeInOut {
             0%   { opacity: 0; transform: translateY(10px); }
             20%  { opacity: 1; transform: translateY(0); }
@@ -61,8 +108,10 @@
             100% { opacity: 0; }
         }
         .copy-toast { animation: fadeInOut 2.5s ease forwards; }
+        
         .prompt-box {
-            background: #f8fafc; border: 1.5px dashed #94a3b8;
+            background: rgba(248, 250, 252, 0.6); 
+            border: 1.5px dashed rgba(148, 163, 184, 0.8);
             border-radius: 12px;
             font-family: 'Tajawal', monospace;
             font-size: 13px;
@@ -71,35 +120,44 @@
             white-space: pre-wrap;
             word-break: break-word; direction: rtl;
             text-align: right;
+            backdrop-filter: blur(4px);
         }
-        .history-item { border-right: 3px solid #e2e8f0; transition: border-color 0.2s; }
+        
+        .history-item { border-right: 3px solid rgba(226, 232, 240, 0.6); transition: border-color 0.2s; }
         .history-item:hover { border-right-color: #1e3a8a; }
+        
         textarea.article-input {
             font-family: 'Tajawal', sans-serif; font-size: 14px;
             line-height: 1.9;
             resize: vertical;
             min-height: 180px;
         }
+        
         #loadingOverlay {
-            position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 100;
+            position: fixed; inset: 0; background: rgba(255,255,255,0.7); 
+            backdrop-filter: blur(10px); z-index: 100;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
     </style>
 </head>
 <body class="text-slate-800 relative min-h-screen flex flex-col">
 
+<div class="bg-blob-1"></div>
+<div class="bg-blob-2"></div>
+<div class="bg-blob-3"></div>
+
 <div id="loadingOverlay">
-    <div class="w-12 h-12 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin mb-4"></div>
-    <p class="text-slate-600 font-bold">جاري تحميل البيانات...</p>
+    <div class="w-12 h-12 border-4 border-slate-300 border-t-slate-800 rounded-full animate-spin mb-4"></div>
+    <p class="text-slate-800 font-bold">I am Special...</p>
 </div>
 
-<header class="bg-slate-900 text-white p-4 sticky top-0 z-40">
+<header class="glass-header text-white p-4 sticky top-0 z-40">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-black tracking-wide cursor-pointer flex items-center gap-1 whitespace-nowrap" onclick="goToMainPage()">
-            <span class="text-yellow-400">أي آم</span> <span class="text-red-500">سبيشل</span>
+        <h1 class="text-2xl font-black tracking-wide cursor-pointer flex items-center gap-1 whitespace-nowrap drop-shadow-md" onclick="goToMainPage()">
+            <span class="text-yellow-400">أي آم</span> <span class="text-red-400">سبيشل</span>
         </h1>
         <div class="flex gap-4">
-            <button onclick="openMaintenanceAuth()" class="bg-slate-800 hover:bg-slate-700 text-slate-100 px-4 py-2 rounded font-bold text-sm transition flex items-center gap-2">
+            <button onclick="openMaintenanceAuth()" class="bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-slate-50 px-4 py-2 rounded-lg font-bold text-sm transition flex items-center gap-2 shadow-sm">
                  محمد عبدالعزيز الحبيب
             </button>
         </div>
@@ -109,13 +167,13 @@
 <div id="mainPageWrapper">
     <div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
         <div class="space-y-2 mb-8 text-center">
-            <h2 class="text-3xl font-black text-slate-800 tracking-wide whitespace-nowrap">تعزيز السمعة الرقمية </h2>
-            <p class="text-slate-500 font-medium">بروتوكول إدارات الفروع</p>
+            <h2 class="text-3xl font-black text-slate-800 tracking-wide whitespace-nowrap drop-shadow-sm">تعزيز السمعة الرقمية </h2>
+            <p class="text-slate-600 font-medium bg-white/40 inline-block px-4 py-1 rounded-full backdrop-blur-sm border border-white/50">بروتوكول إدارات الفروع</p>
         </div>
 
         <div class="mb-12 relative w-full group">
-            <button onclick="scrollCarousel(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❯</button>
-            <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 bg-white rounded-full w-10 h-10 shadow-lg border border-slate-100 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition transform hover:scale-105 opacity-0 group-hover:opacity-100">❮</button>
+            <button onclick="scrollCarousel(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 glass-panel rounded-full w-10 h-10 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 transition transform hover:scale-105 opacity-0 group-hover:opacity-100 font-bold text-lg">❯</button>
+            <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 glass-panel rounded-full w-10 h-10 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 transition transform hover:scale-105 opacity-0 group-hover:opacity-100 font-bold text-lg">❮</button>
             <div id="branchesCarousel" class="flex gap-5 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 pt-2 scroll-smooth px-2"></div>
             <div id="carouselDots" class="flex justify-center items-center gap-2 mt-4 w-full"></div>
         </div>
@@ -125,44 +183,45 @@
 </div>
 
 <div id="bulletinPage" class="flex-col flex-grow">
-    <div class="bg-white shadow-sm sticky top-[65px] z-30">
+    <div class="glass-panel sticky top-[73px] z-30 rounded-none border-x-0 border-t-0">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-            <button onclick="goToMainPage()" class="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold text-sm transition bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-lg border border-slate-200">الرئيسية</button>
+            <button onclick="goToMainPage()" class="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-bold text-sm transition glass-input px-4 py-2 rounded-lg">الرئيسية</button>
             <div class="flex-grow">
-                <span id="bulletinBreadcrumb" class="text-slate-400 text-sm font-medium">التقرير الدوري</span>
-                <span class="text-slate-300 mx-2">◂</span>
-                <span id="bulletinBreadcrumbBranch" class="text-slate-700 font-bold text-sm"></span>
+                <span id="bulletinBreadcrumb" class="text-slate-500 text-sm font-medium">التقرير الدوري</span>
+                <span class="text-slate-400 mx-2">◂</span>
+                <span id="bulletinBreadcrumbBranch" class="text-slate-800 font-bold text-sm bg-white/40 px-2 py-0.5 rounded backdrop-blur"></span>
             </div>
-            <button onclick="shareBulletinPage()" class="flex items-center justify-center share-btn text-[#25D366] hover:text-[#1ebe57] transition" title="مشاركة عبر واتساب">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <button onclick="shareBulletinPage()" class="flex items-center justify-center share-btn text-[#25D366] hover:text-[#1ebe57] transition drop-shadow-md bg-white/50 p-2 rounded-full border border-white/50" title="مشاركة عبر واتساب">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </button>
         </div>
     </div>
     <div id="bulletinContent" class="max-w-6xl mx-auto w-full px-4 md:px-8 py-8 flex-grow slide-up"></div>
 </div>
 
-<div id="iframeModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-2 backdrop-blur-sm" onclick="closeIframeModal(event)">
-    <div class="w-full h-[80vh] max-w-5xl rounded-2xl overflow-hidden shadow-2xl relative" onclick="event.stopPropagation()">
+<div id="iframeModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-2" onclick="closeIframeModal(event)">
+    <div class="w-full h-[80vh] max-w-5xl rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/20 relative bg-slate-100/50 backdrop-blur-lg" onclick="event.stopPropagation()">
+        <button onclick="closeIframeModal(event)" class="absolute top-4 left-4 bg-white/80 hover:bg-white text-slate-800 w-10 h-10 rounded-full shadow flex items-center justify-center font-bold text-lg z-10 transition backdrop-blur">✕</button>
         <iframe id="branchMapIframe" src="" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 </div>
 
-<div id="copyToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white font-bold px-6 py-3 rounded-xl shadow-xl z-50 hidden text-sm">
+<div id="copyToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/90 backdrop-blur-md border border-white/20 text-white font-bold px-6 py-3 rounded-xl shadow-2xl z-50 hidden text-sm">
     تم النسخ
 </div>
 
-<div id="predictionModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-slate-200">
-        <button onclick="closePredictionModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition">✕</button>
+<div id="predictionModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-white/40">
+        <button onclick="closePredictionModal()" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white border border-white/60 flex items-center justify-center transition shadow-sm">✕</button>
         <div class="p-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <div class="md:col-span-2">
                     <h2 class="text-2xl font-black mb-1 text-slate-800">توقع النتيجة</h2>
-                    <p class="text-slate-500 font-medium text-sm mb-8">الأداء الفعلي من بداية الشهر</p>
-                    <div class="mb-6 bg-slate-50 p-5 rounded border border-slate-200 flex flex-col md:flex-row gap-6 items-center justify-between">
+                    <p class="text-slate-600 font-medium text-sm mb-8 bg-white/30 inline-block px-3 py-1 rounded backdrop-blur">الأداء الفعلي من بداية الشهر</p>
+                    <div class="mb-6 bg-white/40 p-5 rounded-xl border border-white/60 shadow-sm flex flex-col md:flex-row gap-6 items-center justify-between">
                         <div class="w-full md:w-auto">
                             <label class="block text-sm font-bold text-slate-700 mb-2">اختر الفرع :</label>
-                            <select id="trial_branch_select" onchange="loadTrialDataFromDB()" class="w-full px-4 py-2 border border-slate-300 rounded bg-white font-bold text-slate-800 focus:outline-none focus:border-slate-500">
+                            <select id="trial_branch_select" onchange="loadTrialDataFromDB()" class="w-full px-4 py-2 border border-white/50 rounded-lg glass-input font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300">
                                 <option value="1">شرق بلازا</option>
                                 <option value="2">الرياض جاليري</option>
                                 <option value="3">ذافيو</option>
@@ -171,40 +230,40 @@
                                 <option value="6">مركز المملكة</option>
                             </select>
                         </div>
-                        <div class="text-left bg-white p-4 rounded border border-slate-200 shadow-sm w-full md:w-auto">
-                            <p class="text-xs text-slate-500 font-bold mb-2">القياس الحالي:</p>
+                        <div class="text-left bg-white/60 backdrop-blur p-4 rounded-xl border border-white/50 shadow-sm w-full md:w-auto">
+                            <p class="text-xs text-slate-600 font-bold mb-2">القياس الحالي:</p>
                             <div class="flex gap-6 text-sm">
-                                <div class="text-slate-700 font-bold">أيام مضت: <span id="daysPassed" class="font-black text-lg">0</span></div>
-                                <div class="text-slate-700 font-bold">أيام متبقية: <span id="daysRemaining" class="font-black text-lg">0</span></div>
+                                <div class="text-slate-800 font-bold">أيام مضت: <span id="daysPassed" class="font-black text-lg bg-slate-100/50 px-2 rounded">0</span></div>
+                                <div class="text-slate-800 font-bold">أيام متبقية: <span id="daysRemaining" class="font-black text-lg bg-slate-100/50 px-2 rounded">0</span></div>
                             </div>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div><label class="block text-sm font-bold text-slate-700 mb-2">التقييمات الإيجابية من بداية الشهر</label><input type="number" id="trial_positive" oninput="calculateTrial()" class="w-full px-4 py-3 border border-slate-300 rounded focus:border-slate-600 focus:outline-none"></div>
-                        <div><label class="block text-sm font-bold text-slate-700 mb-2">التقييمات السلبية </label><input type="number" id="trial_negative" oninput="calculateTrial()" class="w-full px-4 py-3 border border-slate-300 rounded focus:border-slate-600 focus:outline-none"></div>
+                        <div><label class="block text-sm font-bold text-slate-700 mb-2">التقييمات الإيجابية من بداية الشهر</label><input type="number" id="trial_positive" oninput="calculateTrial()" class="w-full px-4 py-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-300"></div>
+                        <div><label class="block text-sm font-bold text-slate-700 mb-2">التقييمات السلبية </label><input type="number" id="trial_negative" oninput="calculateTrial()" class="w-full px-4 py-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-300"></div>
                     </div>
                     <div class="mt-8 flex gap-4">
-                        <button onclick="clearTrialData()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded transition">مسح</button>
+                        <button onclick="clearTrialData()" class="flex-1 bg-white/60 hover:bg-white/80 border border-white/60 backdrop-blur text-slate-800 font-bold py-3 px-4 rounded-lg transition shadow-sm">مسح</button>
                     </div>
                 </div>
-                <div class="bg-slate-50 p-6 rounded border border-slate-200 flex flex-col justify-between">
+                <div class="bg-white/40 p-6 rounded-xl border border-white/60 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h2 class="text-lg font-bold mb-6 text-slate-800 text-center">الاستمرار بنفس اكتساب التقييمات وبدون شكاوى سيكون لديك</h2>
+                        <h2 class="text-lg font-bold mb-6 text-slate-800 text-center bg-white/40 rounded py-2 px-3 backdrop-blur">الاستمرار بنفس اكتساب التقييمات وبدون شكاوى سيكون لديك</h2>
                         <div class="text-center mb-6">
-                            <span id="totalPoints" class="text-6xl font-black text-slate-900">0</span>
-                            <span class="text-lg text-slate-400 font-bold">/ 11</span>
+                            <span id="totalPoints" class="text-6xl font-black text-slate-900 drop-shadow-md">0</span>
+                            <span class="text-lg text-slate-600 font-bold">/ 11</span>
                         </div>
-                        <div class="w-full bg-slate-200 rounded-full h-2 mb-2 overflow-hidden">
-                            <div id="progressBar" class="bg-slate-800 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
+                        <div class="w-full bg-slate-200/50 backdrop-blur rounded-full h-3 mb-2 overflow-hidden border border-white/40">
+                            <div id="progressBar" class="bg-slate-800 h-3 rounded-full transition-all duration-700 shadow-inner" style="width: 0%"></div>
                         </div>
-                        <div class="space-y-4 text-sm pt-6 mt-6 font-bold text-slate-600">
-                            <div class="flex justify-between"><span>نقاط السلامة:</span> <span id="resSafety" class="text-slate-900 font-black">0.00</span></div>
-                            <div class="flex justify-between"><span>نقاط الشكاوى (غير السلامة):</span> <span id="resComplaints" class="text-slate-900 font-black">0.00</span></div>
-                            <div class="flex justify-between"><span>نقاط الإيجابية:</span> <span id="resPos" class="text-slate-900 font-black">0.00</span></div>
-                            <div class="flex justify-between"><span>نقاط السلبية:</span> <span id="resNeg" class="text-slate-900 font-black">0.00</span></div>
+                        <div class="space-y-4 text-sm pt-6 mt-6 font-bold text-slate-700 border-t border-slate-300/30">
+                            <div class="flex justify-between bg-white/30 px-3 py-2 rounded"><span>نقاط السلامة:</span> <span id="resSafety" class="text-slate-900 font-black">0.00</span></div>
+                            <div class="flex justify-between bg-white/30 px-3 py-2 rounded"><span>نقاط الشكاوى (غير السلامة):</span> <span id="resComplaints" class="text-slate-900 font-black">0.00</span></div>
+                            <div class="flex justify-between bg-white/30 px-3 py-2 rounded"><span>نقاط الإيجابية:</span> <span id="resPos" class="text-slate-900 font-black">0.00</span></div>
+                            <div class="flex justify-between bg-white/30 px-3 py-2 rounded"><span>نقاط السلبية:</span> <span id="resNeg" class="text-slate-900 font-black">0.00</span></div>
                         </div>
                     </div>
-                    <div id="rewardBox" class="mt-8 p-4 rounded text-center font-bold text-sm leading-relaxed transition-colors duration-300 bg-white text-slate-400 border border-slate-200">
+                    <div id="rewardBox" class="mt-8 p-4 rounded-xl text-center font-bold text-sm leading-relaxed transition-colors duration-300 bg-white/60 backdrop-blur text-slate-500 border border-white/60 shadow-sm">
                         أدخل البيانات...
                     </div>
                 </div>
@@ -213,30 +272,30 @@
     </div>
 </div>
 
-<div id="maintenanceAuthModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-xl p-8 shadow-2xl max-w-sm w-full text-center border border-slate-200">
+<div id="maintenanceAuthModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-8 shadow-2xl max-w-sm w-full text-center border border-white/50">
         <h3 class="font-black text-xl mb-2 text-slate-900"> الإدارة العليا</h3>
-        <p class="mb-6 font-medium text-slate-500 text-sm">أدخل كلمة المرور </p>
+        <p class="mb-6 font-medium text-slate-600 text-sm bg-white/30 inline-block px-3 py-1 rounded-full">أدخل كلمة المرور </p>
         <div class="flex gap-4 justify-center mb-8" dir="ltr">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 0)" onkeydown="handleBoxKey(event, 0)">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 1)" onkeydown="handleBoxKey(event, 1)">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 2)" onkeydown="handleBoxKey(event, 2)">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold border-2 border-slate-300 rounded focus:border-slate-800 focus:outline-none" oninput="handleBoxInput(this, 3)" onkeydown="handleBoxKey(event, 3)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this, 0)" onkeydown="handleBoxKey(event, 0)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this, 1)" onkeydown="handleBoxKey(event, 1)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this, 2)" onkeydown="handleBoxKey(event, 2)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this, 3)" onkeydown="handleBoxKey(event, 3)">
         </div>
-        <button onclick="closeMaintenanceAuth()" class="w-full py-3 bg-slate-100 text-slate-700 font-bold rounded hover:bg-slate-200 transition">إلغاء</button>
+        <button onclick="closeMaintenanceAuth()" class="w-full py-3 bg-white/50 hover:bg-white/70 border border-white/60 text-slate-800 font-bold rounded-lg transition shadow-sm backdrop-blur">إلغاء</button>
     </div>
 </div>
 
-<div id="adminModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
-        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-xl">
-            <h2 class="text-xl font-black text-slate-900">لوحة التحكم </h2>
-            <button onclick="closeAdmin()" class="text-slate-400 hover:text-slate-800 font-bold text-xl">✕</button>
+<div id="adminModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-[0_15px_40px_rgba(0,0,0,0.2)] border border-white/60 flex flex-col">
+        <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur flex justify-between items-center rounded-t-2xl">
+            <h2 class="text-xl font-black text-slate-900">لوحة التحكم للإدارة</h2>
+            <button onclick="closeAdmin()" class="text-slate-600 hover:text-slate-900 font-bold text-xl bg-white/40 hover:bg-white/60 w-8 h-8 rounded-full flex items-center justify-center transition">✕</button>
         </div>
         <div class="p-8 space-y-8">
-            <div class="bg-slate-100 p-4 rounded flex flex-col md:flex-row gap-4 items-center">
-                <label class="font-bold text-slate-800 whitespace-nowrap">اختر الفرع:</label>
-                <select id="branchSelector" onchange="loadAdminData()" class="w-full md:w-auto p-2 rounded border-slate-300 font-bold focus:outline-none">
+            <div class="bg-white/40 backdrop-blur p-5 rounded-xl border border-white/50 shadow-sm flex flex-col md:flex-row gap-4 items-center">
+                <label class="font-bold text-slate-800 whitespace-nowrap">اختر الفرع للتحرير:</label>
+                <select id="branchSelector" onchange="loadAdminData()" class="w-full md:w-auto p-2.5 rounded-lg glass-input font-bold focus:outline-none focus:ring-2 focus:ring-slate-400">
                     <option value="1">فرع 1 (شرق بلازا)</option>
                     <option value="2">فرع 2 (الرياض جاليري)</option>
                     <option value="3">فرع 3 (ذافيو)</option>
@@ -245,68 +304,80 @@
                     <option value="6">فرع 6 (مركز المملكة)</option>
                 </select>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-slate-100 pb-8">
-                <div><label class="block text-sm mb-2 font-bold text-slate-700">اسم الفرع:</label><input type="text" id="admin_bName" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-700">اسم المديرة:</label><input type="text" id="admin_mName" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-700">اسم النائبة:</label><input type="text" id="admin_dName" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-slate-300/30 pb-8">
+                <div><label class="block text-sm mb-2 font-bold text-slate-800 bg-white/30 inline-block px-2 py-0.5 rounded backdrop-blur">اسم الفرع:</label><input type="text" id="admin_bName" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800 bg-white/30 inline-block px-2 py-0.5 rounded backdrop-blur">اسم المديرة:</label><input type="text" id="admin_mName" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800 bg-white/30 inline-block px-2 py-0.5 rounded backdrop-blur">اسم النائبة:</label><input type="text" id="admin_dName" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
             </div>
+            
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                <div><label class="block text-sm mb-2 font-bold text-slate-700">حوادث السلامة:</label><input type="number" id="admin_safety" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-700">الزوار (مخفي عن الفرع):</label><input type="number" id="admin_visitors" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-700">الشكاوى:</label><input type="number" id="admin_complaints" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-700">إيجابي:</label><input type="number" id="admin_positive" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-700">سلبي:</label><input type="number" id="admin_negative" class="w-full p-3 border border-slate-300 rounded focus:border-slate-500 focus:outline-none"></div>
-                <div><label class="block text-sm mb-2 font-bold text-slate-900">الهدف الشهري:</label><input type="number" id="admin_target" class="w-full p-3 border border-slate-400 bg-slate-50 rounded focus:border-slate-600 focus:outline-none"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">حوادث السلامة:</label><input type="number" id="admin_safety" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">الزوار (مخفي عن الفرع):</label><input type="number" id="admin_visitors" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">الشكاوى:</label><input type="number" id="admin_complaints" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">إيجابي:</label><input type="number" id="admin_positive" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-800">سلبي:</label><input type="number" id="admin_negative" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                <div><label class="block text-sm mb-2 font-bold text-slate-900 bg-amber-100/50 px-2 py-0.5 rounded backdrop-blur">الهدف الشهري:</label><input type="number" id="admin_target" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-amber-400" style="background: rgba(255, 251, 235, 0.6);"></div>
             </div>
-            <button onclick="saveAdminData()" class="w-full bg-slate-900 text-white py-4 rounded font-black text-lg hover:bg-slate-800 transition shadow-md">حفظ التعديلات </button>
+            
+            <div class="flex flex-col sm:flex-row gap-4 mt-8 pt-4 border-t border-slate-300/30">
+                <button onclick="saveAdminData()" class="flex-1 bg-slate-800/90 hover:bg-slate-900 backdrop-blur text-white py-4 rounded-xl font-black text-lg transition shadow-lg border border-white/20 flex items-center justify-center gap-2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    تعديل بيانات البطاقة
+                </button>
+                <button onclick="openArticleModalFromAdmin()" class="flex-1 bg-indigo-600/90 hover:bg-indigo-700 backdrop-blur text-white py-4 rounded-xl font-black text-lg transition shadow-lg border border-white/20 flex items-center justify-center gap-2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    كتابة تقرير
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="articleModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-xl w-full max-w-3xl max-h-[92vh] overflow-y-auto relative shadow-2xl border border-slate-200">
-        <button onclick="closeArticleModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition z-10">✕</button>
+<div id="articleModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto relative shadow-2xl border border-white/50">
+        <button onclick="closeArticleModal()" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60 z-10">✕</button>
 
-        <div class="p-6 border-b border-slate-100 bg-slate-50 rounded-t-xl">
+        <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur rounded-t-2xl">
             <h2 class="text-xl font-black text-slate-900 mb-1" id="articleModalTitle">كتابة مقال الفرع</h2>
-            <p class="text-slate-500 text-sm font-medium" id="articleModalSubtitle">الفرع: —</p>
+            <p class="text-slate-600 text-sm font-bold bg-white/40 inline-block px-2 py-0.5 rounded" id="articleModalSubtitle">الفرع: —</p>
         </div>
 
         <div id="step1_prompt" class="p-6 space-y-5">
             <div class="flex items-center gap-3 mb-4">
-                <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center">1</span>
-                <span class="font-bold text-slate-700">انسخ الأمر التالي وأرسله لنموذج الذكاء الاصطناعي</span>
+                <span class="w-8 h-8 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center shadow-md">1</span>
+                <span class="font-bold text-slate-800 bg-white/40 px-3 py-1 rounded-lg backdrop-blur border border-white/50">انسخ الأمر التالي وأرسله لنموذج الذكاء الاصطناعي</span>
             </div>
             <div class="relative">
-                <pre id="generatedPrompt" class="prompt-box p-4 text-sm overflow-auto max-h-72"></pre>
-                <button onclick="copyPrompt()" class="absolute top-3 left-3 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3 py-1.5 rounded transition flex items-center gap-1.5">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                <pre id="generatedPrompt" class="prompt-box p-5 text-sm overflow-auto max-h-72 shadow-inner"></pre>
+                <button onclick="copyPrompt()" class="absolute top-3 left-3 bg-slate-800/90 backdrop-blur hover:bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition flex items-center gap-1.5 shadow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                     نسخ
                 </button>
             </div>
 
             <div class="flex items-center gap-3 mt-6 mb-2">
-                <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center">2</span>
-                <span class="font-bold text-slate-700">بعد الحصول على المقال من الذكاء الاصطناعي، الصقه هنا</span>
+                <span class="w-8 h-8 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center shadow-md">2</span>
+                <span class="font-bold text-slate-800 bg-white/40 px-3 py-1 rounded-lg backdrop-blur border border-white/50">بعد الحصول على المقال من الذكاء الاصطناعي، الصقه هنا</span>
             </div>
-            <textarea id="articlePasteInput" class="article-input w-full border border-slate-300 rounded-lg p-4 focus:border-slate-600 focus:outline-none text-slate-800 font-medium" placeholder="الصق المقال هنا..."></textarea>
+            <textarea id="articlePasteInput" class="article-input w-full rounded-xl p-5 glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 font-medium shadow-inner" placeholder="الصق المقال هنا..."></textarea>
 
             <div class="flex gap-3 pt-2">
-                <button onclick="saveArticleFromInput()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-black py-3 rounded-lg transition shadow">حفظ المقال </button>
-                <button onclick="closeArticleModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-5 rounded-lg transition">إلغاء</button>
+                <button onclick="saveArticleFromInput()" class="flex-1 bg-slate-800/90 backdrop-blur hover:bg-slate-900 text-white font-black py-4 rounded-xl transition shadow-lg border border-white/20 text-lg">حفظ المقال </button>
+                <button onclick="closeArticleModal()" class="bg-white/60 hover:bg-white/80 backdrop-blur text-slate-800 font-bold py-4 px-6 rounded-xl transition border border-white/60 shadow-sm text-lg">إلغاء</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="historyModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-slate-200">
-        <div class="p-6 border-b border-slate-100 bg-slate-50 rounded-t-xl flex justify-between items-center">
+<div id="historyModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-white/50">
+        <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur flex justify-between items-center rounded-t-2xl">
             <div>
                 <h2 class="text-xl font-black text-slate-900" id="historyModalTitle">سجل الفرع</h2>
-                <p class="text-slate-500 text-sm font-medium mt-0.5">التاريخ من بداية الشهر</p>
+                <p class="text-slate-600 text-sm font-bold mt-1 bg-white/40 inline-block px-2 py-0.5 rounded">التاريخ من بداية الشهر</p>
             </div>
-            <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded bg-white border border-slate-200 flex items-center justify-center transition">✕</button>
+            <button onclick="closeHistoryModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60">✕</button>
         </div>
         <div id="historyContent" class="p-6 space-y-4"></div>
     </div>
@@ -332,6 +403,8 @@ const db = firebase.firestore();
 // حالة الإدارة
 // ============================================================
 let isAdminLoggedIn = false;
+let isCarouselPaused = false;
+let lastClickedCardIndex = 0;
 
 // ============================================================
 // قاعدة البيانات المحدثة (الافتراضية)
@@ -440,16 +513,46 @@ let carouselInterval;
 let currentArticleModalBranchId = null;
 
 // ============================================================
-// دوال الخريطة (Iframe)
+// دوال الخريطة (Iframe) وتوقف الكاروسيل
 // ============================================================
-function openIframeModal(src) {
+function openIframeModal(src, cardIndex) {
+    if(cardIndex !== undefined) {
+        lastClickedCardIndex = cardIndex;
+        scrollToCard(cardIndex);
+    }
+    isCarouselPaused = true;
+    clearInterval(carouselInterval);
     document.getElementById('branchMapIframe').src = src;
     document.getElementById('iframeModal').style.display = 'flex';
 }
 
 function closeIframeModal(e) {
+    // التأكد من النقر على الخلفية أو زر الإغلاق فقط وليس داخل iframe
+    if(e && e.target !== e.currentTarget && e.target.tagName !== 'BUTTON') return;
+    
     document.getElementById('iframeModal').style.display = 'none';
     document.getElementById('branchMapIframe').src = '';
+    
+    // الانتظار 3 ثواني ثم استئناف الحركة من نفس البطاقة
+    setTimeout(() => {
+        scrollToCard(lastClickedCardIndex);
+        isCarouselPaused = false;
+        // استدعاء دالة التشغيل التلقائي من الكاروسيل
+        const carousel = document.getElementById('branchesCarousel');
+        const startAutoScroll = () => {
+            clearInterval(carouselInterval);
+            if(isCarouselPaused) return;
+            carouselInterval = setInterval(() => {
+                const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+                if (Math.abs(carousel.scrollLeft) >= maxScroll - 10) {
+                    carousel.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    scrollCarousel(1);
+                }
+            }, 4000);
+        };
+        startAutoScroll();
+    }, 3000);
 }
 
 // ============================================================
@@ -469,23 +572,23 @@ function calcScores(data) {
 function getPerformanceTier(scores) {
     const { total, ptsSafety, ptsComplaints } = scores;
     if (total >= 9) return {
-        headerColor:    "text-emerald-700 bg-emerald-50 border-emerald-200",
+        headerColor:    "text-emerald-800 bg-emerald-100/50 border-emerald-200 backdrop-blur",
         label:          "أخضر",
-        labelBg:        "bg-emerald-50 border-emerald-200 text-emerald-800",
+        labelBg:        "bg-emerald-100/60 border-emerald-300 text-emerald-800 backdrop-blur",
         borderColor:    "border-emerald-400",
         barColor:       "bg-emerald-500"
     };
     if (total >= 6.5) return {
-        headerColor:    "text-amber-700 bg-amber-50 border-amber-200",
+        headerColor:    "text-amber-800 bg-amber-100/50 border-amber-200 backdrop-blur",
         label:          "أصفر",
-        labelBg:        "bg-amber-50 border-amber-200 text-amber-800",
+        labelBg:        "bg-amber-100/60 border-amber-300 text-amber-800 backdrop-blur",
         borderColor:    "border-amber-400",
         barColor:       "bg-amber-500"
     };
     return {
-        headerColor:    "text-rose-800 bg-rose-50 border-rose-200",
+        headerColor:    "text-rose-800 bg-rose-100/50 border-rose-200 backdrop-blur",
         label:          "أحمر",
-        labelBg:        "bg-rose-50 border-rose-200 text-rose-800",
+        labelBg:        "bg-rose-100/60 border-rose-300 text-rose-800 backdrop-blur",
         borderColor:    "border-rose-400",
         barColor:       "bg-rose-500"
     };
@@ -647,6 +750,15 @@ async function saveArticleFromInput() {
 }
 
 // ============================================================
+// دالة مساعدة لفتح المقال من لوحة الإدارة
+// ============================================================
+function openArticleModalFromAdmin() {
+    const id = document.getElementById('branchSelector').value;
+    closeAdmin();
+    openArticleModal(id);
+}
+
+// ============================================================
 // سجل الفرع التاريخي
 // ============================================================
 function openHistoryModal(branchId) {
@@ -657,39 +769,39 @@ function openHistoryModal(branchId) {
 
     const container = document.getElementById('historyContent');
     if (history.length === 0) {
-        container.innerHTML = `<p class="text-slate-400 text-center font-bold py-8">لا يوجد سجل حتى الآن</p>`;
+        container.innerHTML = `<p class="text-slate-500 text-center font-bold py-8 bg-white/40 rounded-xl border border-white/50 backdrop-blur">لا يوجد سجل حتى الآن</p>`;
     } else {
         const sorted = [...history].reverse();
         container.innerHTML = sorted.map(entry => {
             const dateFormatted = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(entry.date));
             const tier = getPerformanceTier(entry.scores);
             return `
-            <div class="history-item bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
+            <div class="history-item bg-white/60 border border-white/50 rounded-xl p-5 shadow-sm backdrop-blur">
                 <div class="flex justify-between items-center mb-3">
                     <span class="font-black text-slate-800 text-base">${dateFormatted}</span>
                     <span class="text-sm font-bold px-3 py-1 rounded-full ${tier.labelBg} border">${tier.label}</span>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                    <div class="bg-slate-50 rounded-lg p-2 border border-slate-100">
-                        <p class="text-xs text-slate-500 font-bold mb-1">النقاط</p>
-                        <p class="text-xl font-black text-slate-800">${entry.scores.total}</p>
-                        <p class="text-xs text-slate-400">/ 11</p>
+                    <div class="bg-white/50 rounded-lg p-2 border border-white/60 shadow-sm">
+                        <p class="text-xs text-slate-600 font-bold mb-1">النقاط</p>
+                        <p class="text-xl font-black text-slate-900">${entry.scores.total}</p>
+                        <p class="text-xs text-slate-500">/ 11</p>
                     </div>
-                    <div class="bg-slate-50 rounded-lg p-2 border border-slate-100">
-                        <p class="text-xs text-slate-500 font-bold mb-1">إيجابي</p>
-                        <p class="text-xl font-black text-emerald-600">${entry.snapshot.positive}</p>
+                    <div class="bg-emerald-50/50 rounded-lg p-2 border border-emerald-100 shadow-sm">
+                        <p class="text-xs text-slate-600 font-bold mb-1">إيجابي</p>
+                        <p class="text-xl font-black text-emerald-700">${entry.snapshot.positive}</p>
                     </div>
-                    <div class="bg-slate-50 rounded-lg p-2 border border-slate-100">
-                        <p class="text-xs text-slate-500 font-bold mb-1">سلبي</p>
-                        <p class="text-xl font-black text-rose-600">${entry.snapshot.negative}</p>
+                    <div class="bg-rose-50/50 rounded-lg p-2 border border-rose-100 shadow-sm">
+                        <p class="text-xs text-slate-600 font-bold mb-1">سلبي</p>
+                        <p class="text-xl font-black text-rose-700">${entry.snapshot.negative}</p>
                     </div>
-                    <div class="bg-slate-50 rounded-lg p-2 border border-slate-100">
-                        <p class="text-xs text-slate-500 font-bold mb-1">شكاوى</p>
-                        <p class="text-xl font-black text-amber-600">${entry.snapshot.complaints}</p>
+                    <div class="bg-amber-50/50 rounded-lg p-2 border border-amber-100 shadow-sm">
+                        <p class="text-xs text-slate-600 font-bold mb-1">شكاوى</p>
+                        <p class="text-xl font-black text-amber-700">${entry.snapshot.complaints}</p>
                     </div>
                 </div>
                 ${entry.article ?
-                `<div class="mt-3 bg-slate-50 rounded-lg p-3 border border-slate-100"><p class="text-xs text-slate-500 font-bold mb-1.5">المقال المحفوظ:</p><p class="text-slate-600 text-sm leading-relaxed line-clamp-3">${entry.article.substring(0, 200)}${entry.article.length > 200 ? '...' : ''}</p></div>` : ''}
+                `<div class="mt-4 bg-white/40 rounded-lg p-3 border border-white/60 shadow-sm"><p class="text-xs text-slate-600 font-bold mb-1.5">المقال المحفوظ:</p><p class="text-slate-700 text-sm leading-relaxed line-clamp-3 font-medium">${entry.article.substring(0, 200)}${entry.article.length > 200 ? '...' : ''}</p></div>` : ''}
             </div>`;
         }).join('');
     }
@@ -800,11 +912,11 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     const adminButtons = isAdminLoggedIn ?
         `
         <div class="flex gap-2">
-            <button onclick="openHistoryModal(${branchId})" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg border border-slate-200 transition flex items-center gap-1.5">
+            <button onclick="openHistoryModal(${branchId})" class="text-xs font-bold bg-white/60 hover:bg-white border border-white/60 text-slate-800 px-3 py-1.5 rounded-lg transition shadow-sm backdrop-blur flex items-center gap-1.5">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 السجل التاريخي
             </button>
-            <button onclick="openArticleModal(${branchId})" class="text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+            <button onclick="openArticleModal(${branchId})" class="text-xs font-bold bg-slate-800/90 hover:bg-slate-900 border border-white/20 text-white px-3 py-1.5 rounded-lg transition shadow backdrop-blur flex items-center gap-1.5">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 ${hasArticle ? 'تعديل المقال' : 'كتابة المقال'}
             </button>
@@ -819,26 +931,26 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     const articleSection = hasArticle ? `
         <div class="mb-8">
             <div class="flex flex-wrap items-center gap-3 mb-4">
-                <span class="${tier.headerColor} border font-bold text-sm px-4 py-1.5 rounded-full">الأداء الاسبوعي ◂ ${data.bName}</span>
-                <span class="text-slate-400 text-sm font-medium">${dateStr}</span>
+                <span class="${tier.headerColor} border font-bold text-sm px-4 py-1.5 rounded-full shadow-sm">الأداء الاسبوعي ◂ ${data.bName}</span>
+                <span class="text-slate-500 bg-white/40 backdrop-blur px-3 py-1 rounded-full text-sm font-bold border border-white/50">${dateStr}</span>
             </div>
             
-            <h1 class="text-3xl md:text-4xl font-black text-slate-800 leading-tight mb-4">${text.head}</h1>
-            <p class="text-lg text-slate-600 font-bold leading-relaxed mb-3">${text.lead}</p>
-            <p class="text-slate-500 leading-relaxed text-justify">${text.body}</p>
+            <h1 class="text-3xl md:text-4xl font-black text-slate-900 leading-tight mb-4 drop-shadow-sm">${text.head}</h1>
+            <p class="text-lg text-slate-700 font-bold leading-relaxed mb-3 bg-white/30 p-3 rounded-lg backdrop-blur border-l-4 border-slate-400">${text.lead}</p>
+            <p class="text-slate-700 leading-relaxed text-justify font-medium">${text.body}</p>
         </div>
     ` : `
-        <div class="mb-8 ${isAdminLoggedIn ? 'bg-amber-50 border-amber-200' : 'bg-slate-50 border-slate-200'} border rounded-2xl p-6">
+        <div class="mb-8 ${isAdminLoggedIn ? 'bg-amber-50/60 border-amber-200' : 'bg-slate-100/50 border-slate-200'} backdrop-blur border rounded-2xl p-6 shadow-sm">
             <div class="flex items-start gap-4">
-                <span class="text-3xl">${isAdminLoggedIn ? '<' : '<'}</span>
+                <span class="text-3xl drop-shadow">${isAdminLoggedIn ? '✍️' : '⏳'}</span>
                 <div>
                     ${isAdminLoggedIn ?
                     `
-                        <h3 class="font-black text-amber-800 text-lg mb-1">لم يُكتب مقال هذا الفرع بعد</h3>
-                        <p class="text-amber-700 text-sm font-medium mb-4">اكتب مقالا</p>
-                        <button onclick="openArticleModal(${branchId})" class="bg-amber-700 hover:bg-amber-800 text-white font-black px-5 py-2.5 rounded-lg text-sm transition shadow">✦ كتابة المقال</button>
+                        <h3 class="font-black text-amber-900 text-lg mb-1">لم يُكتب مقال هذا الفرع بعد</h3>
+                        <p class="text-amber-800 text-sm font-medium mb-4">اكتب مقالا يعكس الأرقام والمؤشرات أدناه.</p>
+                        <button onclick="openArticleModal(${branchId})" class="bg-amber-700/90 hover:bg-amber-800 backdrop-blur text-white font-black px-5 py-2.5 rounded-lg text-sm transition shadow border border-white/20">✦ كتابة المقال الآن</button>
                     ` : `
-                        <p class="text-slate-700 text-lg font-bold mt-1">${waitingText}</p>
+                        <p class="text-slate-800 text-lg font-bold mt-1">${waitingText}</p>
                     `}
                 </div>
             </div>
@@ -853,66 +965,69 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     return `
         ${articleSection}
 
-        <div class="mb-8 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <div class="mb-8 glass-panel rounded-2xl p-6">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-black text-slate-800">الإنجاز الشهري</h2>
+                <h2 class="text-xl font-black text-slate-800 drop-shadow-sm">الإنجاز الشهري</h2>
                 ${adminButtons}
             </div>
             
             <div class="flex justify-between items-center mb-3">
-                <span class="font-bold text-slate-600 text-sm">التقييمات الإيجابية المحققة</span>
-                <span class="font-black text-slate-800">${data.positive} / ${data.target}</span>
+                <span class="font-bold text-slate-700 text-sm bg-white/40 px-2 py-0.5 rounded">التقييمات الإيجابية المحققة</span>
+                <span class="font-black text-slate-900 text-lg">${data.positive} / ${data.target}</span>
             </div>
-            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden mb-2">
+            <div class="w-full bg-slate-200/50 backdrop-blur border border-white/60 rounded-full h-3 overflow-hidden mb-2 shadow-inner">
                 <div class="${data.positive >= data.target ? 'bg-emerald-500' : 'bg-slate-700'} h-3 rounded-full transition-all" style="width:${Math.min(100, (data.positive / data.target) * 100)}%"></div>
             </div>
-            <p class="text-xs text-slate-400 font-bold text-left">${Math.round((data.positive / data.target) * 100)}% من الهدف</p>
+            <p class="text-xs text-slate-600 font-bold text-left">${Math.round((data.positive / data.target) * 100)}% من الهدف</p>
         </div>
 
-        <div class="border-t border-slate-100 my-8"></div>
+        <div class="border-t border-slate-300/30 my-8"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="md:col-span-1 bg-slate-800 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-md">
-                <p class="text-slate-400 font-bold text-sm mb-2">الأداء العام</p>
-                <div class="text-7xl font-black mb-1">${scores.total}</div>
-                <p class="text-slate-400 text-sm font-bold">من 11</p>
-                <div class="w-full bg-slate-600 rounded-full h-2 mt-4 overflow-hidden">
-                    <div class="${tier.barColor} h-2 rounded-full transition-all" style="width:${progressPercent}%"></div>
+            <div class="md:col-span-1 bg-slate-800/90 backdrop-blur border border-white/20 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-tr from-slate-900 to-transparent opacity-50 z-0"></div>
+                <div class="z-10 relative flex flex-col items-center">
+                    <p class="text-slate-300 font-bold text-sm mb-2">الأداء العام</p>
+                    <div class="text-7xl font-black mb-1 drop-shadow-lg">${scores.total}</div>
+                    <p class="text-slate-300 text-sm font-bold">من 11</p>
+                    <div class="w-full bg-slate-600/50 rounded-full h-2 mt-4 overflow-hidden border border-white/10 shadow-inner">
+                        <div class="${tier.barColor} h-2 rounded-full transition-all" style="width:${progressPercent}%"></div>
+                    </div>
+                    <span class="mt-4 font-bold text-sm px-4 py-1.5 rounded-full ${tier.labelBg} border shadow-sm">${tier.label}</span>
                 </div>
-                <span class="mt-4 font-bold text-sm px-3 py-1 rounded-full ${tier.labelBg} border">${tier.label}</span>
             </div>
             <div class="md:col-span-2 grid grid-cols-2 gap-4">
-                ${buildStatCard('نقاط السلامة', scores.ptsSafety, data.safety > 0 ? `text-rose-600 bg-rose-50` : `text-emerald-600 bg-emerald-50`, `${data.safety} حوادث`, 3)}
-                ${buildStatCard('نقاط الشكاوى', scores.ptsComplaints, 'text-amber-600 bg-amber-50', `${data.complaints} شكوى`, 2)}
-                ${buildStatCard('نقاط التقييمات الإيجابية', scores.ptsPositive, 'text-emerald-600 bg-emerald-50', `${data.positive} تقييم`, 4)}
-                ${buildStatCard('نقاط التقييمات السلبية', scores.ptsNegative, 'text-rose-600 bg-rose-50', `${data.negative} تقييم`, 2)}
+                ${buildStatCard('نقاط السلامة', scores.ptsSafety, data.safety > 0 ? `text-rose-700 bg-rose-100/60 border-rose-200` : `text-emerald-700 bg-emerald-100/60 border-emerald-200`, `${data.safety} حوادث`, 3)}
+                ${buildStatCard('نقاط الشكاوى', scores.ptsComplaints, 'text-amber-700 bg-amber-100/60 border-amber-200', `${data.complaints} شكوى`, 2)}
+                ${buildStatCard('نقاط الإيجابية', scores.ptsPositive, 'text-emerald-700 bg-emerald-100/60 border-emerald-200', `${data.positive} تقييم`, 4)}
+                ${buildStatCard('نقاط السلبية', scores.ptsNegative, 'text-rose-700 bg-rose-100/60 border-rose-200', `${data.negative} تقييم`, 2)}
             </div>
         </div>
 
-        <div class="border-t border-slate-100 my-8"></div>
+        <div class="border-t border-slate-300/30 my-8"></div>
 
         <div class="mb-8">
-            <h2 class="text-xl font-black text-slate-800 mb-6">معلومات الفرع</h2>
+            <h2 class="text-xl font-black text-slate-800 mb-6 drop-shadow-sm">معلومات الفرع</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                    <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">فريق الإدارة</h3>
+                <div class="glass-panel rounded-2xl p-6">
+                    <h3 class="font-black text-slate-800 text-sm mb-5 uppercase tracking-wide bg-white/40 inline-block px-3 py-1 rounded backdrop-blur border border-white/50">فريق الإدارة</h3>
                     ${teamHTML}
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                    <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">تقييم Google</h3>
-                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 flex items-center justify-between mb-4">
+                <div class="glass-panel rounded-2xl p-6">
+                    <h3 class="font-black text-slate-800 text-sm mb-5 uppercase tracking-wide bg-white/40 inline-block px-3 py-1 rounded backdrop-blur border border-white/50">تقييم Google</h3>
+                    <div class="bg-white/50 backdrop-blur rounded-xl p-4 border border-white/60 flex items-center justify-between mb-4 shadow-sm">
                         <div class="flex items-center gap-3">
-                            <span class="text-4xl font-black text-slate-800">${ratingValue}</span>
+                            <span class="text-4xl font-black text-slate-900 drop-shadow-sm">${ratingValue}</span>
                             <div class="flex flex-col">
                                 <div class="flex text-2xl leading-none mb-1">${buildStars(ratingValue)}</div>
-                                <span class="text-xs text-slate-500 font-bold">${reviewsCount.toLocaleString('en-US')} مراجعة</span>
+                                <span class="text-xs text-slate-600 font-bold">${reviewsCount.toLocaleString('en-US')} مراجعة</span>
                             </div>
                         </div>
-                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-slate-200 shadow-inner">${MAP_PIN_SVG}</div>
+                        <div class="w-10 h-10 bg-white/80 rounded-full flex items-center justify-center border border-white shadow-sm">${MAP_PIN_SVG}</div>
                     </div>
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-slate-500 font-bold">من بداية الشهر</span>
-                        <span class="font-black text-emerald-600">+${data.positive} مراجعة جديدة</span>
+                    <div class="flex justify-between items-center text-sm bg-white/30 px-3 py-2 rounded-lg backdrop-blur">
+                        <span class="text-slate-700 font-bold">من بداية الشهر</span>
+                        <span class="font-black text-emerald-700">+${data.positive} مراجعة جديدة</span>
                     </div>
                 </div>
             </div>
@@ -922,23 +1037,23 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
 
 function buildStatCard(title, pts, badgeClass, badgeText, maxPts) {
     return `
-        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 branch-stat-card flex flex-col justify-between">
-            <p class="text-slate-500 font-bold text-xs mb-1">${title}</p>
-            <p class="text-3xl font-black text-slate-800">${pts.toFixed(2)}</p>
+        <div class="glass-panel rounded-xl p-5 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+            <p class="text-slate-600 font-bold text-xs mb-1 bg-white/30 inline-block px-2 py-0.5 rounded">${title}</p>
+            <p class="text-3xl font-black text-slate-900 drop-shadow-sm">${pts.toFixed(2)}</p>
             <div class="flex items-center gap-2 mt-2">
-                <span class="text-xs font-bold ${badgeClass} px-2 py-0.5 rounded">${badgeText}</span>
+                <span class="text-xs font-bold ${badgeClass} backdrop-blur px-2 py-1 rounded-md border shadow-sm">${badgeText}</span>
             </div>
-            <p class="text-slate-400 text-xs mt-1">من أصل ${maxPts} نقاط</p>
+            <p class="text-slate-500 text-xs mt-2 font-medium">من أصل ${maxPts} نقاط</p>
         </div>`;
 }
 
 function buildPersonRow(name, role, withBorder) {
     return `
-        <div class="flex items-center gap-4 ${withBorder ? 'mb-4 pb-4 border-b border-slate-50' : ''}">
-            <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center font-black text-slate-600 text-lg">${name.charAt(0)}</div>
+        <div class="flex items-center gap-4 ${withBorder ? 'mb-4 pb-4 border-b border-white/30' : ''}">
+            <div class="w-12 h-12 bg-white/70 backdrop-blur rounded-full flex items-center justify-center font-black text-slate-800 text-lg shadow-inner border border-white">${name.charAt(0)}</div>
             <div>
-                <p class="font-black text-slate-800 text-base">${name}</p>
-                <p class="text-slate-400 text-sm font-medium">${role}</p>
+                <p class="font-black text-slate-900 text-base drop-shadow-sm">${name}</p>
+                <p class="text-slate-600 text-sm font-bold bg-white/30 inline-block px-2 rounded-sm mt-0.5">${role}</p>
             </div>
         </div>`;
 }
@@ -1019,35 +1134,35 @@ function initCarousel() {
         if(data.dName) mgtNames.push(data.dName);
         let mgtText = mgtNames.length > 0 ? `إدارة: ${mgtNames.join(' و ')}` : 'إدارة الفرع';
 
+        const index = i - 1;
         const card = document.createElement('div');
-        card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm snap-center transition-transform hover:-translate-y-1 hover:shadow-md cursor-pointer active:cursor-grabbing";
+        card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 glass-panel rounded-2xl p-5 snap-center transition-transform hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] cursor-pointer active:cursor-grabbing border border-white/60";
         
-        // تعديل فتح بطاقة الفرع لتظهر نافذة خرائط جوجل
-        card.onclick = () => openIframeModal(data.iframeSrc);
+        card.onclick = () => openIframeModal(data.iframeSrc, index);
         
         card.innerHTML = `
             <div class="flex justify-between items-start mb-5">
                 <div>
-                    <h3 class="font-black text-xl text-slate-800 tracking-tight">فرع ${data.bName}</h3>
-                    <p class="text-xs text-slate-500 font-bold mt-1">${mgtText}</p>
+                    <h3 class="font-black text-xl text-slate-900 tracking-tight drop-shadow-sm">فرع ${data.bName}</h3>
+                    <p class="text-xs text-slate-600 font-bold mt-1 bg-white/40 inline-block px-2 rounded backdrop-blur">${mgtText}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">${MAP_PIN_SVG}</div>
+                    <div class="w-10 h-10 bg-white/70 backdrop-blur rounded-full flex items-center justify-center border border-white shadow-sm">${MAP_PIN_SVG}</div>
                 </div>
             </div>
-            <div class="bg-slate-50 rounded-xl p-3 border border-slate-100 flex items-center justify-between">
+            <div class="bg-white/50 backdrop-blur rounded-xl p-3 border border-white/60 flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl font-black text-slate-800">${ratingValue}</span>
+                    <span class="text-2xl font-black text-slate-900 drop-shadow-sm">${ratingValue}</span>
                     <div class="flex text-lg leading-none mb-1">${buildStars(ratingValue)}</div>
                 </div>
                 <div class="flex flex-col items-end">
-                    <span class="text-xs font-bold text-slate-500 mb-1">المراجعات</span>
-                    <span class="text-xs font-black text-blue-700 bg-blue-100 px-2.5 py-1 rounded-md border border-blue-200">${reviewsCount.toLocaleString('en-US')}</span>
+                    <span class="text-xs font-bold text-slate-600 mb-1">المراجعات</span>
+                    <span class="text-xs font-black text-blue-800 bg-blue-100/60 backdrop-blur px-2.5 py-1 rounded-md border border-blue-200/50">${reviewsCount.toLocaleString('en-US')}</span>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-sm">
-                <div class="font-bold text-slate-600">من بداية الشهر</div>
-                <div class="font-black text-emerald-600">+${data.positive} <span class="text-xs">مراجعة ايجابية</span></div>
+            <div class="mt-4 pt-4 border-t border-white/40 flex justify-between items-center text-sm">
+                <div class="font-bold text-slate-700 bg-white/30 px-2 py-0.5 rounded">من بداية الشهر</div>
+                <div class="font-black text-emerald-700">+${data.positive} <span class="text-xs font-bold">مراجعة ايجابية</span></div>
             </div>
         `;
         carousel.appendChild(card);
@@ -1060,7 +1175,7 @@ function setupCarouselDots() {
     const dotsContainer = document.getElementById('carouselDots');
     dotsContainer.innerHTML = '';
     for (let i = 0; i < 6; i++) {
-        dotsContainer.innerHTML += `<button onclick="scrollToCard(${i})" class="carousel-dot w-2.5 h-2.5 rounded-full bg-slate-300 transition-all duration-300"></button>`;
+        dotsContainer.innerHTML += `<button onclick="scrollToCard(${i})" class="carousel-dot w-2.5 h-2.5 rounded-full bg-slate-300/80 backdrop-blur transition-all duration-300 border border-white/50"></button>`;
     }
     updateActiveDot();
 }
@@ -1097,11 +1212,11 @@ function updateActiveDot() {
     
     dots.forEach((dot, idx) => {
         if (idx === closestIndex) {
-            dot.classList.remove('bg-slate-300', 'w-2.5');
-            dot.classList.add('bg-slate-800', 'w-6');
+            dot.classList.remove('bg-slate-300/80', 'w-2.5');
+            dot.classList.add('bg-slate-800', 'w-6', 'shadow-sm');
         } else {
-            dot.classList.remove('bg-slate-800', 'w-6');
-            dot.classList.add('bg-slate-300', 'w-2.5');
+            dot.classList.remove('bg-slate-800', 'w-6', 'shadow-sm');
+            dot.classList.add('bg-slate-300/80', 'w-2.5');
         }
     });
 }
@@ -1119,6 +1234,7 @@ function setupCarouselEvents() {
 
     const startAutoScroll = () => {
         clearInterval(carouselInterval);
+        if(isCarouselPaused) return;
         carouselInterval = setInterval(() => {
             const maxScroll = carousel.scrollWidth - carousel.clientWidth;
             if (Math.abs(carousel.scrollLeft) >= maxScroll - 10) {
@@ -1128,9 +1244,9 @@ function setupCarouselEvents() {
             }
         }, 4000);
     };
-    carousel.addEventListener('mouseenter', () => clearInterval(carouselInterval));
+    carousel.addEventListener('mouseenter', () => { if(!isCarouselPaused) clearInterval(carouselInterval); });
     carousel.addEventListener('mouseleave', startAutoScroll);
-    carousel.addEventListener('touchstart', () => clearInterval(carouselInterval));
+    carousel.addEventListener('touchstart', () => { if(!isCarouselPaused) clearInterval(carouselInterval); });
     carousel.addEventListener('touchend', startAutoScroll);
     startAutoScroll();
 }
@@ -1146,8 +1262,8 @@ function generateNewspaper() {
     const dateSection = document.createElement('div');
     dateSection.className = "relative";
     dateSection.innerHTML = `
-        <div class="absolute -right-6 top-0 w-4 h-4 rounded-full bg-slate-800 border-4 border-white shadow"></div>
-        <h3 class="text-xl font-black text-slate-800 mb-6 bg-white inline-block px-4 py-1 rounded shadow-sm border border-slate-100">تقرير ${dateStr}</h3>
+        <div class="absolute -right-6 top-0 w-4 h-4 rounded-full bg-slate-800 border-4 border-white/60 shadow-sm"></div>
+        <h3 class="text-xl font-black text-slate-800 mb-6 bg-white/60 backdrop-blur inline-block px-4 py-2 rounded-lg shadow-sm border border-white/80">تقرير ${dateStr}</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid"></div>
     `;
     timelineContainer.appendChild(dateSection);
@@ -1165,7 +1281,7 @@ function generateNewspaper() {
     writtenReports.sort((a, b) => b.date - a.date);
 
     if (writtenReports.length === 0) {
-        container.innerHTML = `<p class="col-span-full text-center text-slate-500 font-bold py-8">لا توجد تقارير</p>`;
+        container.innerHTML = `<p class="col-span-full text-center text-slate-600 bg-white/40 rounded-xl py-8 font-bold border border-white/60 backdrop-blur">لا توجد تقارير</p>`;
         return;
     }
 
@@ -1185,22 +1301,22 @@ function generateNewspaper() {
         }
 
         const cardContent = `
-            <h3 onclick="openBulletinPage(${i})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-800 cursor-pointer hover:text-blue-600 transition">${headLine}</h3>
-            <p class="text-slate-600 text-sm font-bold mb-4 leading-relaxed">${leadLine}</p>
+            <h3 onclick="openBulletinPage(${i})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition drop-shadow-sm">${headLine}</h3>
+            <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${leadLine}</p>
         `;
 
         container.innerHTML += `
-            <div class="bg-white p-6 rounded-xl shadow-sm newspaper-card flex flex-col justify-between hover:shadow-md transition border border-slate-100">
+            <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition border border-white/60 newspaper-card hover:-translate-y-1">
                 <div>
                     <div class="flex justify-between items-start">
-                        <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1 rounded-full">الفروع ◂ ${data.bName}</span>
+                        <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1.5 rounded-full shadow-sm">الفروع ◂ ${data.bName}</span>
                     </div>
                     ${cardContent}
                 </div>
-                <div class="mt-auto pt-5 border-t border-slate-100">
-                    <div class="flex justify-between items-center text-slate-800 font-black">
+                <div class="mt-auto pt-5 border-t border-white/40">
+                    <div class="flex justify-between items-center text-slate-800 font-black bg-white/40 px-3 py-2 rounded-lg backdrop-blur">
                         <span>النقاط</span>
-                        <span class="bg-slate-800 text-white px-3 py-1 rounded text-sm">${scores.total} ◠</span>
+                        <span class="bg-slate-800/90 backdrop-blur text-white px-3 py-1 rounded shadow text-sm border border-white/20">${scores.total} ◠</span>
                     </div>
                 </div>
             </div>`;
@@ -1378,15 +1494,17 @@ function calculateTrial() {
     const rewardBox = document.getElementById('rewardBox');
     
     const levels = [
-        { min: 9,         text: "التوقع: أداء مرتفع",    border: "#10b981" },
-        { min: 7,         text: "التوقع: أداء متوسط ◬",    border: "#f59e0b" },
-        { min: 4,         text: "التوقع: أداء منخفض ⚠",   border: "#f97316" },
-        { min: -Infinity, text: "التوقع: أداء حرج ⨂",      border: "#ef4444" }
+        { min: 9,         text: "التوقع: أداء مرتفع",    border: "#10b981", bg: "rgba(16, 185, 129, 0.1)" },
+        { min: 7,         text: "التوقع: أداء متوسط ◬",    border: "#f59e0b", bg: "rgba(245, 158, 11, 0.1)" },
+        { min: 4,         text: "التوقع: أداء منخفض ⚠",   border: "#f97316", bg: "rgba(249, 115, 22, 0.1)" },
+        { min: -Infinity, text: "التوقع: أداء حرج ⨂",      border: "#ef4444", bg: "rgba(239, 68, 68, 0.1)" }
     ];
     
     const level = levels.find(l => total >= l.min);
     rewardBox.innerHTML = level.text + additionText;
-    rewardBox.className = `mt-6 p-4 rounded text-center font-black text-lg bg-white border-2 border-[${level.border}] text-slate-800`;
+    rewardBox.className = `mt-6 p-4 rounded-xl text-center font-black text-lg backdrop-blur text-slate-800 border-2`;
+    rewardBox.style.borderColor = level.border;
+    rewardBox.style.backgroundColor = level.bg;
 }
 </script>
 
