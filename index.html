@@ -6,9 +6,9 @@
     <title>آي أم سبيشل </title>
 
     <meta property="og:title" id="og_title" content="آي أم سبيشل | تقرير الأداء للفروع">
-    <meta property="og:description" id="og_description" content="تابع تقرير الأداء لمجموعة فروع آي إم سبيشل، حيث نستعرض نتائج ومؤشرات الجودة والخدمة لضمان التميز الدائم والارتقاء المستمر.">
+    <meta property="og:description" id="og_description" content="تابع تقرير الأداء لمجموعة فروع أي آم سبيشل، حيث نستعرض نتائج ومؤشرات الجودة والخدمة لضمان التميز الدائم والارتقاء المستمر.">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="آي إم سبيشل">
+    <meta property="og:site_name" content="أي آم سبيشل">
     <meta property="og:locale" content="ar_SA">
     <meta property="og:url" id="og_url" content="">
 
@@ -640,7 +640,7 @@ function generatePromptText(branchId) {
     let mgtRef = mgtLine.length > 0 ? `مع الإشارة المباشرة إلى ${mgtLine.join(' و ')}.` : '';
 
     const prompt = `أنت محرر محتوى متخصص في كتابة تقارير الأداء لمراكز ترفيه الأطفال بأسلوب صحفي احترافي ومشوق باللغة العربية.
-اكتب تقرير أداء لفرع "${data.bName}" انت تعمل لصالح مجموعة "آي إم سبيشل" لمراكز ترفيه الأطفال وتكتب تقارير داخلية للزملاء والمالك، بناءً على البيانات التالية:
+اكتب تقرير أداء لفرع "${data.bName}" انت تعمل لصالح مجموعة "أي آم سبيشل" لمراكز ترفيه الأطفال وتكتب تقارير داخلية للزملاء والمالك، بناءً على البيانات التالية:
 
 ═══════════════════════════════════
 📋 بيانات الفرع
@@ -892,7 +892,7 @@ function openBulletinPage(branchId) {
     history.pushState('', '', `#bulletin-${branchId}`);
     
     updateOGTags(
-        `تقرير فرع ${data.bName} - آي إم سبيشل`,
+        `تقرير فرع ${data.bName} - أي آم سبيشل`,
         `${currentBulletinData.head} | المؤشر العام: ${scores.total}/11 | تصنيف: ${tier.label}`,
         window.location.href
     );
@@ -1097,7 +1097,7 @@ function shareBulletinPage() {
 
     const waText = encodeURIComponent(
         ` *تقرير أداء فرع ${branchName}*\n`
-      + `آي إم سبيشل\n\n`
+      + `أي آم سبيشل\n\n`
       + `${head}\n\n`
       + `${lead}\n\n`
       + `تصنيف: ${scoreLabel}\n\n`
