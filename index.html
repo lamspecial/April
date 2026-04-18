@@ -129,6 +129,12 @@
     <div id="bulletinContent" class="max-w-6xl mx-auto w-full px-4 md:px-8 py-8 flex-grow slide-up"></div>
 </div>
 
+<div id="iframeModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 z-50 hidden items-center justify-center p-2 backdrop-blur-sm" onclick="closeIframeModal(event)">
+    <div class="w-full h-[80vh] max-w-5xl rounded-2xl overflow-hidden shadow-2xl relative" onclick="event.stopPropagation()">
+        <iframe id="branchMapIframe" src="" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</div>
+
 <div id="copyToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white font-bold px-6 py-3 rounded-xl shadow-xl z-50 hidden text-sm">
     تم النسخ
 </div>
@@ -145,12 +151,12 @@
                         <div class="w-full md:w-auto">
                             <label class="block text-sm font-bold text-slate-700 mb-2">اختر الفرع :</label>
                             <select id="trial_branch_select" onchange="loadTrialDataFromDB()" class="w-full px-4 py-2 border border-slate-300 rounded bg-white font-bold text-slate-800 focus:outline-none focus:border-slate-500">
-                                <option value="1">الياسمين</option>
-                                <option value="2">الملقا</option>
-                                <option value="3">الندى</option>
-                                <option value="4">النرجس</option>
-                                <option value="5">الربيع</option>
-                                <option value="6">الغدير</option>
+                                <option value="1">شرق بلازا</option>
+                                <option value="2">الرياض جاليري</option>
+                                <option value="3">ذافيو</option>
+                                <option value="4">القصر مول</option>
+                                <option value="5">سلام مول</option>
+                                <option value="6">مركز المملكة</option>
                             </select>
                         </div>
                         <div class="text-left bg-white p-4 rounded border border-slate-200 shadow-sm w-full md:w-auto">
@@ -219,12 +225,12 @@
             <div class="bg-slate-100 p-4 rounded flex flex-col md:flex-row gap-4 items-center">
                 <label class="font-bold text-slate-800 whitespace-nowrap">اختر الفرع:</label>
                 <select id="branchSelector" onchange="loadAdminData()" class="w-full md:w-auto p-2 rounded border-slate-300 font-bold focus:outline-none">
-                    <option value="1">فرع 1 (الياسمين)</option>
-                    <option value="2">فرع 2 (الملقا)</option>
-                    <option value="3">فرع 3 (الندى)</option>
-                    <option value="4">فرع 4 (النرجس)</option>
-                    <option value="5">فرع 5 (الربيع)</option>
-                    <option value="6">فرع 6 (الغدير)</option>
+                    <option value="1">فرع 1 (شرق بلازا)</option>
+                    <option value="2">فرع 2 (الرياض جاليري)</option>
+                    <option value="3">فرع 3 (ذافيو)</option>
+                    <option value="4">فرع 4 (القصر مول)</option>
+                    <option value="5">فرع 5 (سلام مول)</option>
+                    <option value="6">فرع 6 (مركز المملكة)</option>
                 </select>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-slate-100 pb-8">
@@ -301,15 +307,15 @@
 let isAdminLoggedIn = false;
 
 // ============================================================
-// قاعدة البيانات
+// قاعدة البيانات المحدثة
 // ============================================================
 let branchesData = {
-    1: { bName: "شرق بلازا", mName: "فاطمة",  dName: "نورة",   safety: 0, visitors: 1200, complaints: 2, positive: 55, negative: 1, target: 50 },
-    2: { bName: "الرياض جاليري",   mName: "فاطمة",    dName: ".",  safety: 1, visitors: 900,  complaints: 5, positive: 40, negative: 3, target: 50 },
-    3: { bName: "ذافيو",    mName: "اسمهان الغامدي",    dName: "فاطمه الحارثي",    safety: 0, visitors: 1500, complaints: 1, positive: 70, negative: 0, target: 50 },
-    4: { bName: "القصر",   mName: "فاطمة",    dName: "العنود", safety: 0, visitors: 800,  complaints: 0, positive: 30, negative: 4, target: 50 },
-    5: { bName: "سلام مول",   mName: "عبير",   dName: "روان",   safety: 2, visitors: 1100, complaints: 8, positive: 45, negative: 6, target: 50 },
-    6: { bName: "مركز المملكة",   mName: "نجلاء",  dName: "دلال",   safety: 0, visitors: 1300, complaints: 3, positive: 60, negative: 2, target: 50 }
+    1: { bName: "شرق بلازا", mName: "فاطمة السبيعي",  dName: "",   safety: 0, visitors: 1200, complaints: 2, positive: 31, negative: 1, target: 50, baseRating: 4.3, baseReviews: 210, iframeSrc: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d164903.2141441533!2d46.81057301314928!3d24.692980163395696!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f070079c56b1f%3A0x467da10cd49ea263!2sI%20am%20special!5e0!3m2!1sar!2ssa!4v1776487837062!5m2!1sar!2ssa" },
+    2: { bName: "الرياض جاليري",   mName: "",    dName: "فاطمة جعفري",  safety: 1, visitors: 900,  complaints: 5, positive: 31, negative: 3, target: 50, baseRating: 4.0, baseReviews: 343, iframeSrc: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d164913.7756258042!2d46.72418597869817!3d24.684998102760346!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2ee3e72ef25fe1%3A0x80694184f2c8bfa3!2z2KfZiiDYp9mFINiz2KjZiti02YQ!5e0!3m2!1sar!2ssa!4v1776487817232!5m2!1sar!2ssa" },
+    3: { bName: "ذافيو",    mName: "اسمهان الغامدي",    dName: "فاطمة الحارثي",    safety: 0, visitors: 1500, complaints: 1, positive: 99, negative: 0, target: 50, baseRating: 4.6, baseReviews: 326, iframeSrc: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d10306.261765903853!2d46.7286395510535!3d24.69526659713942!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f038fc98c3b9f%3A0xb97168603aaf5b31!2sI%20am%20special!5e0!3m2!1sar!2ssa!4v1776487866148!5m2!1sar!2ssa" },
+    4: { bName: "القصر مول",   mName: "منيره هزري",    dName: "", safety: 0, visitors: 800,  complaints: 0, positive: 11, negative: 4, target: 50, baseRating: 4.3, baseReviews: 215, iframeSrc: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d201771.0028656187!2d46.70064182491825!3d24.597818146740305!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f0574c9346ba1%3A0x71206d42e2e70f9c!2z2KfZiiDYp9mFINiz2KjZiti02YQgfCBJIGFtIHNwZWNpYWw!5e0!3m2!1sar!2ssa!4v1776487726486!5m2!1sar!2ssa" },
+    5: { bName: "سلام مول",   mName: "هند المطيري",   dName: "نوف هزازي",   safety: 2, visitors: 1100, complaints: 8, positive: 8, negative: 6, target: 50, baseRating: 4.2, baseReviews: 147, iframeSrc: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d201771.0028656187!2d46.70064182491825!3d24.597818146740305!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f11aa8f623ed3%3A0x72ab124244a1cf6f!2z2KfZiiDYp9mFINiz2KjZiti02YQ!5e0!3m2!1sar!2ssa!4v1776487753224!5m2!1sar!2ssa" },
+    6: { bName: "مركز المملكة",   mName: "",  dName: "هاجر القاسمي",   safety: 0, visitors: 1300, complaints: 3, positive: 3, negative: 2, target: 50, baseRating: 4.2, baseReviews: 154, iframeSrc: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d164913.7756258042!2d46.72418597869817!3d24.684998102760346!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f038149e74eaf%3A0xf8016d2217c1f4ef!2z2KfZiiDYp9mFINiz2KjZiti02YQgfCBJIGFtIHNwZWNpYWw!5e0!3m2!1sar!2ssa!4v1776487781383!5m2!1sar!2ssa" }
 };
 
 let branchHistory = {};
@@ -364,7 +370,6 @@ function saveArticlesToStorage() {
     } catch(e) { console.error('فشل حفظ المقالات:', e); }
 }
 
-// دالة لجلب بيانات المقال (مراعاة التوافق مع النسخ القديمة التي كانت تحفظ كنص فقط)
 function getArticleData(id) {
     const article = branchArticles[id];
     if (!article) return null;
@@ -373,10 +378,9 @@ function getArticleData(id) {
 }
 
 // ============================================================
-// ثوابت مشتركة
+// ثوابت ومشتركات
 // ============================================================
 
-const BASE_REVIEWS = [1420, 890, 2100, 650, 1150, 1840];
 const SHARE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
 const MAP_PIN_SVG = `<svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/><circle cx="12" cy="9" r="2.5" fill="#FFF"/></svg>`;
 
@@ -384,6 +388,19 @@ let currentBulletinData = null;
 let autoMultiplier = 1;
 let carouselInterval;
 let currentArticleModalBranchId = null;
+
+// ============================================================
+// دوال الخريطة (Iframe)
+// ============================================================
+function openIframeModal(src) {
+    document.getElementById('branchMapIframe').src = src;
+    document.getElementById('iframeModal').style.display = 'flex';
+}
+
+function closeIframeModal(e) {
+    document.getElementById('iframeModal').style.display = 'none';
+    document.getElementById('branchMapIframe').src = '';
+}
 
 // ============================================================
 // الدوال المساعدة المشتركة
@@ -425,12 +442,7 @@ function getPerformanceTier(scores) {
 }
 
 function calcRating(data, branchId) {
-    const total = data.positive + data.negative;
-    let ratingValue = total > 0 ?
-        (4.0 + (data.positive / total)).toFixed(1) : "4.5";
-    if (parseFloat(ratingValue) > 5.0) ratingValue = "5.0";
-    const reviewsCount = BASE_REVIEWS[branchId - 1] + data.positive;
-    return { ratingValue, reviewsCount };
+    return { ratingValue: data.baseRating.toFixed(1), reviewsCount: data.baseReviews + data.positive };
 }
 
 function buildStars(ratingValue) {
@@ -466,6 +478,11 @@ function generatePromptText(branchId) {
         ? `⚠️ تسجيل ${data.safety} حادثة سلامة هذا الشهر`
         : "لا حوادث سلامة مسجلة";
 
+    let mgtLine = [];
+    if (data.mName) mgtLine.push(`المديرة ${data.mName}`);
+    if (data.dName) mgtLine.push(`نائبتها ${data.dName}`);
+    let mgtRef = mgtLine.length > 0 ? `مع الإشارة المباشرة إلى ${mgtLine.join(' و ')}.` : '';
+
     const prompt = `أنت محرر محتوى متخصص في كتابة تقارير الأداء لمراكز ترفيه الأطفال بأسلوب صحفي احترافي ومشوق باللغة العربية.
 اكتب تقرير أداء أسبوعي لفرع "${data.bName}" التابع لسلسلة "آي إم سبيشل" لمراكز ترفيه الأطفال، بناءً على البيانات التالية:
 
@@ -473,8 +490,8 @@ function generatePromptText(branchId) {
 📋 بيانات الفرع
 ═══════════════════════════════════
 • اسم الفرع: ${data.bName}
-• المديرة: ${data.mName}
-• نائبة المديرة: ${data.dName}
+• المديرة: ${data.mName || 'غير محدد'}
+• نائبة المديرة: ${data.dName || 'غير محدد'}
 • تاريخ التقرير: ${dateStr}
 • اليوم من الشهر: ${currentDay} من أصل ${daysInMonth} يوم
 
@@ -509,7 +526,7 @@ function generatePromptText(branchId) {
 جملة افتتاحية واحدة تلخص الأداء بشكل مكثف (50-70 كلمة).
 
 [التحليل]
-تحليل موضوعي ودقيق لأداء الفرع يشمل نقاط القوة والضعف، مع الإشارة المباشرة إلى المديرة ${data.mName} ونائبتها ${data.dName}.
+تحليل موضوعي ودقيق لأداء الفرع يشمل نقاط القوة والضعف، ${mgtRef}
 اجعله بين 80 و 120 كلمة بأسلوب صحفي احترافي.
 
 ملاحظات أسلوبية مهمة:
@@ -529,7 +546,12 @@ function openArticleModal(branchId) {
     const data = branchesData[branchId];
 
     document.getElementById('articleModalTitle').textContent = `مقال فرع ${data.bName}`;
-    document.getElementById('articleModalSubtitle').textContent = `الفرع: ${data.bName} — المديرة: ${data.mName}`;
+
+    let subtitleParts = [`الفرع: ${data.bName}`];
+    if (data.mName) subtitleParts.push(`المديرة: ${data.mName}`);
+    else if (data.dName) subtitleParts.push(`النائبة: ${data.dName}`);
+    
+    document.getElementById('articleModalSubtitle').textContent = subtitleParts.join(' — ');
 
     const promptText = generatePromptText(branchId);
     document.getElementById('generatedPrompt').textContent = promptText;
@@ -548,7 +570,7 @@ function closeArticleModal() {
 function copyPrompt() {
     const text = document.getElementById('generatedPrompt').textContent;
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(showCopyToast);
+        navigator.clipboard.writeText(text).then(() => showCopyToast());
     } else {
         const el = document.createElement('textarea');
         el.value = text;
@@ -566,7 +588,6 @@ function saveArticleFromInput() {
     if (!id) return;
     if (!text) { alert('الرجاء لصق المقال أولاً'); return; }
     
-    // تم الحفظ مع التاريخ للترتيب
     branchArticles[id] = { text: text, date: new Date().getTime() };
     saveArticlesToStorage();
     closeArticleModal();
@@ -704,7 +725,6 @@ function openBulletinPage(branchId) {
     document.getElementById('bulletinBreadcrumbBranch').textContent = `فرع ${data.bName}`;
     history.pushState('', '', `#bulletin-${branchId}`);
     
-    // تحديث ديناميكي للوصف في Open Graph
     updateOGTags(
         `تقرير فرع ${data.bName} - آي إم سبيشل`,
         `${currentBulletinData.head} | المؤشر العام: ${scores.total}/11 | تصنيف: ${tier.label}`,
@@ -738,6 +758,11 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
         </div>
     ` : ``;
 
+    let waitingNames = [];
+    if(data.mName) waitingNames.push(`المديرة ${data.mName}`);
+    if(data.dName) waitingNames.push(`نائبتها ${data.dName}`);
+    let waitingText = waitingNames.length > 0 ? `بانتظار تحركات ${waitingNames.join(' و ')}` : `بانتظار تحركات الإدارة`;
+
     const articleSection = hasArticle ? `
         <div class="mb-8">
             <div class="flex flex-wrap items-center gap-3 mb-4">
@@ -760,12 +785,17 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                         <p class="text-amber-700 text-sm font-medium mb-4">اكتب مقالا</p>
                         <button onclick="openArticleModal(${branchId})" class="bg-amber-700 hover:bg-amber-800 text-white font-black px-5 py-2.5 rounded-lg text-sm transition shadow">✦ كتابة المقال</button>
                     ` : `
-                        <p class="text-slate-700 text-lg font-bold mt-1">بانتظار تحركات المديرة ${data.mName} ونائبتها ${data.dName}</p>
+                        <p class="text-slate-700 text-lg font-bold mt-1">${waitingText}</p>
                     `}
                 </div>
             </div>
         </div>
     `;
+
+    let teamHTML = '';
+    if(data.mName) teamHTML += buildPersonRow(data.mName, 'مديرة الفرع', data.dName !== '');
+    if(data.dName) teamHTML += buildPersonRow(data.dName, 'نائبة المديرة', false);
+    if(!data.mName && !data.dName) teamHTML = '<p class="text-slate-500 text-sm font-bold">لا يوجد بيانات إدارة مسجلة</p>';
 
     return `
         ${articleSection}
@@ -813,8 +843,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
                     <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">فريق الإدارة</h3>
-                    ${buildPersonRow(data.mName, 'مديرة الفرع', true)}
-                    ${buildPersonRow(data.dName, 'نائبة المديرة', false)}
+                    ${teamHTML}
                 </div>
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
                     <h3 class="font-black text-slate-700 text-sm mb-5 uppercase tracking-wide">تقييم Google</h3>
@@ -931,20 +960,25 @@ function initCarousel() {
     for (let i = 1; i <= 6; i++) {
         const data = branchesData[i];
         const { ratingValue, reviewsCount } = calcRating(data, i);
-        const articleData = getArticleData(i);
-        const hasArticle = !!articleData;
+
+        let mgtNames = [];
+        if(data.mName) mgtNames.push(data.mName);
+        if(data.dName) mgtNames.push(data.dName);
+        let mgtText = mgtNames.length > 0 ? `إدارة: ${mgtNames.join(' و ')}` : 'إدارة الفرع';
 
         const card = document.createElement('div');
         card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm snap-center transition-transform hover:-translate-y-1 hover:shadow-md cursor-pointer active:cursor-grabbing";
-        card.onclick = () => openBulletinPage(i);
+        
+        // تعديل فتح بطاقة الفرع لتظهر نافذة خرائط جوجل
+        card.onclick = () => openIframeModal(data.iframeSrc);
+        
         card.innerHTML = `
             <div class="flex justify-between items-start mb-5">
                 <div>
                     <h3 class="font-black text-xl text-slate-800 tracking-tight">فرع ${data.bName}</h3>
-                    <p class="text-xs text-slate-500 font-bold mt-1">إدارة: ${data.mName} و ${data.dName}</p>
+                    <p class="text-xs text-slate-500 font-bold mt-1">${mgtText}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    ${hasArticle ? '<span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200"></span>' : ''}
                     <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">${MAP_PIN_SVG}</div>
                 </div>
             </div>
@@ -1075,7 +1109,6 @@ function generateNewspaper() {
         }
     }
 
-    // الترتيب حسب الأحدث فالأقدم
     writtenReports.sort((a, b) => b.date - a.date);
 
     if (writtenReports.length === 0) {
@@ -1108,7 +1141,6 @@ function generateNewspaper() {
                 <div>
                     <div class="flex justify-between items-start">
                         <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1 rounded-full">الفروع ◂ ${data.bName}</span>
-                        <span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200"></span>
                     </div>
                     ${cardContent}
                 </div>
@@ -1202,7 +1234,10 @@ function saveAdminData() {
         complaints: num('admin_complaints'),
         positive:   num('admin_positive'),
         negative:   num('admin_negative'),
-        target:     num('admin_target', 50)
+        target:     num('admin_target', 50),
+        baseRating: branchesData[id].baseRating,
+        baseReviews: branchesData[id].baseReviews,
+        iframeSrc: branchesData[id].iframeSrc
     };
     closeAdmin();
 
