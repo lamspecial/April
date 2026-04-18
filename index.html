@@ -97,7 +97,7 @@
 <div id="mainPageWrapper">
     <div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
         <div class="space-y-2 mb-8 text-center">
-            <h2 class="text-3xl font-black text-slate-800 tracking-wide whitespace-nowrap">تعزيز الثقة الرقمية </h2>
+            <h2 class="text-3xl font-black text-slate-800 tracking-wide whitespace-nowrap">تعزيز السمعة الرقمية </h2>
             <p class="text-slate-500 font-medium">بروتوكول إدارات الفروع</p>
         </div>
 
@@ -944,7 +944,7 @@ function initCarousel() {
                     <p class="text-xs text-slate-500 font-bold mt-1">إدارة: ${data.mName} و ${data.dName}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    ${hasArticle ? '<span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">مكتوب</span>' : ''}
+                    ${hasArticle ? '<span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200"></span>' : ''}
                     <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">${MAP_PIN_SVG}</div>
                 </div>
             </div>
@@ -1079,7 +1079,7 @@ function generateNewspaper() {
     writtenReports.sort((a, b) => b.date - a.date);
 
     if (writtenReports.length === 0) {
-        container.innerHTML = `<p class="col-span-full text-center text-slate-500 font-bold py-8">لا توجد تقارير مكتوبة حتى الآن</p>`;
+        container.innerHTML = `<p class="col-span-full text-center text-slate-500 font-bold py-8">لا توجد تقارير</p>`;
         return;
     }
 
@@ -1108,7 +1108,7 @@ function generateNewspaper() {
                 <div>
                     <div class="flex justify-between items-start">
                         <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1 rounded-full">الفروع ◂ ${data.bName}</span>
-                        <span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">مكتوب</span>
+                        <span class="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200"></span>
                     </div>
                     ${cardContent}
                 </div>
