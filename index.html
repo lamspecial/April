@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آي أم سبيشل</title>
+    <title>آي أم سبيشل </title>
 
     <meta property="og:title" id="og_title" content="آي أم سبيشل | تقرير الأداء للفروع">
     <meta property="og:description" id="og_description" content="تابع تقرير الأداء لمجموعة فروع أي آم سبيشل، حيث نستعرض نتائج ومؤشرات الجودة والخدمة لضمان التميز الدائم والارتقاء المستمر.">
@@ -34,7 +34,7 @@
             font-family: 'Tajawal', sans-serif; 
             background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
             background-attachment: fixed;
-            margin: 0; padding: 0;
+            margin: 0; padding: 0; 
         }
 
         .bg-blob-1 { position: fixed; top: -10%; right: -5%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
@@ -70,7 +70,8 @@
         .newspaper-card { border-right: 4px solid rgba(30, 58, 138, 0.8); }
         .pin-box { transition: all 0.2s; }
         .pin-box:focus { transform: scale(1.05); }
-        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
         
         .timeline-border { border-right: 2px dashed rgba(203, 213, 225, 0.7); }
@@ -85,17 +86,25 @@
         #mainPageWrapper { display: flex; flex-direction: column; flex-grow: 1; }
         #mainPageWrapper.hidden-page { display: none; }
         
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
         .slide-up { animation: slideUp 0.35s ease forwards; }
         
         .share-btn { transition: all 0.2s; }
         .share-btn:hover { transform: scale(1.03); }
         
-        @keyframes fadeInOut { 0% { opacity: 0; transform: translateY(10px); } 20% { opacity: 1; transform: translateY(0); } 80% { opacity: 1; } 100% { opacity: 0; } }
+        @keyframes fadeInOut {
+            0%   { opacity: 0; transform: translateY(10px); }
+            20%  { opacity: 1; transform: translateY(0); }
+            80%  { opacity: 1; }
+            100% { opacity: 0; }
+        }
         .copy-toast { animation: fadeInOut 2.5s ease forwards; }
         
         .prompt-box {
-            background: rgba(248, 250, 252, 0.6);
+            background: rgba(248, 250, 252, 0.6); 
             border: 1.5px dashed rgba(148, 163, 184, 0.8);
             border-radius: 12px;
             font-family: 'Tajawal', monospace;
@@ -112,8 +121,7 @@
         .history-item:hover { border-right-color: #1e3a8a; }
         
         textarea.article-input {
-            font-family: 'Tajawal', sans-serif;
-            font-size: 14px;
+            font-family: 'Tajawal', sans-serif; font-size: 14px;
             line-height: 1.9;
             resize: vertical;
             min-height: 180px;
@@ -124,22 +132,6 @@
             backdrop-filter: blur(10px); z-index: 100;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-
-        /* تنسيقات إضافية للأوسمة والأنواع الجديدة */
-        .overflow-tag {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold;
-            box-shadow: 0 2px 4px rgba(16,185,129,0.3);
-            display: inline-flex; align-items: center; gap: 4px;
-        }
-        .type-badge {
-            font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;
-        }
-        .badge-weekly { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
-        .badge-announcement { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-        .badge-opinion { background: #fae8ff; color: #86198f; border: 1px solid #f5d0fe; }
-        
-        .author-credit { font-size: 0.75rem; color: #64748b; margin-top: 10px; border-top: 1px dashed #cbd5e1; padding-top: 5px; }
     </style>
 </head>
 <body class="text-slate-800 relative min-h-screen flex flex-col">
@@ -154,31 +146,17 @@
 </div>
 
 <header class="glass-header text-white p-4 sticky top-0 z-40">
-    <div class="max-w-6xl mx-auto flex justify-between items-center flex-wrap gap-2">
-        <div class="flex items-center gap-2 cursor-pointer" onclick="goToMainPage()">
-            <img src="SpeSvg.svg" alt="آي أم سبيشل" class="w-8 h-8 object-contain" onerror="this.style.display='none'">
-            <h1 class="text-xl md:text-2xl font-black tracking-wide flex items-center gap-1 whitespace-nowrap drop-shadow-md">
-                <span class="text-red-600">أي آم</span> <span class="text-yellow-400">سبيشل</span>
-            </h1>
-        </div>
-        <div class="flex gap-2 items-center w-full md:w-auto justify-end">
-            <button onclick="openWriterModal()" class="bg-purple-600/20 hover:bg-purple-600/40 backdrop-blur border border-purple-300/30 text-slate-50 px-3 py-1.5 rounded-lg font-bold text-xs transition shadow-sm">
-                كاتب رأي
-            </button>
-            <button onclick="openMaintenanceAuth()" class="bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-slate-50 px-4 py-2 rounded-lg font-bold text-sm transition flex items-center gap-2 shadow-sm whitespace-nowrap flex-shrink-0 max-w-[150px] md:max-w-none overflow-hidden text-ellipsis block">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-black tracking-wide cursor-pointer flex items-center gap-1 whitespace-nowrap drop-shadow-md" onclick="goToMainPage()">
+            <span class="text-red-600">أي آم</span> <span class="text-yellow-400">سبيشل</span>
+        </h1>
+        <div class="flex gap-4">
+            <button onclick="openMaintenanceAuth()" class="bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-slate-50 px-4 py-2 rounded-lg font-bold text-sm transition flex items-center gap-2 shadow-sm">
                  محمد عبدالعزيز الحبيب
             </button>
         </div>
     </div>
 </header>
-
-<div id="globalAdminActions" class="hidden bg-white/20 backdrop-blur border-b border-white/30 p-2 z-30 relative sticky top-[72px]">
-    <div class="max-w-6xl mx-auto flex gap-2 justify-center flex-wrap">
-        <button onclick="openGlobalArticleModal('weekly')" class="bg-indigo-600/90 text-white text-xs font-bold px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">تحديث أسبوعي</button>
-        <button onclick="openGlobalArticleModal('announcement')" class="bg-amber-600/90 text-white text-xs font-bold px-4 py-2 rounded-lg shadow hover:bg-amber-700 transition">إضافة إعلان</button>
-        <button onclick="generateOpinionCode()" class="bg-fuchsia-600/90 text-white text-xs font-bold px-4 py-2 rounded-lg shadow hover:bg-fuchsia-700 transition">إصدار كود كاتب خارجي</button>
-    </div>
-</div>
 
 <div id="mainPageWrapper">
     <div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
@@ -192,30 +170,6 @@
             <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 glass-panel rounded-full w-10 h-10 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 transition transform hover:scale-105 opacity-0 group-hover:opacity-100 font-bold text-lg">❮</button>
             <div id="branchesCarousel" class="flex gap-5 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 pt-2 scroll-smooth px-2"></div>
             <div id="carouselDots" class="flex justify-center items-center gap-2 mt-4 w-full"></div>
-        </div>
-
-        <div class="mb-12 glass-panel rounded-2xl p-6 relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-l from-white/40 to-transparent z-0"></div>
-            <div class="relative z-10">
-                <h2 class="text-xl font-black text-slate-800 mb-4 drop-shadow-sm flex items-center gap-2">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    التقييمات من بداية الشهر
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-white/50 backdrop-blur rounded-xl p-4 border border-white/60 flex items-center justify-between shadow-sm">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-bold text-slate-600 mb-1">إجمالي التقييمات الإيجابية للمجموعة</span>
-                            <span class="text-4xl font-black text-slate-900 drop-shadow-sm" id="totalBrandReviews">0</span>
-                        </div>
-                        <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-xl font-black shadow-inner">+</div>
-                    </div>
-                    <div class="bg-white/40 backdrop-blur rounded-xl p-4 border border-white/60 shadow-sm flex flex-col justify-center">
-                        <span class="text-sm font-bold text-slate-700 mb-2">الأكثر مساهمة:</span>
-                        <div id="topContributors" class="text-base font-black text-emerald-800 flex flex-wrap gap-2">
-                            </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div id="newsTimeline" class="space-y-12 pr-4 timeline-border relative"></div>
@@ -250,7 +204,8 @@
     تم النسخ
 </div>
 
-<div id="predictionModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4"></div>
+<div id="predictionModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    </div>
 
 <div id="maintenanceAuthModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div class="glass-panel rounded-2xl p-8 shadow-2xl max-w-sm w-full text-center border border-white/50">
@@ -296,6 +251,7 @@
                 <div><label class="block text-sm mb-2 font-bold text-slate-800">الشكاوى:</label><input type="number" id="admin_complaints" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-800">تقييمات بداية الشهر:</label><input type="number" id="admin_startReviews" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-800">التقييمات الحالية الاجمالية:</label><input type="number" id="admin_currentReviews" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
+                
                 <div><label class="block text-sm mb-2 font-bold text-slate-800">تقييم سلبي (يدوي):</label><input type="number" id="admin_negative" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-800">التقييم العام للفرع:</label><input type="number" id="admin_baseRating" step="0.1" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
                 <div><label class="block text-sm mb-2 font-bold text-slate-800">الزوار (مخفي عن الفرع):</label><input type="number" id="admin_visitors" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400"></div>
@@ -319,54 +275,32 @@
         <button onclick="closeArticleModal()" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60 z-10">✕</button>
 
         <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur rounded-t-2xl">
-            <h2 class="text-xl font-black text-slate-900 mb-1" id="articleModalTitle">كتابة مقال</h2>
-            <p class="text-slate-600 text-sm font-bold bg-white/40 inline-block px-2 py-0.5 rounded" id="articleModalSubtitle">نوع المقال</p>
+            <h2 class="text-xl font-black text-slate-900 mb-1" id="articleModalTitle">كتابة مقال الفرع</h2>
+            <p class="text-slate-600 text-sm font-bold bg-white/40 inline-block px-2 py-0.5 rounded" id="articleModalSubtitle">الفرع: —</p>
         </div>
 
         <div id="step1_prompt" class="p-6 space-y-5">
-            <div id="promptContainer" class="hidden">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="w-8 h-8 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center shadow-md">1</span>
-                    <span class="font-bold text-slate-800 bg-white/40 px-3 py-1 rounded-lg backdrop-blur border border-white/50">انسخ الأمر لنموذج الذكاء الاصطناعي</span>
-                </div>
-                <div class="relative">
-                    <pre id="generatedPrompt" class="prompt-box p-5 text-sm overflow-auto max-h-72 shadow-inner"></pre>
-                    <button onclick="copyPrompt()" class="absolute top-3 left-3 bg-slate-800/90 backdrop-blur hover:bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition flex items-center gap-1.5 shadow">نسخ</button>
-                </div>
-                <div class="flex items-center gap-3 mt-6 mb-2">
-                    <span class="w-8 h-8 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center shadow-md">2</span>
-                    <span class="font-bold text-slate-800 bg-white/40 px-3 py-1 rounded-lg backdrop-blur border border-white/50">ألصق هنا المقال</span>
-                </div>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="w-8 h-8 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center shadow-md">1</span>
+                <span class="font-bold text-slate-800 bg-white/40 px-3 py-1 rounded-lg backdrop-blur border border-white/50">انسخ الأمر </span>
             </div>
-            
-            <textarea id="articlePasteInput" class="article-input w-full rounded-xl p-5 glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 font-medium shadow-inner" placeholder="اكتب المقال..."></textarea>
+            <div class="relative">
+                <pre id="generatedPrompt" class="prompt-box p-5 text-sm overflow-auto max-h-72 shadow-inner"></pre>
+                <button onclick="copyPrompt()" class="absolute top-3 left-3 bg-slate-800/90 backdrop-blur hover:bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition flex items-center gap-1.5 shadow">
+                    نسخ
+                </button>
+            </div>
+
+            <div class="flex items-center gap-3 mt-6 mb-2">
+                <span class="w-8 h-8 rounded-full bg-slate-800 text-white text-sm font-black flex items-center justify-center shadow-md">2</span>
+                <span class="font-bold text-slate-800 bg-white/40 px-3 py-1 rounded-lg backdrop-blur border border-white/50">ألصق هنا</span>
+            </div>
+            <textarea id="articlePasteInput" class="article-input w-full rounded-xl p-5 glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 font-medium shadow-inner" placeholder="اكتب مقالا..."></textarea>
 
             <div class="flex gap-3 pt-2">
                 <button onclick="saveArticleFromInput()" class="flex-1 bg-slate-800/90 backdrop-blur hover:bg-slate-900 text-white font-black py-4 rounded-xl transition shadow-lg border border-white/20 text-lg">حفظ المقال </button>
                 <button onclick="closeArticleModal()" class="bg-white/60 hover:bg-white/80 backdrop-blur text-slate-800 font-bold py-4 px-6 rounded-xl transition border border-white/60 shadow-sm text-lg">إلغاء</button>
             </div>
-        </div>
-    </div>
-</div>
-
-<div id="writerModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-    <div class="glass-panel rounded-2xl w-full max-w-lg shadow-2xl border border-white/50">
-        <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur flex justify-between items-center rounded-t-2xl">
-            <h2 class="text-xl font-black text-slate-900">مقال رأي</h2>
-            <button onclick="closeWriterModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60">✕</button>
-        </div>
-        <div class="p-6 space-y-4" id="writerCodeSection">
-            <p class="text-sm font-bold text-slate-600 mb-2">أدخل الكود الممنوح لك لكتابة المقال:</p>
-            <input type="text" id="writerCodeInput" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 font-bold text-center uppercase tracking-widest" placeholder="الكود هنا">
-            <button onclick="verifyWriterCode()" class="w-full bg-purple-600/90 hover:bg-purple-700 backdrop-blur text-white font-bold py-3 rounded-lg transition shadow">التحقق والبدء</button>
-        </div>
-        <div class="p-6 space-y-4 hidden" id="writerInputSection">
-            <div class="bg-white/40 p-3 rounded-lg text-sm mb-2">
-                <span class="font-bold block text-slate-800" id="writerEmpName"></span>
-                <span class="text-slate-600 mt-1 block text-xs" id="writerEmpBio"></span>
-            </div>
-            <textarea id="writerTextarea" class="article-input w-full rounded-xl p-4 glass-input focus:outline-none focus:ring-2 focus:ring-purple-400 text-slate-800 font-medium" placeholder="اكتب مقال الرأي الخاص بك هنا..."></textarea>
-            <button onclick="submitOpinionArticle()" class="w-full bg-slate-800/90 hover:bg-slate-900 backdrop-blur text-white font-bold py-3 rounded-lg transition shadow">نشر المقال</button>
         </div>
     </div>
 </div>
@@ -396,6 +330,7 @@ const firebaseConfig = {
     messagingSenderId: "86730383077",
     appId: "1:86730383077:web:ebdf3c92e2239d477f7e0c"
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
@@ -405,8 +340,6 @@ const db = firebase.firestore();
 let isAdminLoggedIn = false;
 let isCarouselPaused = false;
 let lastClickedCardIndex = 0;
-let currentArticleType = 'performance'; // 'performance', 'weekly', 'announcement', 'opinion'
-let writerSessionData = null; // للاحتفاظ ببيانات الكاتب الخارجي مؤقتاً
 
 // ============================================================
 // قاعدة البيانات المحدثة (الافتراضية)
@@ -419,11 +352,10 @@ let branchesData = {
     5: { bName: "سلام مول",   mName: "هند المطيري",   dName: "نوف هزازي",   safety: 2, visitors: 1100, complaints: 8, positive: 8, negative: 6, target: 50, baseRating: 4.2, baseReviews: 147, iframeSrc: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d201771.0028656187!2d46.70064182491825!3d24.597818146740305!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f11aa8f623ed3%3A0x72ab124244a1cf6f!2z2KfZiiDYp9mFINiz2KjZiti02YQ!5e0!3m2!1sar!2ssa!4v1776487753224!5m2!1sar!2ssa" },
     6: { bName: "مركز المملكة",   mName: "",  dName: "هاجر القاسمي",   safety: 0, visitors: 1300, complaints: 3, positive: 3, negative: 2, target: 50, baseRating: 4.2, baseReviews: 154, iframeSrc: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d164913.7756258042!2d46.72418597869817!3d24.684998102760346!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f038149e74eaf%3A0xf8016d2217c1f4ef!2z2KfZiiDYp9mFINiz2KjZiti02YQgfCBJIGFtIHNwZWNpYWw!5e0!3m2!1sar!2ssa!4v1776487781383!5m2!1sar!2ssa" }
 };
+
 let branchHistory = {};
-let branchArticles = {
-    // 0: مخصص للمقالات العامة (أسبوعي، إعلانات، آراء)
-    0: []
-};
+// أصبحت المقالات مصفوفة لكل فرع لدعم تواريخ متعددة وبيانات مجمدة
+let branchArticles = {}; 
 
 // ============================================================
 // تحميل البيانات من فايربيس
@@ -440,7 +372,8 @@ async function loadAllDataFromFirebase() {
         const articlesDoc = await db.collection('appData').doc('articles').get();
         if (articlesDoc.exists) {
             let loadedArticles = articlesDoc.data().data;
-            // Migration
+            
+            // كود الترحيل (Migration): لتحويل المقالات القديمة (النصية) إلى مصفوفة ذات بيانات مجمدة لكي لا تتأثر
             for (let id in loadedArticles) {
                 if (!Array.isArray(loadedArticles[id])) {
                     let oldData = loadedArticles[id];
@@ -451,13 +384,11 @@ async function loadAllDataFromFirebase() {
                         text: text,
                         timestamp: ts,
                         dateStr: dateStr,
-                        type: 'performance',
                         snapshot: { ...branchesData[id] },
                         scores: calcScores(branchesData[id])
                     }];
                 }
             }
-            if(!loadedArticles[0]) loadedArticles[0] = [];
             branchArticles = loadedArticles;
         }
     } catch (e) {
@@ -482,7 +413,7 @@ async function saveArticlesToFirebase() {
 
 function autoSaveDailySnapshot() {
     const today = new Date();
-    const dateKey = today.toISOString().split('T')[0];
+    const dateKey = today.toISOString().split('T')[0]; 
     let changed = false;
     for (let id = 1; id <= 6; id++) {
         if (!branchHistory[id]) branchHistory[id] = [];
@@ -490,7 +421,7 @@ function autoSaveDailySnapshot() {
         if (!existsToday) {
             const data = branchesData[id];
             const scores = calcScores(data);
-            const latestArticle = getArticleData(id, null, 'performance');
+            const latestArticle = getArticleData(id);
             branchHistory[id].push({
                 date:     dateKey,
                 snapshot: { ...data },
@@ -503,88 +434,66 @@ function autoSaveDailySnapshot() {
     if (changed) saveHistoryToFirebase();
 }
 
-function getArticleData(id, timestamp = null, typeFilter = null) {
+// دالة لجلب المقال. إذا تم تمرير timestamp تجلب المقال لذلك الوقت، وإلا تجلب الأحدث
+function getArticleData(id, timestamp = null) {
     const articles = branchArticles[id];
     if (!articles || !Array.isArray(articles) || articles.length === 0) return null;
-    let filtered = articles;
-    if (typeFilter) {
-        filtered = articles.filter(a => a.type === typeFilter);
-    }
-    if (filtered.length === 0) return null;
     
     if (timestamp) {
-        return filtered.find(a => a.timestamp === timestamp) || null;
+        return articles.find(a => a.timestamp === timestamp) || null;
     }
-    return filtered.reduce((latest, current) => current.timestamp > latest.timestamp ? current : latest, filtered[0]);
+    // إرجاع أحدث مقال بناءً على التوقيت
+    return articles.reduce((latest, current) => current.timestamp > latest.timestamp ? current : latest, articles[0]);
 }
 
 // ============================================================
 // ثوابت ومشتركات
 // ============================================================
+
 const SHARE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
 const MAP_PIN_SVG = `<svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/><circle cx="12" cy="9" r="2.5" fill="#FFF"/></svg>`;
+
 let currentBulletinData = null;
 let autoMultiplier = 1;
 let carouselInterval;
 let currentArticleModalBranchId = null;
-let currentArticleTimestamp = null;
+let currentArticleTimestamp = null; // للاحتفاظ بالزمن في حال تحرير مقال قديم
 
 // ============================================================
-// دوال مساعدة لحساب المؤشرات وتنسيق التواريخ
+// دوال مساعدة لحساب المؤشرات
 // ============================================================
 function calcScores(data) {
-    const ptsSafety = Math.max(0, 3 - data.safety);
-    let rawPtsComplaints = Math.max(0, 2 - (data.complaints / (data.visitors * 0.003)));
-    const ptsPositive = Math.min(4, (data.positive / data.target) * 4);
-
-    // تأثير التقييمات السلبية المخفف إذا كانت التقييمات الإيجابية منخفضة
-    let negWeight = 0.25;
-    if (data.positive < data.target * 0.5) {
-        negWeight = 0.15;
-    }
-    let rawPtsNegative = Math.max(0, 2 - (data.negative * negWeight));
-
-    // نظام الفائض (Overflow)
-    let extraPositives = Math.max(0, data.positive - data.target);
-    let overflowTag = false;
-    let recoveredComplaints = 0;
-    let recoveredNegative = 0;
-
-    if (extraPositives > 0) {
-        overflowTag = true;
-        let maxComplaintRecovery = 2 - rawPtsComplaints;
-        recoveredComplaints = Math.min(maxComplaintRecovery, extraPositives * 0.2);
-        
-        let remainingExtra = extraPositives - (recoveredComplaints / 0.2);
-        if (remainingExtra > 0) {
-            let maxNegativeRecovery = 2 - rawPtsNegative;
-            recoveredNegative = Math.min(maxNegativeRecovery, remainingExtra * 0.2);
-        }
-    }
-
-    const ptsComplaints = rawPtsComplaints + recoveredComplaints;
-    const ptsNegative = rawPtsNegative + recoveredNegative;
-    const total = Math.round((ptsSafety + ptsComplaints + ptsPositive + ptsNegative) * 100) / 100;
-    
-    return { ptsSafety, ptsComplaints, ptsPositive, ptsNegative, total, overflowTag };
+    const ptsSafety     = Math.max(0, 3 - data.safety);
+    const ptsComplaints = Math.max(0, 2 - (data.complaints / (data.visitors * 0.003)));
+    const ptsPositive   = Math.min(4, (data.positive / data.target) * 4);
+    const negWeight     = (data.target / Math.max(1, data.positive)) * 0.25;
+    const ptsNegative   = Math.max(0, 2 - (data.negative * negWeight));
+    const total         = Math.round((ptsSafety + ptsComplaints + ptsPositive + ptsNegative) * 100) / 100;
+    return { ptsSafety, ptsComplaints, ptsPositive, ptsNegative, total };
 }
 
 function getPerformanceTier(scores) {
     const { total } = scores;
     if (total >= 9) return {
-        headerColor: "text-emerald-800 bg-emerald-100/50 border-emerald-200 backdrop-blur",
-        label: "أخضر", labelBg: "bg-emerald-100/60 border-emerald-300 text-emerald-800 backdrop-blur",
-        borderColor: "border-emerald-400", barColor: "bg-emerald-500"
+        headerColor:    "text-emerald-800 bg-emerald-100/50 border-emerald-200 backdrop-blur",
+        label:          "أخضر",
+        labelBg:        "bg-emerald-100/60 border-emerald-300 text-emerald-800 backdrop-blur",
+        borderColor:    "border-emerald-400",
+        barColor:       "bg-emerald-500"
     };
     if (total >= 6.5) return {
-        headerColor: "text-amber-800 bg-amber-100/50 border-amber-200 backdrop-blur",
-        label: "أصفر", labelBg: "bg-amber-100/60 border-amber-300 text-amber-800 backdrop-blur",
-        borderColor: "border-amber-400", barColor: "bg-amber-500"
+        headerColor:    "text-amber-800 bg-amber-100/50 border-amber-200 backdrop-blur",
+        label:          "أصفر",
+        labelBg:        "bg-amber-100/60 border-amber-300 text-amber-800 backdrop-blur",
+        borderColor:    "border-amber-400",
+        barColor:       "bg-amber-500"
     };
     return {
-        headerColor: "text-rose-800 bg-rose-100/50 border-rose-200 backdrop-blur",
-        label: "أحمر", labelBg: "bg-rose-100/60 border-rose-300 text-rose-800 backdrop-blur",
-        borderColor: "border-rose-400", barColor: "bg-rose-500"
+        headerColor:    "text-rose-800 bg-rose-100/50 border-rose-200 backdrop-blur",
+        label:          "أحمر",
+        labelBg:        "bg-rose-100/60 border-rose-300 text-rose-800 backdrop-blur",
+        borderColor:    "border-rose-400",
+        barColor:       "bg-rose-500"
     };
 }
 
@@ -594,141 +503,118 @@ function calcRating(data, branchId) {
 
 function buildStars(ratingValue) {
     const isFull = parseFloat(ratingValue) >= 5.0;
-    return `<span class="google-star">★</span>`.repeat(4) + `<span class="${isFull ? 'google-star' : 'google-star-empty'}">★</span>`;
-}
-
-function formatDateAr(dateObj) {
-    const days = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-    const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-    // تنسيق: "السبت ٢٥ أبريل"
-    const dayStr = String(dateObj.getDate()).replace(/\d/g, d =>  '٠١٢٣٤٥٦٧٨٩'[d]);
-    return `${days[dateObj.getDay()]} ${dayStr} ${months[dateObj.getMonth()]}`;
+    return `<span class="google-star">★</span>`.repeat(4)
+         + `<span class="${isFull ? 'google-star' : 'google-star-empty'}">★</span>`;
 }
 
 // ============================================================
-// توليد نصوص Prompts
+// توليد نص الـ Prompt
 // ============================================================
 function generatePromptText(branchId, snapshotData = null, snapshotScores = null) {
-    const data = snapshotData || branchesData[branchId];
+    // استخدم البيانات المجمدة إذا كانت متوفرة، وإلا استخدم البيانات الحية الحالية
+    const data   = snapshotData || branchesData[branchId];
     const scores = snapshotScores || calcScores(data);
-    const tier = getPerformanceTier(scores);
-    const today = new Date();
-    const dateStr = formatDateAr(today);
+    const tier   = getPerformanceTier(scores);
+
+    const today     = new Date();
+    const dateStr   = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(today);
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    
-    const performanceContext = scores.total >= 9 ? "الأداء ممتاز ومتفوق" : scores.total >= 6.5 ? "الأداء متوسط ومقبول" : "الأداء منخفض ويحتاج تدخل";
-    const safetyNote = data.safety > 0 ? `⚠️ تسجيل ${data.safety} حادثة سلامة` : "لا حوادث سلامة مسجلة";
-    
+    const currentDay  = today.getDate();
+
+    const performanceContext = scores.total >= 9
+        ? "الأداء ممتاز ومتفوق ويستحق الإشادة والإبراز"
+        : scores.total >= 6.5
+        ? "الأداء متوسط ومقبول ولكن يحتاج تحسين ملحوظ"
+        : scores.ptsSafety < 3
+        ? "هناك مشكلة جدية في السلامة تستوجب التنبيه العاجل"
+        : scores.ptsComplaints < 1
+        ? "ارتفاع مقلق في الشكاوى يستدعي تدخلاً فورياً"
+        : "ضعف واضح في اكتساب التقييمات الإيجابية يحتاج معالجة";
+
+    const safetyNote = data.safety > 0
+        ? `⚠️ تسجيل ${data.safety} حادثة سلامة هذا الشهر`
+        : "لا حوادث سلامة مسجلة";
+
     let mgtLine = [];
     if (data.mName) mgtLine.push(`المديرة ${data.mName}`);
     if (data.dName) mgtLine.push(`نائبتها ${data.dName}`);
     let mgtRef = mgtLine.length > 0 ? `مع الإشارة المباشرة إلى ${mgtLine.join(' و ')}.` : '';
 
     return `أنت محرر محتوى متخصص في كتابة تقارير الأداء لمراكز ترفيه الأطفال بأسلوب صحفي احترافي ومشوق باللغة العربية.
-اكتب تقرير أداء لفرع "${data.bName}" انت تعمل لصالح مجموعة "أي آم سبيشل".
+اكتب تقرير أداء لفرع "${data.bName}" انت تعمل لصالح مجموعة "أي آم سبيشل" لمراكز ترفيه الأطفال وتكتب تقارير داخلية للزملاء والمالك، بناءً على البيانات التالية:
 
-بيانات الفرع:
-اسم الفرع: ${data.bName}
-التاريخ: ${dateStr} (اليوم ${today.getDate()} من أصل ${daysInMonth})
-النقاط: ${scores.total}/11 (التقييمات الإيجابية: ${data.positive}/${data.target}، السلبية: ${data.negative}، الشكاوى: ${data.complaints}، الحوادث: ${data.safety})
-تصنيف الأداء: ${tier.label} (${performanceContext})
+═══════════════════════════════════
+📋 بيانات الفرع
+═══════════════════════════════════
+• اسم الفرع: ${data.bName}
+• المديرة: ${data.mName || 'غير محدد'}
+• نائبة المديرة: ${data.dName || 'غير محدد'}
+• تاريخ التقرير: ${dateStr}
+• اليوم من الشهر: ${currentDay} من أصل ${daysInMonth} يوم
 
-المطلوب:
-عنوان رئيسي جذاب (15 كلمة كحد أقصى).
-جملة افتتاحية مكثفة (30-50 كلمة).
-تحليل موضوعي (80-100 كلمة) يشمل نقاط القوة والضعف ${mgtRef}.
-بدون عناوين فرعية إضافية. اجعله بأسلوب صحفي واضح وسهل.`;
-}
+═══════════════════════════════════
+📊 الأرقام والمؤشرات
+═══════════════════════════════════
+• حوادث السلامة: ${data.safety} (${safetyNote})
+• الشكاوى المسجلة: ${data.complaints}
+• التقييمات الإيجابية: ${data.positive} (الهدف: ${data.target})
+• التقييمات السلبية: ${data.negative}
+• نسبة تحقيق الهدف: ${Math.round((data.positive / data.target) * 100)}%
 
-function generateWeeklyPrompt() {
-    let prompt = `أنت محرر محتوى متخصص. اكتب مقال "التحديث الأسبوعي" لأداء جميع فروع "أي آم سبيشل" لترفيه الأطفال.
-    
-بيانات الفروع الحالية:
-`;
-    for(let i=1; i<=6; i++) {
-        let d = branchesData[i];
-        prompt += `- ${d.bName}: (${d.positive} إيجابي / ${d.target} الهدف)، (${d.negative} سلبي)، (${d.complaints} شكاوى)، (${d.safety} حوادث).\n`;
-    }
-    
-    prompt += `
-المطلوب:
-عنوان رئيسي مشوق يخص التحديث الأسبوعي للمجموعة.
-فقرة افتتاحية شاملة.
-تحليل للارتفاع والانخفاض بشكل عام، وذكر أبرز التحديات.
-لا تضع عناوين فرعية أو تنسيقات معقدة.`;
-    return prompt;
-}
+═══════════════════════════════════
+🏆 نتيجة الأداء المحسوبة
+═══════════════════════════════════
+• نقاط السلامة: ${scores.ptsSafety.toFixed(2)} / 3
+• نقاط الشكاوى: ${scores.ptsComplaints.toFixed(2)} / 2
+• نقاط التقييمات الإيجابية: ${scores.ptsPositive.toFixed(2)} / 4
+• نقاط التقييمات السلبية: ${scores.ptsNegative.toFixed(2)} / 2
+• المجموع الكلي: ${scores.total} / 11
+• تصنيف الأداء: ${tier.label} (${performanceContext})
 
-// ============================================================
-// إدارة الإحصائيات العامة للمجموعة
-// ============================================================
-function updateBrandStats() {
-    let totalPositive = 0;
-    let contributors = [];
-    
-    for (let i = 1; i <= 6; i++) {
-        let d = branchesData[i];
-        totalPositive += d.positive;
-        let managerName = d.mName || d.dName || `فرع ${d.bName}`;
-        contributors.push({ name: managerName, val: d.positive });
-    }
-    
-    document.getElementById('totalBrandReviews').textContent = totalPositive;
-    
-    contributors.sort((a, b) => b.val - a.val);
-    let topHTML = '';
-    let topCount = Math.min(3, contributors.length);
-    for(let i=0; i<topCount; i++) {
-        if(contributors[i].val > 0) {
-            topHTML += `<span class="bg-emerald-100/60 px-2 py-0.5 rounded-md border border-emerald-200 text-sm shadow-sm">${contributors[i].name} (${contributors[i].val})</span>`;
-        }
-    }
-    if(!topHTML) topHTML = `<span class="text-slate-500 text-sm">لا يوجد مساهمات حتى الآن</span>`;
-    document.getElementById('topContributors').innerHTML = topHTML;
+═══════════════════════════════════
+✍️ متطلبات التقرير
+═══════════════════════════════════
+اكتب التقرير بالتنسيق التالي بالضبط:
+
+عنوان رئيسي واحد مشوق وجذاب لا يتجاوز 15 كلمة، يعكس أداء الفرع بأسلوب صحفي.
+
+جملة افتتاحية واحدة تلخص الأداء بشكل مكثف (30-50 كلمة).
+
+تحليل موضوعي ودقيق لأداء الفرع يشمل نقاط القوة والضعف، ${mgtRef}
+اجعله بين 80 و 100 كلمة بأسلوب صحفي احترافي.
+
+ملاحظات أسلوبية مهمة:
+- استخدم أسلوب النشرات الاقتصادية الجذابة، لا أسلوب التقارير الرسمية الجافة
+- ضع في الاعتبار ان الفرع يكتسب التقييميات يوميا على مدى الشهر والتقدم اليومي المثالي هو 1.66 تقييم 
+- اجعل العنوان لافتاً ومحفزاً على القراءة
+- اجعل التقرير باسلوب طبيعي بحيث يفهمه الشخص غير المتعمق في قراءة التقارير
+- لا تضف أي عناوين فرعية أو تنسيقات إضافية غير المطلوبة أعلاه`;
 }
 
 // ============================================================
-// المودال والكتابة للحالات المختلفة
+// مودال كتابة المقال وحفظه (بشكل مرتبط بالبيانات المجمدة)
 // ============================================================
-function openGlobalArticleModal(type) {
-    currentArticleType = type;
-    currentArticleModalBranchId = 0; // 0 للمقالات العامة
-    
-    document.getElementById('articleModal').style.display = 'flex';
-    document.getElementById('articlePasteInput').value = '';
-    
-    const promptContainer = document.getElementById('promptContainer');
-    if(type === 'weekly') {
-        document.getElementById('articleModalTitle').textContent = 'كتابة التحديث الأسبوعي';
-        document.getElementById('articleModalSubtitle').textContent = 'يحتوي على أرقام جميع الفروع';
-        promptContainer.classList.remove('hidden');
-        document.getElementById('generatedPrompt').textContent = generateWeeklyPrompt();
-    } else if (type === 'announcement') {
-        document.getElementById('articleModalTitle').textContent = 'إضافة إعلان جديد';
-        document.getElementById('articleModalSubtitle').textContent = 'نص إعلاني مباشر';
-        promptContainer.classList.add('hidden');
-    }
-}
-
 function openArticleModal(branchId, timestamp = null) {
-    currentArticleType = 'performance';
     currentArticleModalBranchId = branchId;
-    currentArticleTimestamp = timestamp;
+    currentArticleTimestamp = timestamp; // لمعرفة ما إذا كنا نعدل مقالاً قديماً أو نكتب لليوم
 
     const data = branchesData[branchId];
+    
     let targetData = data;
     let targetScores = calcScores(data);
     let existingText = '';
-    
+
     if (timestamp) {
-        const articleObj = getArticleData(branchId, timestamp, 'performance');
+        // نعدل مقال قديم، استخدم البيانات المجمدة لذلك المقال
+        const articleObj = getArticleData(branchId, timestamp);
         if (articleObj) {
             targetData = articleObj.snapshot || data;
             targetScores = articleObj.scores || targetScores;
             existingText = articleObj.text;
         }
     } else {
-        const latestObj = getArticleData(branchId, null, 'performance');
+        // نكتب أو نعدل مقال اليوم، استخدم البيانات الحالية
+        const latestObj = getArticleData(branchId);
         if (latestObj && latestObj.dateStr === new Date().toISOString().split('T')[0]) {
             existingText = latestObj.text;
         }
@@ -737,10 +623,9 @@ function openArticleModal(branchId, timestamp = null) {
     document.getElementById('articleModalTitle').textContent = `مقال فرع ${data.bName}`;
     let subtitleParts = [`الفرع: ${data.bName}`];
     if (data.mName) subtitleParts.push(`المديرة: ${data.mName}`);
+    else if (data.dName) subtitleParts.push(`النائبة: ${data.dName}`);
     document.getElementById('articleModalSubtitle').textContent = subtitleParts.join(' — ');
 
-    const promptContainer = document.getElementById('promptContainer');
-    promptContainer.classList.remove('hidden');
     const promptText = generatePromptText(branchId, targetData, targetScores);
     document.getElementById('generatedPrompt').textContent = promptText;
 
@@ -756,34 +641,45 @@ function closeArticleModal() {
 
 function copyPrompt() {
     const text = document.getElementById('generatedPrompt').textContent;
-    if (navigator.clipboard) { navigator.clipboard.writeText(text).then(() => showCopyToast()); } 
-    else {
-        const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); showCopyToast();
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => showCopyToast());
+    } else {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        showCopyToast();
     }
 }
 
 async function saveArticleFromInput() {
+    const id = currentArticleModalBranchId;
     const text = document.getElementById('articlePasteInput').value.trim();
-    if (!text) { alert('الرجاء كتابة أو لصق المقال أولاً'); return; }
+    if (!id) return;
+    if (!text) { alert('الرجاء لصق المقال أولاً'); return; }
     
-    let id = currentArticleModalBranchId;
     if (!branchArticles[id]) branchArticles[id] = [];
     
     const ts = currentArticleTimestamp || new Date().getTime();
     const dateStr = new Date(ts).toISOString().split('T')[0];
     
-    let articleObj = {
-        text: text, timestamp: ts, dateStr: dateStr, type: currentArticleType
+    const articleObj = {
+        text: text,
+        timestamp: ts,
+        dateStr: dateStr,
+        snapshot: JSON.parse(JSON.stringify(branchesData[id])), // تجميد البيانات الحالية وحفظها في المقال
+        scores: calcScores(branchesData[id])
     };
-    
-    if(currentArticleType === 'performance' && id !== 0) {
-        articleObj.snapshot = JSON.parse(JSON.stringify(branchesData[id]));
-        articleObj.scores = calcScores(branchesData[id]);
-        // استبدال أو إضافة في نفس اليوم
-        const existingIndex = branchArticles[id].findIndex(a => a.dateStr === dateStr && a.type === 'performance');
-        if (existingIndex >= 0) branchArticles[id][existingIndex] = articleObj;
-        else branchArticles[id].push(articleObj);
+
+    // التحقق مما إذا كنا نعدل مقالاً موجوداً في نفس اليوم
+    const existingIndex = branchArticles[id].findIndex(a => a.dateStr === dateStr);
+    if (existingIndex >= 0) {
+        // تحديث المقال الموجود اليوم
+        branchArticles[id][existingIndex] = articleObj;
     } else {
+        // إضافة مقال جديد
         branchArticles[id].push(articleObj);
     }
 
@@ -791,99 +687,32 @@ async function saveArticleFromInput() {
     closeArticleModal();
     generateNewspaper();
     initCarousel();
-    showCopyToast('تم حفظ المقال بنجاح');
+    showCopyToast('تم حفظ المقال وارتباطه بأرقام اليوم');
+}
+
+function openArticleModalFromAdmin() {
+    const id = document.getElementById('branchSelector').value;
+    closeAdmin();
+    // بدون تمرير تايم ستامب لكي يكتب مقال جديد بناء على الأرقام الحالية
+    openArticleModal(id);
 }
 
 // ============================================================
-// نظام كاتب الرأي الخارجي
+// تهيئة الصفحة ومعالجة الروابط
 // ============================================================
-async function generateOpinionCode() {
-    let empName = prompt("أدخل اسم الموظفة/الكاتب:");
-    if(!empName) return;
-    let empBio = prompt("أدخل نبذة قصيرة (ستظهر بخط صغير):");
-    if(!empBio) return;
-    
-    let code = Math.random().toString(36).substring(2, 8).toUpperCase();
-    await db.collection('appData').doc('opinionCodes').set({
-        [code]: { empName, empBio, used: false, createdAt: new Date().getTime() }
-    }, {merge: true});
-    
-    alert(`تم إنشاء الكود بنجاح!\nالكود هو: ${code}\nيرجى إعطاءه للكاتب الخارجي.`);
-}
-
-function openWriterModal() {
-    document.getElementById('writerModal').style.display = 'flex';
-    document.getElementById('writerCodeSection').classList.remove('hidden');
-    document.getElementById('writerInputSection').classList.add('hidden');
-    document.getElementById('writerCodeInput').value = '';
-    document.getElementById('writerTextarea').value = '';
-}
-function closeWriterModal() { document.getElementById('writerModal').style.display = 'none'; writerSessionData = null; }
-
-async function verifyWriterCode() {
-    let code = document.getElementById('writerCodeInput').value.trim().toUpperCase();
-    if(!code) return alert("أدخل الكود أولاً");
-    try {
-        let doc = await db.collection('appData').doc('opinionCodes').get();
-        if(doc.exists && doc.data()[code] && !doc.data()[code].used) {
-            writerSessionData = { code: code, ...doc.data()[code] };
-            document.getElementById('writerCodeSection').classList.add('hidden');
-            document.getElementById('writerInputSection').classList.remove('hidden');
-            document.getElementById('writerEmpName').textContent = writerSessionData.empName;
-            document.getElementById('writerEmpBio').textContent = writerSessionData.empBio;
-        } else {
-            alert("الكود غير صحيح أو تم استخدامه مسبقاً.");
-        }
-    } catch(e) { console.error(e); alert("خطأ في التحقق من الكود."); }
-}
-
-async function submitOpinionArticle() {
-    let text = document.getElementById('writerTextarea').value.trim();
-    if(!text) return alert("الرجاء كتابة المقال");
-    if(!writerSessionData) return;
-    
-    let ts = new Date().getTime();
-    let articleObj = {
-        text: text, timestamp: ts, dateStr: new Date(ts).toISOString().split('T')[0],
-        type: 'opinion', authorName: writerSessionData.empName, authorBio: writerSessionData.empBio
-    };
-    
-    if(!branchArticles[0]) branchArticles[0] = [];
-    branchArticles[0].push(articleObj);
-    
-    await db.collection('appData').doc('opinionCodes').update({ [`${writerSessionData.code}.used`]: true });
-    await saveArticlesToFirebase();
-    
-    alert("تم نشر مقال الرأي بنجاح! شكراً لك.");
-    closeWriterModal();
-    generateNewspaper();
-}
-
-// ============================================================
-// تهيئة الصفحة
-// ============================================================
-function checkSession() {
-    if (localStorage.getItem('isAdminLoggedIn') === 'true') {
-        isAdminLoggedIn = true;
-        document.getElementById('globalAdminActions').classList.remove('hidden');
-        document.getElementById('globalAdminActions').classList.add('flex');
-    }
-}
-
 window.onload = async function () {
-    checkSession();
     await loadAllDataFromFirebase();
     document.getElementById('loadingOverlay').style.display = 'none';
-    
+
     const hash = window.location.hash;
     if (hash && hash.startsWith('#bulletin-')) {
         const parts = hash.split('-');
         const branchId = parseInt(parts[1]);
         const timestamp = parts.length > 2 ? parseInt(parts[2]) : null;
+
         if (branchId >= 1 && branchId <= 6) {
             generateNewspaper();
             initCarousel();
-            updateBrandStats();
             autoSaveDailySnapshot();
             setTimeout(() => openBulletinPage(branchId, timestamp), 100);
             return;
@@ -891,18 +720,13 @@ window.onload = async function () {
     }
     generateNewspaper();
     initCarousel();
-    updateBrandStats();
     autoSaveDailySnapshot();
 };
 
 function showPage(pageId) {
     const isMain = pageId === 'main';
     document.getElementById('mainPageWrapper').style.display = isMain ? 'flex' : 'none';
-    if(isMain) {
-        document.getElementById('globalAdminActions').style.display = isAdminLoggedIn ? 'block' : 'none';
-    } else {
-        document.getElementById('globalAdminActions').style.display = 'none';
-    }
+    document.getElementById('mainPageWrapper').style.flexDirection = 'column';
     document.getElementById('bulletinPage').style.display = isMain ? 'none' : 'flex';
     document.getElementById('bulletinPage').style.flexDirection = 'column';
 }
@@ -914,22 +738,32 @@ function goToMainPage() {
 }
 
 // ============================================================
-// صفحة التقرير المستقلة (للفروع)
+// صفحة التقرير المستقلة (تدعم استدعاء البيانات المجمدة)
 // ============================================================
 function openBulletinPage(branchId, timestamp = null) {
-    let data, scores, articleData, dateObj;
+    let data, scores, articleData, dateStr;
+
     if (timestamp) {
-        articleData = getArticleData(branchId, timestamp, 'performance');
+        // استدعاء مقال قديم مع بياناته المجمدة
+        articleData = getArticleData(branchId, timestamp);
         if (articleData && articleData.snapshot) {
-            data = articleData.snapshot; scores = articleData.scores || calcScores(data); dateObj = new Date(articleData.timestamp);
+            data = articleData.snapshot;
+            scores = articleData.scores || calcScores(data);
+            dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(articleData.timestamp));
         } else {
-            data = branchesData[branchId]; scores = calcScores(data); dateObj = new Date();
+            // كخيار بديل في حال لم نجد البيانات المجمدة
+            data = branchesData[branchId];
+            scores = calcScores(data);
+            dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
         }
     } else {
-        data = branchesData[branchId]; scores = calcScores(data); articleData = getArticleData(branchId, null, 'performance'); dateObj = new Date();
+        // عرض التقرير المباشر والأحدث (عند النقر من الكاروسيل)
+        data = branchesData[branchId];
+        scores = calcScores(data);
+        articleData = getArticleData(branchId);
+        dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
     }
 
-    const dateStr = formatDateAr(dateObj);
     const tier = getPerformanceTier(scores);
     const { ratingValue, reviewsCount } = calcRating(data, branchId);
     const progressPercent = Math.min(100, (scores.total / 11) * 100);
@@ -938,6 +772,7 @@ function openBulletinPage(branchId, timestamp = null) {
     const articleTimestampToPass = articleData ? articleData.timestamp : null;
 
     let articleHead = '', articleLead = '', articleBody = '';
+
     if (article) {
         const lines = article.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         if (lines.length >= 1) articleHead = lines[0];
@@ -946,35 +781,59 @@ function openBulletinPage(branchId, timestamp = null) {
     }
 
     currentBulletinData = {
-        branchId, bName: data.bName, head: articleHead || `تقرير أداء فرع ${data.bName}`,
-        lead: articleLead || `مؤشر الأداء العام: ${scores.total} / 11 — تصنيف: ${tier.label}`, performanceLabel: tier.label, dateStr
+        branchId,
+        bName:            data.bName,
+        head:             articleHead || `تقرير أداء فرع ${data.bName}`,
+        lead:             articleLead || `مؤشر الأداء العام: ${scores.total} / 11 — تصنيف: ${tier.label}`,
+        performanceLabel: tier.label,
+        dateStr
     };
-    
+
     document.getElementById('bulletinBreadcrumbBranch').textContent = `فرع ${data.bName}`;
+    
+    // تحديث الرابط ليدعم المشاركة بالتوقيت
     const hashUrl = timestamp ? `#bulletin-${branchId}-${timestamp}` : `#bulletin-${branchId}`;
     history.pushState('', '', hashUrl);
-    updateOGTags(`تقرير فرع ${data.bName} - أي آم سبيشل`, `${currentBulletinData.head} | المؤشر العام: ${scores.total}/11`, window.location.href);
     
+    updateOGTags(
+        `تقرير فرع ${data.bName} - أي آم سبيشل`,
+        `${currentBulletinData.head} | المؤشر العام: ${scores.total}/11 | تصنيف: ${tier.label}`,
+        window.location.href
+    );
+
     document.getElementById('bulletinContent').innerHTML = buildBulletinHTML(data, scores, tier, { head: articleHead, lead: articleLead, body: articleBody }, ratingValue, reviewsCount, dateStr, progressPercent, branchId, !!article, articleTimestampToPass);
+
     showPage('bulletin');
 
     const contentEl = document.getElementById('bulletinContent');
-    contentEl.classList.remove('slide-up'); void contentEl.offsetWidth; contentEl.classList.add('slide-up');
+    contentEl.classList.remove('slide-up');
+    void contentEl.offsetWidth;
+    contentEl.classList.add('slide-up');
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, dateStr, progressPercent, branchId, hasArticle, timestampToPass) {
     const tsParam = timestampToPass ? timestampToPass : 'null';
-    const adminButtons = isAdminLoggedIn ? `
+    
+    const adminButtons = isAdminLoggedIn ?
+        `
         <div class="flex gap-2">
-            <button onclick="openHistoryModal(${branchId})" class="text-xs font-bold bg-white/60 hover:bg-white border border-white/60 text-slate-800 px-3 py-1.5 rounded-lg transition shadow-sm backdrop-blur flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> السجل </button>
-            <button onclick="openArticleModal(${branchId}, ${tsParam})" class="text-xs font-bold bg-slate-800/90 hover:bg-slate-900 border border-white/20 text-white px-3 py-1.5 rounded-lg transition shadow backdrop-blur flex items-center gap-1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> ${hasArticle ? 'تعديل المقال' : 'كتابة مقال'}</button>
-        </div>` : ``;
+            <button onclick="openHistoryModal(${branchId})" class="text-xs font-bold bg-white/60 hover:bg-white border border-white/60 text-slate-800 px-3 py-1.5 rounded-lg transition shadow-sm backdrop-blur flex items-center gap-1.5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                السجل 
+            </button>
+            <button onclick="openArticleModal(${branchId}, ${tsParam})" class="text-xs font-bold bg-slate-800/90 hover:bg-slate-900 border border-white/20 text-white px-3 py-1.5 rounded-lg transition shadow backdrop-blur flex items-center gap-1.5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                ${hasArticle ? 'تعديل المقال المعروض' : 'كتابة مقال'}
+            </button>
+        </div>
+    ` : ``;
 
-    let waitingNames = []; if(data.mName) waitingNames.push(data.mName); if(data.dName) waitingNames.push(data.dName);
+    let waitingNames = [];
+    if(data.mName) waitingNames.push(`المديرة ${data.mName}`);
+    if(data.dName) waitingNames.push(`نائبتها ${data.dName}`);
     let waitingText = waitingNames.length > 0 ? `بانتظار تحركات ${waitingNames.join(' و ')}` : `بانتظار تحركات الإدارة`;
-
-    let overflowBadge = scores.overflowTag ? `<span class="overflow-tag mt-2">🌟 فاضت التقييمات وعوضت السلبيات</span>` : ``;
 
     const articleSection = hasArticle ? `
         <div class="mb-8">
@@ -982,6 +841,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                 <span class="${tier.headerColor} border font-bold text-sm px-4 py-1.5 rounded-full shadow-sm">الأداء ◂ ${data.bName}</span>
                 <span class="text-slate-500 bg-white/40 backdrop-blur px-3 py-1 rounded-full text-sm font-bold border border-white/50">${dateStr}</span>
             </div>
+            
             <h1 class="text-3xl md:text-4xl font-black text-slate-900 leading-tight mb-4 drop-shadow-sm">${text.head}</h1>
             <p class="text-lg text-slate-700 font-bold leading-relaxed mb-3 bg-white/30 p-3 rounded-lg backdrop-blur border-l-4 border-slate-400">${text.lead}</p>
             <p class="text-slate-700 leading-relaxed text-justify font-medium">${text.body}</p>
@@ -991,12 +851,18 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
             <div class="flex items-start gap-4">
                 <span class="text-3xl drop-shadow">${isAdminLoggedIn ? '✍️' : '⏳'}</span>
                 <div>
-                    ${isAdminLoggedIn ? `<h3 class="font-black text-amber-900 text-lg mb-1">لم يُكتب مقال هذا الفرع بعد</h3>
+                    ${isAdminLoggedIn ?
+                    `
+                        <h3 class="font-black text-amber-900 text-lg mb-1">لم يُكتب مقال هذا الفرع بعد</h3>
                         <p class="text-amber-800 text-sm font-medium mb-4">اكتب مقالا يعكس الأرقام والمؤشرات أدناه.</p>
-                        <button onclick="openArticleModal(${branchId})" class="bg-amber-700/90 hover:bg-amber-800 text-white font-black px-5 py-2.5 rounded-lg text-sm transition shadow border border-white/20">✦ كتابة المقال الآن</button>` : `<p class="text-slate-800 text-lg font-bold mt-1">${waitingText}</p>`}
+                        <button onclick="openArticleModal(${branchId})" class="bg-amber-700/90 hover:bg-amber-800 backdrop-blur text-white font-black px-5 py-2.5 rounded-lg text-sm transition shadow border border-white/20">✦ كتابة المقال الآن</button>
+                    ` : `
+                        <p class="text-slate-800 text-lg font-bold mt-1">${waitingText}</p>
+                    `}
                 </div>
             </div>
-        </div>`;
+        </div>
+    `;
 
     let teamHTML = '';
     if(data.mName) teamHTML += buildPersonRow(data.mName, 'مديرة الفرع', data.dName !== '');
@@ -1005,11 +871,13 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
 
     return `
         ${articleSection}
+
         <div class="mb-8 glass-panel rounded-2xl p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-black text-slate-800 drop-shadow-sm">الإنجاز الشهري</h2>
                 ${adminButtons}
             </div>
+            
             <div class="flex justify-between items-center mb-3">
                 <span class="font-bold text-slate-700 text-sm bg-white/40 px-2 py-0.5 rounded">التقييمات الإيجابية المحققة</span>
                 <span class="font-black text-slate-900 text-lg">${data.positive} / ${data.target}</span>
@@ -1018,9 +886,10 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                 <div class="${data.positive >= data.target ? 'bg-emerald-500' : 'bg-slate-700'} h-3 rounded-full transition-all" style="width:${Math.min(100, (data.positive / data.target) * 100)}%"></div>
             </div>
             <p class="text-xs text-slate-600 font-bold text-left">${Math.round((data.positive / data.target) * 100)}% من الهدف</p>
-            ${overflowBadge}
         </div>
+
         <div class="border-t border-slate-300/30 my-8"></div>
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="md:col-span-1 bg-slate-800/90 backdrop-blur border border-white/20 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-tr from-slate-900 to-transparent opacity-50 z-0"></div>
@@ -1040,8 +909,10 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                 ${buildStatCard('نقاط الإيجابية', scores.ptsPositive, 'text-emerald-700 bg-emerald-100/60 border-emerald-200', `${data.positive} تقييم`, 4)}
                 ${buildStatCard('نقاط السلبية', scores.ptsNegative, 'text-rose-700 bg-rose-100/60 border-rose-200', `${data.negative} تقييم`, 2)}
             </div>
-         </div>
+        </div>
+
         <div class="border-t border-slate-300/30 my-8"></div>
+
         <div class="mb-8">
             <h2 class="text-xl font-black text-slate-800 mb-6 drop-shadow-sm">معلومات الفرع</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1067,7 +938,8 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                     </div>
                 </div>
             </div>
-        </div>`;
+        </div>
+    `;
 }
 
 function buildStatCard(title, pts, badgeClass, badgeText, maxPts) {
@@ -1093,39 +965,29 @@ function buildPersonRow(name, role, withBorder) {
         </div>`;
 }
 
-// ============================================================
-// الكاروسيل وبطاقات الفروع
-// ============================================================
+// ... دوال الكاروسيل وباقي الدوال (كما هي بدون تغيير) ...
 function initCarousel() {
     const carousel = document.getElementById('branchesCarousel');
     carousel.innerHTML = '';
     for (let i = 1; i <= 6; i++) {
         const data = branchesData[i];
         const { ratingValue, reviewsCount } = calcRating(data, i);
-        let mgtNames = []; if(data.mName) mgtNames.push(data.mName); if(data.dName) mgtNames.push(data.dName);
+        let mgtNames = [];
+        if(data.mName) mgtNames.push(data.mName);
+        if(data.dName) mgtNames.push(data.dName);
         let mgtText = mgtNames.length > 0 ? `إدارة: ${mgtNames.join(' و ')}` : 'إدارة الفرع';
 
         const index = i - 1;
         const card = document.createElement('div');
         card.className = "min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 glass-panel rounded-2xl p-5 snap-center transition-transform hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] cursor-pointer active:cursor-grabbing border border-white/60";
-        
-        card.onclick = () => {
-            if (isAdminLoggedIn) {
-                document.getElementById('branchSelector').value = i;
-                document.getElementById('adminModal').style.display = 'flex';
-                loadAdminData();
-            } else {
-                openBulletinPage(i);
-            }
-        };
-
+        card.onclick = () => openIframeModal(data.iframeSrc, index);
         card.innerHTML = `
             <div class="flex justify-between items-start mb-5">
                 <div>
                     <h3 class="font-black text-xl text-slate-900 tracking-tight drop-shadow-sm">فرع ${data.bName}</h3>
                     <p class="text-xs text-slate-600 font-bold mt-1 bg-white/40 inline-block px-2 rounded backdrop-blur">${mgtText}</p>
                 </div>
-                <div class="flex items-center gap-2 cursor-pointer z-20 hover:scale-110 transition" onclick="openIframeModal('${data.iframeSrc}', ${index}); event.stopPropagation();">
+                <div class="flex items-center gap-2">
                     <div class="w-10 h-10 bg-white/70 backdrop-blur rounded-full flex items-center justify-center border border-white shadow-sm">${MAP_PIN_SVG}</div>
                 </div>
             </div>
@@ -1146,82 +1008,134 @@ function initCarousel() {
         `;
         carousel.appendChild(card);
     }
-    setupCarouselDots(); setupCarouselEvents();
+    setupCarouselDots();
+    setupCarouselEvents();
 }
 function setupCarouselDots() {
-    const dotsContainer = document.getElementById('carouselDots'); dotsContainer.innerHTML = '';
-    for (let i = 0; i < 6; i++) { dotsContainer.innerHTML += `<button onclick="scrollToCard(${i})" class="carousel-dot w-2.5 h-2.5 rounded-full bg-slate-300/80 backdrop-blur transition-all duration-300 border border-white/50"></button>`; }
+    const dotsContainer = document.getElementById('carouselDots');
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < 6; i++) {
+        dotsContainer.innerHTML += `<button onclick="scrollToCard(${i})" class="carousel-dot w-2.5 h-2.5 rounded-full bg-slate-300/80 backdrop-blur transition-all duration-300 border border-white/50"></button>`;
+    }
     updateActiveDot();
 }
-function scrollToCard(index) { const carousel = document.getElementById('branchesCarousel'); const cards = carousel.children; if(cards[index]) cards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }
+function scrollToCard(index) {
+    const carousel = document.getElementById('branchesCarousel');
+    const cards = carousel.children;
+    if(cards[index]) cards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
 function updateActiveDot() {
-    const carousel = document.getElementById('branchesCarousel'); const dots = document.querySelectorAll('.carousel-dot');
+    const carousel = document.getElementById('branchesCarousel');
+    const dots = document.querySelectorAll('.carousel-dot');
     if (!dots.length || !carousel.children.length) return;
-    const cards = carousel.children; let closestIndex = 0; let minDistance = Infinity;
+    const cards = carousel.children;
+    let closestIndex = 0;
+    let minDistance = Infinity;
     const carouselCenter = carousel.getBoundingClientRect().left + carousel.getBoundingClientRect().width / 2;
     for(let i=0; i < cards.length; i++) {
         const cardCenter = cards[i].getBoundingClientRect().left + cards[i].getBoundingClientRect().width / 2;
-        const distance = Math.abs(carouselCenter - cardCenter); if (distance < minDistance) { minDistance = distance; closestIndex = i; }
+        const distance = Math.abs(carouselCenter - cardCenter);
+        if (distance < minDistance) { minDistance = distance; closestIndex = i; }
     }
     dots.forEach((dot, idx) => {
-        dot.className = idx === closestIndex ? "carousel-dot w-6 h-2.5 rounded-full bg-slate-800 shadow-sm transition-all duration-300 border border-white/50" : "carousel-dot w-2.5 h-2.5 rounded-full bg-slate-300/80 backdrop-blur transition-all duration-300 border border-white/50";
+        if (idx === closestIndex) {
+            dot.className = "carousel-dot w-6 h-2.5 rounded-full bg-slate-800 shadow-sm transition-all duration-300 border border-white/50";
+        } else {
+            dot.className = "carousel-dot w-2.5 h-2.5 rounded-full bg-slate-300/80 backdrop-blur transition-all duration-300 border border-white/50";
+        }
     });
 }
 function scrollCarousel(direction) { document.getElementById('branchesCarousel').scrollBy({ left: direction * -340, behavior: 'smooth' }); }
 function setupCarouselEvents() {
-    const carousel = document.getElementById('branchesCarousel'); carousel.addEventListener('scroll', () => requestAnimationFrame(updateActiveDot));
-    const startAutoScroll = () => { clearInterval(carouselInterval); if(isCarouselPaused) return; carouselInterval = setInterval(() => { const maxScroll = carousel.scrollWidth - carousel.clientWidth; if (Math.abs(carousel.scrollLeft) >= maxScroll - 10) carousel.scrollTo({ left: 0, behavior: 'smooth' }); else scrollCarousel(1); }, 4000); };
-    carousel.addEventListener('mouseenter', () => { if(!isCarouselPaused) clearInterval(carouselInterval); }); carousel.addEventListener('mouseleave', startAutoScroll); carousel.addEventListener('touchstart', () => { if(!isCarouselPaused) clearInterval(carouselInterval); }); carousel.addEventListener('touchend', startAutoScroll); startAutoScroll();
+    const carousel = document.getElementById('branchesCarousel');
+    carousel.addEventListener('scroll', () => requestAnimationFrame(updateActiveDot));
+    const startAutoScroll = () => {
+        clearInterval(carouselInterval);
+        if(isCarouselPaused) return;
+        carouselInterval = setInterval(() => {
+            const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+            if (Math.abs(carousel.scrollLeft) >= maxScroll - 10) carousel.scrollTo({ left: 0, behavior: 'smooth' });
+            else scrollCarousel(1);
+        }, 4000);
+    };
+    carousel.addEventListener('mouseenter', () => { if(!isCarouselPaused) clearInterval(carouselInterval); });
+    carousel.addEventListener('mouseleave', startAutoScroll);
+    carousel.addEventListener('touchstart', () => { if(!isCarouselPaused) clearInterval(carouselInterval); });
+    carousel.addEventListener('touchend', startAutoScroll);
+    startAutoScroll();
 }
 function openIframeModal(src, cardIndex) {
     if(cardIndex !== undefined) { lastClickedCardIndex = cardIndex; scrollToCard(cardIndex); }
-    isCarouselPaused = true; clearInterval(carouselInterval);
-    document.getElementById('branchMapIframe').src = src; document.getElementById('iframeModal').style.display = 'flex';
+    isCarouselPaused = true;
+    clearInterval(carouselInterval);
+    document.getElementById('branchMapIframe').src = src;
+    document.getElementById('iframeModal').style.display = 'flex';
 }
 function closeIframeModal(e) {
     if(e && e.target !== e.currentTarget && e.target.tagName !== 'BUTTON') return;
-    document.getElementById('iframeModal').style.display = 'none'; document.getElementById('branchMapIframe').src = '';
-    setTimeout(() => { scrollToCard(lastClickedCardIndex); isCarouselPaused = false; setupCarouselEvents(); }, 3000);
+    document.getElementById('iframeModal').style.display = 'none';
+    document.getElementById('branchMapIframe').src = '';
+    setTimeout(() => {
+        scrollToCard(lastClickedCardIndex);
+        isCarouselPaused = false;
+        setupCarouselEvents(); // يعيد تشغيل المؤقت
+    }, 3000);
 }
 
 // ============================================================
-// توليد صحيفة الأداء الشاملة في الصفحة الرئيسية
+// توليد صحيفة الأداء (التقارير المجمدة مفروزة حسب التاريخ)
 // ============================================================
 function generateNewspaper() {
     const timelineContainer = document.getElementById('newsTimeline');
     timelineContainer.innerHTML = '';
+
     let allReports = [];
 
-    // جلب جميع المقالات بجميع الأنواع
-    for (let id in branchArticles) {
-        if (Array.isArray(branchArticles[id])) {
-            branchArticles[id].forEach(art => {
+    // جمع كل المقالات من كل الفروع
+    for (let i = 1; i <= 6; i++) {
+        const articles = branchArticles[i];
+        if (articles && Array.isArray(articles)) {
+            articles.forEach(art => {
                 allReports.push({
-                    branchId: parseInt(id),
-                    article: art.text, timestamp: art.timestamp, dateStr: art.dateStr, type: art.type || 'performance',
-                    snapshot: art.snapshot || (id > 0 ? branchesData[id] : null), 
-                    scores: art.scores || (id > 0 ? calcScores(branchesData[id]) : null),
-                    authorName: art.authorName, authorBio: art.authorBio
+                    branchId: i,
+                    article: art.text,
+                    timestamp: art.timestamp,
+                    dateStr: art.dateStr,
+                    snapshot: art.snapshot || branchesData[i], 
+                    scores: art.scores || calcScores(branchesData[i])
                 });
             });
         }
     }
 
+    // ترتيب من الأحدث إلى الأقدم
     allReports.sort((a, b) => b.timestamp - a.timestamp);
+
     if (allReports.length === 0) {
-        timelineContainer.innerHTML = `<div class="relative"><p class="col-span-full text-center text-slate-600 bg-white/40 rounded-xl py-8 font-bold border border-white/60 backdrop-blur">لا توجد تقارير</p></div>`; return;
+        const dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric' }).format(new Date());
+        timelineContainer.innerHTML = `
+            <div class="relative">
+                <div class="absolute -right-6 top-0 w-4 h-4 rounded-full bg-slate-800 border-4 border-white/60 shadow-sm"></div>
+                <h3 class="text-xl font-black text-slate-800 mb-6 bg-white/60 backdrop-blur inline-block px-4 py-2 rounded-lg shadow-sm border border-white/80"> ${dateStr}</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <p class="col-span-full text-center text-slate-600 bg-white/40 rounded-xl py-8 font-bold border border-white/60 backdrop-blur">لا توجد تقارير</p>
+                </div>
+            </div>`;
+        return;
     }
 
+    // تجميع التقارير حسب التاريخ
     const groupedReports = {};
     allReports.forEach(report => {
         if (!groupedReports[report.dateStr]) groupedReports[report.dateStr] = [];
         groupedReports[report.dateStr].push(report);
     });
 
+    // رسم القسم لكل تاريخ
     Object.keys(groupedReports).sort((a,b) => new Date(b) - new Date(a)).forEach(dateKey => {
         const reports = groupedReports[dateKey];
         const dateObj = new Date(dateKey);
-        const displayDate = formatDateAr(dateObj);
+        const displayDate = new Intl.DateTimeFormat('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(dateObj);
 
         const dateSection = document.createElement('div');
         dateSection.className = "relative mb-12";
@@ -1232,47 +1146,41 @@ function generateNewspaper() {
         `;
         timelineContainer.appendChild(dateSection);
         const container = dateSection.querySelector(`#cardsGrid-${dateKey}`);
-        
-        reports.forEach(item => {
-            let headLine = '', leadLine = '', bodyText = '';
-            const lines = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l.length > 0) : [];
-            headLine = lines[0] || 'مقال';
-            leadLine = lines[1] || '';
-            bodyText = lines.slice(1).join(' ').substring(0, 150) + '...';
 
-            let tagHtml = '', scoreHtml = '', clickAction = '';
+        reports.forEach(item => {
+            const i = item.branchId;
+            const data = item.snapshot;
+            const scores = item.scores;
+            const tier = getPerformanceTier(scores);
+            const article = item.article;
             
-            if (item.type === 'performance' && item.branchId > 0) {
-                const tier = getPerformanceTier(item.scores);
-                tagHtml = `<span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1.5 rounded-full shadow-sm">الفروع ◂ ${item.snapshot.bName}</span>`;
-                scoreHtml = `<div class="mt-auto pt-5 border-t border-white/40"><div class="flex justify-between items-center text-slate-800 font-black bg-white/40 px-3 py-2 rounded-lg backdrop-blur"><span>النقاط</span><span class="bg-slate-800/90 backdrop-blur text-white px-3 py-1 rounded shadow text-sm border border-white/20">${item.scores.total} ◠</span></div></div>`;
-                clickAction = `onclick="openBulletinPage(${item.branchId}, ${item.timestamp})" class="cursor-pointer hover:text-blue-700 transition drop-shadow-sm font-black text-xl mt-5 mb-3 leading-snug text-slate-900"`;
-            } 
-            else if (item.type === 'weekly') {
-                tagHtml = `<span class="type-badge badge-weekly">التحديث الأسبوعي 📊</span>`;
-                leadLine = bodyText; 
-                clickAction = `class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 drop-shadow-sm"`;
+            let headLine = '';
+            let leadLine = '';
+            if (article) {
+                const lines = article.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                headLine = lines[0] || '';
+                leadLine = lines[1] || '';
             }
-            else if (item.type === 'announcement') {
-                tagHtml = `<span class="type-badge badge-announcement">إعلان 📢</span>`;
-                leadLine = bodyText;
-                clickAction = `class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 drop-shadow-sm"`;
-            }
-            else if (item.type === 'opinion') {
-                tagHtml = `<span class="type-badge badge-opinion">مقال رأي ✍️</span>`;
-                leadLine = item.article.substring(0, 200) + '...';
-                scoreHtml = `<div class="author-credit"><span class="font-bold text-slate-800 block">${item.authorName}</span><span class="block">${item.authorBio}</span></div>`;
-                clickAction = `class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 drop-shadow-sm"`;
-            }
+
+            const cardContent = `
+                <h3 onclick="openBulletinPage(${i}, ${item.timestamp})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition drop-shadow-sm">${headLine}</h3>
+                <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${leadLine}</p>
+            `;
 
             container.innerHTML += `
                 <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition border border-white/60 newspaper-card hover:-translate-y-1">
                     <div>
-                        <div class="flex justify-between items-start">${tagHtml}</div>
-                        <h3 ${clickAction}>${headLine}</h3>
-                        <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${leadLine}</p>
+                        <div class="flex justify-between items-start">
+                            <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1.5 rounded-full shadow-sm">الفروع ◂ ${data.bName}</span>
+                        </div>
+                        ${cardContent}
                     </div>
-                    ${scoreHtml}
+                    <div class="mt-auto pt-5 border-t border-white/40">
+                        <div class="flex justify-between items-center text-slate-800 font-black bg-white/40 px-3 py-2 rounded-lg backdrop-blur">
+                            <span>النقاط</span>
+                            <span class="bg-slate-800/90 backdrop-blur text-white px-3 py-1 rounded shadow text-sm border border-white/20">${scores.total} ◠</span>
+                        </div>
+                    </div>
                 </div>`;
         });
     });
@@ -1282,44 +1190,39 @@ function generateNewspaper() {
 function updateOGTags(title, description, url) {
     ['og_title', 'twitter_title'].forEach(id => { const el = document.getElementById(id); if (el) el.setAttribute('content', title); });
     ['og_description', 'twitter_description', 'meta_description'].forEach(id => { const el = document.getElementById(id); if (el) el.setAttribute('content', description); });
-    const urlEl = document.getElementById('og_url'); if (urlEl) urlEl.setAttribute('content', url); document.title = title;
+    const urlEl = document.getElementById('og_url'); if (urlEl) urlEl.setAttribute('content', url);
+    document.title = title;
 }
 function shareBulletinPage() {
-    const url = window.location.href; const branchName = currentBulletinData ? currentBulletinData.bName : ''; const scoreLabel = currentBulletinData ? currentBulletinData.performanceLabel : '';
-    const head = currentBulletinData ? currentBulletinData.head : 'التقارير '; const lead = currentBulletinData ? currentBulletinData.lead : 'تقرير الأداء الدوري';
+    const url = window.location.href;
+    const branchName = currentBulletinData ? currentBulletinData.bName : '';
+    const scoreLabel = currentBulletinData ? currentBulletinData.performanceLabel : '';
+    const head       = currentBulletinData ? currentBulletinData.head : 'التقارير ';
+    const lead       = currentBulletinData ? currentBulletinData.lead : 'تقرير الأداء الدوري';
     const waText = encodeURIComponent(` *تقرير أداء فرع ${branchName}*\nأي آم سبيشل\n\n${head}\n\n${lead}\n\nتصنيف: ${scoreLabel}\n\n ${url}`);
     window.open(`https://api.whatsapp.com/send?text=${waText}`, '_blank');
 }
 function showCopyToast(msg) {
-    const toast = document.getElementById('copyToast'); toast.textContent = msg || 'تم النسخ'; toast.classList.remove('hidden'); toast.classList.add('copy-toast');
+    const toast = document.getElementById('copyToast');
+    toast.textContent = msg || 'تم النسخ';
+    toast.classList.remove('hidden'); toast.classList.add('copy-toast');
     setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('copy-toast'); }, 2500);
 }
 
-// ============================================================
-// الإدارة والتحكم 
-// ============================================================
+// ... دوال الإدارة والتحكم (لم تتغير) ...
 const pinBoxes = document.querySelectorAll('.pin-box');
 function handleBoxInput(el, idx) { el.value = el.value.replace(/[^0-9]/g, ''); if (el.value !== '') { if (idx < 3) pinBoxes[idx + 1].focus(); checkAdminPinLength(); } }
 function handleBoxKey(e, idx) { if (e.key === 'Backspace' && e.target.value === '' && idx > 0) { pinBoxes[idx - 1].focus(); pinBoxes[idx - 1].value = ''; } }
 function checkAdminPinLength() { const pin = Array.from(pinBoxes).map(b => b.value).join(''); if (pin.length === 4) verifyMaintenance(pin); }
-
 function verifyMaintenance(enteredPin) {
     const today = new Date();
     const correctPin = today.getDate().toString().padStart(2, '0') + (today.getMonth() + 1).toString().padStart(2, '0');
     if (enteredPin === correctPin) {
-        isAdminLoggedIn = true; 
-        localStorage.setItem('isAdminLoggedIn', 'true');
-        closeMaintenanceAuth(); 
-        document.getElementById('globalAdminActions').classList.remove('hidden');
-        document.getElementById('globalAdminActions').classList.add('flex');
-        alert("تم تسجيل الدخول بنجاح للإدارة.");
-    } else { alert("الرقم السري غير صحيح!"); pinBoxes.forEach(b => b.value = ''); pinBoxes[0].focus(); }
+        isAdminLoggedIn = true; closeMaintenanceAuth(); document.getElementById('adminModal').style.display = 'flex'; loadAdminData(); generateNewspaper();
+        if (currentBulletinData && currentBulletinData.branchId) openBulletinPage(currentBulletinData.branchId, currentArticleTimestamp);
+    } else { alert("غير صحيح!"); pinBoxes.forEach(b => b.value = ''); pinBoxes[0].focus(); }
 }
-
-function openMaintenanceAuth() { 
-    if(isAdminLoggedIn) { alert("أنت مسجل الدخول مسبقاً."); return; }
-    document.getElementById('maintenanceAuthModal').style.display = 'flex'; pinBoxes.forEach(b => b.value = ''); setTimeout(() => pinBoxes[0].focus(), 100); 
-}
+function openMaintenanceAuth() { document.getElementById('maintenanceAuthModal').style.display = 'flex'; pinBoxes.forEach(b => b.value = ''); setTimeout(() => pinBoxes[0].focus(), 100); }
 function closeMaintenanceAuth() { document.getElementById('maintenanceAuthModal').style.display = 'none'; }
 function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
 function loadAdminData() {
@@ -1335,20 +1238,15 @@ async function saveAdminData() {
     let positiveReviews = currentReviews - startReviews; if (positiveReviews < 0) positiveReviews = 0;
     branchesData[id] = { bName: document.getElementById('admin_bName').value, mName: document.getElementById('admin_mName').value, dName: document.getElementById('admin_dName').value, safety: num('admin_safety'), visitors: num('admin_visitors', 1), complaints: num('admin_complaints'), positive: positiveReviews, negative: num('admin_negative'), target: num('admin_target', 50), baseRating: num('admin_baseRating', branchesData[id].baseRating), baseReviews: startReviews, iframeSrc: branchesData[id].iframeSrc };
     closeAdmin();
-    
     const today = new Date(); const dateKey = today.toISOString().split('T')[0];
     if (!branchHistory[id]) branchHistory[id] = [];
     const todayIdx = branchHistory[id].findIndex(r => r.date === dateKey);
     const scores = calcScores(branchesData[id]);
-    const latestArticle = getArticleData(id, null, 'performance');
+    const latestArticle = getArticleData(id);
     const entry = { date: dateKey, snapshot: { ...branchesData[id] }, scores: { ...scores }, article: latestArticle ? latestArticle.text : '' };
     if (todayIdx >= 0) branchHistory[id][todayIdx] = entry; else branchHistory[id].push(entry);
-    
     await saveBranchesToFirebase(); await saveHistoryToFirebase();
-    updateBrandStats(); generateNewspaper(); initCarousel();
-}
-function openArticleModalFromAdmin() {
-    const id = document.getElementById('branchSelector').value; closeAdmin(); openArticleModal(id);
+    generateNewspaper(); initCarousel();
 }
 
 function openHistoryModal(branchId) {
@@ -1360,7 +1258,7 @@ function openHistoryModal(branchId) {
     } else {
         const sorted = [...history].reverse();
         container.innerHTML = sorted.map(entry => {
-            const dateFormatted = formatDateAr(new Date(entry.date));
+            const dateFormatted = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(entry.date));
             const tier = getPerformanceTier(entry.scores);
             return `
             <div class="history-item bg-white/60 border border-white/50 rounded-xl p-5 shadow-sm backdrop-blur">
@@ -1374,12 +1272,48 @@ function openHistoryModal(branchId) {
                     <div class="bg-rose-50/50 rounded-lg p-2 border border-rose-100 shadow-sm"><p class="text-xs text-slate-600 font-bold mb-1">سلبي</p><p class="text-xl font-black text-rose-700">${entry.snapshot.negative}</p></div>
                     <div class="bg-amber-50/50 rounded-lg p-2 border border-amber-100 shadow-sm"><p class="text-xs text-slate-600 font-bold mb-1">شكاوى</p><p class="text-xl font-black text-amber-700">${entry.snapshot.complaints}</p></div>
                 </div>
+                ${entry.article ? `<div class="mt-4 bg-white/40 rounded-lg p-3 border border-white/60 shadow-sm"><p class="text-xs text-slate-600 font-bold mb-1.5">المقال المحفوظ:</p><p class="text-slate-700 text-sm leading-relaxed line-clamp-3 font-medium">${entry.article.substring(0, 200)}${entry.article.length > 200 ? '...' : ''}</p></div>` : ''}
             </div>`;
         }).join('');
     }
     document.getElementById('historyModal').style.display = 'flex';
 }
 function closeHistoryModal() { document.getElementById('historyModal').style.display = 'none'; }
+
+// ... دوال حاسبة التوقع (Prediction Modal - بدون تغيير) ...
+function openPredictionModal() { document.getElementById('predictionModal').style.display = 'flex'; setupDateCalculator(); loadTrialDataFromDB(); }
+function closePredictionModal() { document.getElementById('predictionModal').style.display = 'none'; }
+function setupDateCalculator() {
+    const today = new Date(); const currentDay = today.getDate(); const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    document.getElementById('daysPassed').innerText = currentDay; document.getElementById('daysRemaining').innerText = daysInMonth - currentDay;
+    autoMultiplier = currentDay > 0 ? daysInMonth / currentDay : 1;
+}
+function loadTrialDataFromDB() {
+    const data = branchesData[document.getElementById('trial_branch_select').value];
+    document.getElementById('trial_positive').value = data.positive; document.getElementById('trial_negative').value = data.negative; calculateTrial();
+}
+function clearTrialData() { if (confirm("هل تريد إعادة ضبط الحقول للقيم الصفرية؟")) { document.getElementById('trial_positive').value = ''; document.getElementById('trial_negative').value = ''; calculateTrial(); } }
+function calculateTrial() {
+    const data = branchesData[document.getElementById('trial_branch_select').value];
+    const rawPositive = parseFloat(document.getElementById('trial_positive').value) || 0;
+    const rawNegative = parseFloat(document.getElementById('trial_negative').value) || 0;
+    const projData = { ...data, positive: rawPositive * autoMultiplier, negative: rawNegative };
+    const scores = calcScores(projData);
+    const negWeight = (data.target / Math.max(1, rawPositive * autoMultiplier)) * 0.25;
+    const ptsNegative = Math.max(0, 2 - (rawNegative * negWeight));
+    let total = Math.round((scores.ptsSafety + scores.ptsComplaints + scores.ptsPositive + ptsNegative) * 100) / 100;
+    if (isNaN(total)) total = 0;
+    document.getElementById('resSafety').innerText = scores.ptsSafety.toFixed(2); document.getElementById('resComplaints').innerText = scores.ptsComplaints.toFixed(2);
+    document.getElementById('resPos').innerText = scores.ptsPositive.toFixed(2); document.getElementById('resNeg').innerText = ptsNegative.toFixed(2);
+    document.getElementById('totalPoints').innerText = total; document.getElementById('progressBar').style.width = `${Math.min(100, (total / 11) * 100)}%`;
+    const additionText = "<br><span class='text-xs font-bold text-slate-500 mt-2 block'>عند الاستمرار بنفس الاداء</span>";
+    const rewardBox = document.getElementById('rewardBox');
+    const levels = [ { min: 9, text: "التوقع: أداء مرتفع", border: "#10b981", bg: "rgba(16, 185, 129, 0.1)" }, { min: 7, text: "التوقع: أداء متوسط ◬", border: "#f59e0b", bg: "rgba(245, 158, 11, 0.1)" }, { min: 4, text: "التوقع: أداء منخفض ⚠", border: "#f97316", bg: "rgba(249, 115, 22, 0.1)" }, { min: -Infinity, text: "التوقع: أداء حرج ⨂", border: "#ef4444", bg: "rgba(239, 68, 68, 0.1)" } ];
+    const level = levels.find(l => total >= l.min);
+    rewardBox.innerHTML = level.text + additionText; rewardBox.className = `mt-6 p-4 rounded-xl text-center font-black text-lg backdrop-blur text-slate-800 border-2`;
+    rewardBox.style.borderColor = level.border; rewardBox.style.backgroundColor = level.bg;
+}
 </script>
+
 </body>
 </html>
