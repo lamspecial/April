@@ -185,21 +185,13 @@ function calcScores(data) {
     let surplusForComplaints = 0;
     let surplusForNegative   = 0;
 
-    if (P > target) {
-        const surplus = P - target;
-        const maxComplaintsBoost  = 2 - rawPtsComplaints; // ما يمكن تصحيحه من الشكاوى
-        const complaintsBoost     = Math.min(surplus * 0.2, maxComplaintsBoost);
-        ptsComplaints = Math.min(2, rawPtsComplaints + complaintsBoost);
-        surplusForComplaints      = complaintsBoost / 0.2; // عدد التقييمات المستخدمة
-
-        const remainingSurplus    = surplus - surplusForComplaints;
-        if (remainingSurplus > 0) {
-            const maxNegativeBoost = 2 - rawPtsNegative;
-            const negativeBoost    = Math.min(remainingSurplus * 0.2, maxNegativeBoost);
-            ptsNegative            = Math.min(2, rawPtsNegative + negativeBoost);
-            surplusForNegative     = negativeBoost / 0.2;
-        }
-        surplusUsed = surplusForComplaints + surplusForNegative;
+   if (P > target) {
+    const surplus            = P - target;
+    const maxComplaintsBoost = 2 - rawPtsComplaints;
+    const complaintsBoost    = Math.min(surplus * 0.2, maxComplaintsBoost);
+    ptsComplaints            = Math.min(2, rawPtsComplaints + complaintsBoost);
+    surplusForComplaints     = complaintsBoost / 0.2;
+    surplusUsed              = surplusForComplaints;
     }
 
     const total = Math.round((ptsSafety + ptsComplaints + ptsPositive + ptsNegative) * 100) / 100;
@@ -289,7 +281,7 @@ function updateBrandReviewsPanel() {
 // ============================================================
 function formatDateArabic(dateStr) {
     const dateObj = new Date(dateStr + 'T12:00:00');
-    return new Intl.DateTimeFormat('ar-SA', { weekday: 'long', day: 'numeric', month: 'long' }).format(dateObj);
+return new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { weekday: 'long', day: 'numeric', month: 'long' }).format(dateObj);
 }
 
 // ============================================================
@@ -301,7 +293,8 @@ function generatePromptText(branchId, snapshotData = null, snapshotScores = null
     const tier   = getPerformanceTier(scores);
 
     const today       = new Date();
-    const dateStr     = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(today);
+    const dateStr     = new Intl.DateTinew Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' })
+meFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(today);
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
     const currentDay  = today.getDate();
 
@@ -1044,7 +1037,8 @@ function openBulletinPage(branchId, timestamp = null) {
         if (articleData && articleData.snapshot) {
             data    = articleData.snapshot;
             scores  = articleData.scores || calcScores(data);
-            dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(articleData.timestamp));
+            dateStr = new Intl.DateTimeFormat('ar-EG', {new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(articleData.timestamp))
+ month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(articleData.timestamp));
         } else {
             data    = branchesData[branchId];
             scores  = calcScores(data);
