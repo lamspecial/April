@@ -176,7 +176,7 @@ function calcScores(data) {
 
     // --- وزن السلبية ---
     const steps = Math.floor(P / 5) * 5;
-const W = steps === 0 ? 1.0 : Math.max(0.1, target / (2 * steps + target));
+const W = steps === 0 ? 1.0 : Math.max(0.1, target / (2 * steps + 60));
     const rawPtsNegative = Math.max(0, 2 - (data.negative * W));
 
     // --- فائض الإيجابية ---
