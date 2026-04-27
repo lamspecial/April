@@ -1,0 +1,197 @@
+/* ============================================================
+   style.css — آي أم سبيشل
+   ============================================================ */
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    background-attachment: fixed;
+    margin: 0; padding: 0;
+}
+
+/* ---- Decorative background blobs ---- */
+.bg-blob-1 { position: fixed; top: -10%; right: -5%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
+.bg-blob-2 { position: fixed; bottom: -20%; left: -10%; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
+.bg-blob-3 { position: fixed; top: 40%; left: 40%; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(234,179,8,0.1) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
+
+/* ---- Glass panels ---- */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
+
+.glass-header {
+    background: rgba(15, 23, 42, 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.glass-input {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+}
+.glass-input:focus {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: #64748b;
+}
+
+/* ---- Newspaper cards ---- */
+.newspaper-card { border-right: 4px solid rgba(30, 58, 138, 0.8); }
+
+/* ---- PIN boxes ---- */
+.pin-box { transition: all 0.2s; }
+.pin-box:focus { transform: scale(1.05); }
+
+/* ---- Hide number spinners ---- */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+
+/* ---- Timeline ---- */
+.timeline-border { border-right: 2px dashed rgba(203, 213, 225, 0.7); }
+
+/* ---- Scrollbar hide ---- */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ---- Google stars ---- */
+.google-star { color: #fbbc04; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+.google-star-empty { color: rgba(218, 220, 224, 0.6); }
+
+/* ---- Page visibility helpers ---- */
+#bulletinPage { display: none; }
+#bulletinPage.active { display: flex; }
+#mainPageWrapper { display: flex; flex-direction: column; flex-grow: 1; }
+#mainPageWrapper.hidden-page { display: none; }
+
+/* ---- Animations ---- */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.slide-up { animation: slideUp 0.35s ease forwards; }
+
+@keyframes fadeInOut {
+    0%   { opacity: 0; transform: translateY(10px); }
+    20%  { opacity: 1; transform: translateY(0); }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+.copy-toast { animation: fadeInOut 2.5s ease forwards; }
+
+/* ---- Share button ---- */
+.share-btn { transition: all 0.2s; }
+.share-btn:hover { transform: scale(1.03); }
+
+/* ---- Prompt box ---- */
+.prompt-box {
+    background: rgba(248, 250, 252, 0.6);
+    border: 1.5px dashed rgba(148, 163, 184, 0.8);
+    border-radius: 12px;
+    font-family: 'Tajawal', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #334155;
+    white-space: pre-wrap;
+    word-break: break-word;
+    direction: rtl;
+    text-align: right;
+    backdrop-filter: blur(4px);
+}
+
+/* ---- History items ---- */
+.history-item { border-right: 3px solid rgba(226, 232, 240, 0.6); transition: border-color 0.2s; }
+.history-item:hover { border-right-color: #1e3a8a; }
+
+/* ---- Article textarea ---- */
+textarea.article-input {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    line-height: 1.9;
+    resize: vertical;
+    min-height: 180px;
+}
+
+/* ---- Loading overlay ---- */
+#loadingOverlay {
+    position: fixed; inset: 0;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---- Modal display fix: override Tailwind hidden when JS sets display:flex ---- */
+[id$="Modal"][style*="display: flex"],
+[id$="Modal"][style*="display:flex"],
+#iframeModal[style*="display: flex"],
+#iframeModal[style*="display:flex"],
+#opinionWritePage[style*="display: flex"],
+#opinionWritePage[style*="display:flex"],
+#branchDetailModal[style*="display: flex"],
+#branchDetailModal[style*="display:flex"] {
+    display: flex !important;
+}
+
+/* ---- Surplus badge ---- */
+.surplus-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #065f46;
+    background: rgba(167,243,208,0.7);
+    border: 1px solid rgba(52,211,153,0.5);
+    border-radius: 6px;
+    padding: 2px 7px;
+    margin-top: 4px;
+    backdrop-filter: blur(4px);
+    direction: rtl;
+    line-height: 1.5;
+}
+
+/* ---- Opinion author byline ---- */
+.opinion-byline {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(203,213,225,0.4);
+    direction: rtl;
+}
+
+/* ---- Article type tag pill ---- */
+.article-type-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid;
+    backdrop-filter: blur(4px);
+}
+
+/* ---- Top contributor fade animation ---- */
+@keyframes nameFadeIn {
+    0%   { opacity: 0; transform: translateY(6px); }
+    20%  { opacity: 1; transform: translateY(0); }
+    80%  { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-6px); }
+}
+.name-fade { animation: nameFadeIn 4s ease forwards; }
+
+/* ---- Admin btn shrink for narrow viewports ---- */
+@media (max-width: 380px) {
+    #adminBtn span { max-width: 120px; }
+}
