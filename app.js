@@ -216,24 +216,24 @@ function calcScores(data) {
 function getPerformanceTier(scores) {
     const { total } = scores;
     if (total >= 9) return {
-        headerColor: "text-emerald-800 bg-emerald-100/50 border-emerald-200 backdrop-blur",
+        headerColor: "text-emerald-700 border-emerald-500",
         label: "أخضر",
-        labelBg: "bg-emerald-100/60 border-emerald-300 text-emerald-800 backdrop-blur",
-        borderColor: "border-emerald-400",
+        labelBg: "border-emerald-500 text-emerald-700",
+        borderColor: "border-emerald-500",
         barColor: "bg-emerald-500"
     };
     if (total >= 6.5) return {
-        headerColor: "text-amber-800 bg-amber-100/50 border-amber-200 backdrop-blur",
+        headerColor: "text-amber-700 border-amber-500",
         label: "أصفر",
-        labelBg: "bg-amber-100/60 border-amber-300 text-amber-800 backdrop-blur",
-        borderColor: "border-amber-400",
+        labelBg: "border-amber-500 text-amber-700",
+        borderColor: "border-amber-500",
         barColor: "bg-amber-500"
     };
     return {
-        headerColor: "text-rose-800 bg-rose-100/50 border-rose-200 backdrop-blur",
+        headerColor: "text-rose-700 border-rose-500",
         label: "أحمر",
-        labelBg: "bg-rose-100/60 border-rose-300 text-rose-800 backdrop-blur",
-        borderColor: "border-rose-400",
+        labelBg: "border-rose-500 text-rose-700",
+        borderColor: "border-rose-500",
         barColor: "bg-rose-500"
     };
 }
@@ -256,10 +256,11 @@ function updateBrandReviewsPanel() {
     for (let i = 1; i <= 6; i++) total += (branchesData[i].positive || 0);
     document.getElementById('brandTotalReviews').textContent = total;
 
-    // جمع المساهمين (مديرات/نائبات)
+    // جمع المساهمين (مديرات/نائبات) — فقط الفروع التي تجاوزت 20 تقييم
     let contributors = [];
     for (let i = 1; i <= 6; i++) {
         const d = branchesData[i];
+        if ((d.positive || 0) < 20) continue;
         if (d.mName) contributors.push({ name: d.mName, positive: d.positive });
         if (d.dName) contributors.push({ name: d.dName, positive: d.positive });
     }
@@ -829,7 +830,7 @@ function initCarousel() {
             <div class="flex justify-between items-start mb-5">
                 <div>
                     <h3 class="font-black text-xl text-slate-900 tracking-tight drop-shadow-sm">فرع ${data.bName}</h3>
-                    <p class="text-xs text-slate-600 font-bold mt-1 bg-white/40 inline-block px-2 rounded backdrop-blur">${mgtText}</p>
+                    <p class="text-xs text-slate-600 font-bold mt-1">${mgtText}</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="text-xs font-bold px-2 py-1 rounded-full border ${tier.labelBg}">${tier.label}</span>
@@ -888,29 +889,41 @@ function openBranchDetailModal(branchId) {
         <div class="w-full bg-slate-200/50 border border-white/60 rounded-full h-3 overflow-hidden mb-1 shadow-inner">
             <div class="${tier.barColor} h-3 rounded-full transition-all" style="width:${progressPct}%"></div>
         </div>
-        <p class="text-xs font-bold text-slate-500 mb-4">${tier.label}</p>
+        <p class="text-xs font-bold ${tier.headerColor} border inline-block px-2 py-0.5 rounded-full mb-4">${tier.label}</p>
 
         <div class="grid grid-cols-2 gap-3">
             <div class="bg-white/50 rounded-xl p-3 border border-white/60">
                 <p class="text-xs font-bold text-slate-500 mb-1">السلامة</p>
-                <p class="text-2xl font-black text-slate-900">${scores.ptsSafety.toFixed(2)}</p>
-                <p class="text-xs text-slate-500">/ 3 — ${data.safety} حوادث</p>
+                <div class="flex items-baseline gap-1.5">
+                    <p class="text-2xl font-black text-slate-900">${scores.ptsSafety.toFixed(2)}</p>
+                    <p class="text-xs text-slate-400 font-medium">(من 3)</p>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">/ ${data.safety} حوادث</p>
             </div>
             <div class="bg-white/50 rounded-xl p-3 border border-white/60">
                 <p class="text-xs font-bold text-slate-500 mb-1">الشكاوى</p>
-                <p class="text-2xl font-black text-slate-900">${scores.ptsComplaints.toFixed(2)}</p>
-                <p class="text-xs text-slate-500">/ 2 — ${data.complaints} شكوى</p>
+                <div class="flex items-baseline gap-1.5">
+                    <p class="text-2xl font-black text-slate-900">${scores.ptsComplaints.toFixed(2)}</p>
+                    <p class="text-xs text-slate-400 font-medium">(من 2)</p>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">/ ${data.complaints} شكوى</p>
                 ${complaintsNote}
             </div>
             <div class="bg-emerald-50/60 rounded-xl p-3 border border-emerald-100">
                 <p class="text-xs font-bold text-slate-500 mb-1">التقييمات الإيجابية</p>
-                <p class="text-2xl font-black text-emerald-700">${scores.ptsPositive.toFixed(2)}</p>
-                <p class="text-xs text-slate-500">/ 4 — ${data.positive}/${data.target}</p>
+                <div class="flex items-baseline gap-1.5">
+                    <p class="text-2xl font-black text-emerald-700">${scores.ptsPositive.toFixed(2)}</p>
+                    <p class="text-xs text-slate-400 font-medium">(من 4)</p>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">/ ${data.positive} من ${data.target}</p>
             </div>
             <div class="bg-rose-50/60 rounded-xl p-3 border border-rose-100">
                 <p class="text-xs font-bold text-slate-500 mb-1">التقييمات السلبية</p>
-                <p class="text-2xl font-black text-rose-700">${scores.ptsNegative.toFixed(2)}</p>
-                <p class="text-xs text-slate-500">/ 2 — ${data.negative} تقييم</p>
+                <div class="flex items-baseline gap-1.5">
+                    <p class="text-2xl font-black text-rose-700">${scores.ptsNegative.toFixed(2)}</p>
+                    <p class="text-xs text-slate-400 font-medium">(من 2)</p>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">/ ${data.negative} تقييم</p>
                 ${negativeNote}
             </div>
         </div>
@@ -923,7 +936,6 @@ function openBranchDetailModal(branchId) {
                 <div class="${data.positive >= data.target ? 'bg-emerald-500' : 'bg-slate-700'} h-2 rounded-full" style="width:${Math.min(100, (data.positive / data.target) * 100)}%"></div>
             </div>
         </div>
-        <button onclick="openBulletinPage(${branchId})" class="w-full mt-4 bg-slate-800/90 hover:bg-slate-900 text-white font-black py-3 rounded-xl transition shadow border border-white/20 text-sm">عرض التقرير الكامل</button>
     `;
     document.getElementById('branchDetailModal').style.display = 'flex';
 }
@@ -977,7 +989,11 @@ function scrollCarousel(direction) {
 
 function setupCarouselEvents() {
     const carousel = document.getElementById('branchesCarousel');
-    carousel.addEventListener('scroll', () => requestAnimationFrame(updateActiveDot));
+    let scrollRaf = null;
+    carousel.addEventListener('scroll', () => {
+        if (scrollRaf) return;
+        scrollRaf = requestAnimationFrame(() => { updateActiveDot(); scrollRaf = null; });
+    });
 
     const startAutoScroll = () => {
         clearInterval(carouselInterval);
@@ -1111,6 +1127,10 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 ${hasArticle ? 'تعديل المقال' : 'كتابة مقال'}
             </button>
+            ${hasArticle && timestampToPass ? `<button onclick="deleteArticle(${branchId}, ${timestampToPass})" class="text-xs font-bold bg-rose-600/90 hover:bg-rose-700 border border-white/20 text-white px-3 py-1.5 rounded-lg transition shadow backdrop-blur flex items-center gap-1.5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                حذف المقال
+            </button>` : ''}
         </div>
     ` : '';
 
@@ -1339,8 +1359,8 @@ function generateNewspaper() {
                 cardEl.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start mb-3">
-                            <span class="${tier.headerColor} border font-bold text-xs uppercase tracking-wide px-3 py-1.5 rounded-full shadow-sm">الفروع ◂ ${data.bName}</span>
-                            <span class="article-type-pill bg-indigo-50/70 border-indigo-200 text-indigo-700">📊 تقرير أداء</span>
+                            <span class="${tier.headerColor} border font-bold text-xs px-3 py-1.5 rounded-full">الأداء ◂ ${data.bName}</span>
+                            ${isAdminLoggedIn ? `<button onclick="event.stopPropagation(); deleteArticle(${item.branchId}, ${item.timestamp})" class="w-7 h-7 flex items-center justify-center bg-rose-50/80 hover:bg-rose-100 border border-rose-300 text-rose-600 rounded-full transition" title="حذف المقال"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
                         </div>
                         <h3 onclick="openBulletinPage(${item.branchId}, ${item.timestamp})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition drop-shadow-sm">${headLine}</h3>
                         <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${leadLine}</p>
@@ -1359,8 +1379,8 @@ function generateNewspaper() {
                 cardEl.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start mb-3">
-                            <span class="text-emerald-800 bg-emerald-100/50 border border-emerald-200 font-bold text-xs px-3 py-1.5 rounded-full backdrop-blur">جميع الفروع</span>
-                            <span class="article-type-pill bg-emerald-50/70 border-emerald-200 text-emerald-700">📅 أسبوعي</span>
+                            <span class="text-emerald-700 border border-emerald-500 font-bold text-xs px-3 py-1.5 rounded-full">جميع الفروع</span>
+                            ${isAdminLoggedIn ? `<button onclick="event.stopPropagation(); deleteGlobalArticle(${item.timestamp})" class="w-7 h-7 flex items-center justify-center bg-rose-50/80 hover:bg-rose-100 border border-rose-300 text-rose-600 rounded-full transition" title="حذف المقال"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
                         </div>
                         <h3 class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 drop-shadow-sm">${headLine}</h3>
                         <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${leadLine}</p>
@@ -1380,8 +1400,8 @@ function generateNewspaper() {
                 cardEl.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start mb-3">
-                            <span class="text-amber-800 bg-amber-100/50 border border-amber-200 font-bold text-xs px-3 py-1.5 rounded-full backdrop-blur">إعلان</span>
-                            <span class="article-type-pill bg-amber-50/70 border-amber-200 text-amber-700">📢 إعلان</span>
+                            <span class="text-amber-700 border border-amber-500 font-bold text-xs px-3 py-1.5 rounded-full">إعلان</span>
+                            ${isAdminLoggedIn ? `<button onclick="event.stopPropagation(); deleteGlobalArticle(${item.timestamp})" class="w-7 h-7 flex items-center justify-center bg-rose-50/80 hover:bg-rose-100 border border-rose-300 text-rose-600 rounded-full transition" title="حذف المقال"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
                         </div>
                         <h3 class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 drop-shadow-sm">${headLine}</h3>
                         <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${bodyLineShort}${bodyLine.length > 150 ? '...' : ''}</p>
@@ -1399,8 +1419,8 @@ function generateNewspaper() {
                 cardEl.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start mb-3">
-                            <span class="text-rose-800 bg-rose-100/50 border border-rose-200 font-bold text-xs px-3 py-1.5 rounded-full backdrop-blur">رأي</span>
-                            <span class="article-type-pill bg-rose-50/70 border-rose-200 text-rose-700">✍️ رأي</span>
+                            <span class="text-rose-700 border border-rose-500 font-bold text-xs px-3 py-1.5 rounded-full">رأي</span>
+                            ${isAdminLoggedIn ? `<button onclick="event.stopPropagation(); deleteGlobalArticle(${item.timestamp})" class="w-7 h-7 flex items-center justify-center bg-rose-50/80 hover:bg-rose-100 border border-rose-300 text-rose-600 rounded-full transition" title="حذف المقال"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
                         </div>
                         <h3 class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 drop-shadow-sm">${headLine}</h3>
                         <p class="text-slate-700 text-sm font-medium mb-3 leading-relaxed">${bodyLine}${bodyRaw.length > 150 ? '...' : ''}</p>
@@ -1544,6 +1564,29 @@ function closeMaintenanceAuth() {
 
 function closeAdmin() {
     document.getElementById('adminModal').style.display = 'none';
+}
+
+// ============================================================
+// حذف المقالات
+// ============================================================
+async function deleteArticle(branchId, timestamp) {
+    if (!confirm('هل تريد حذف هذا المقال نهائياً؟')) return;
+    if (!branchArticles[branchId]) return;
+    branchArticles[branchId] = branchArticles[branchId].filter(a => a.timestamp !== timestamp);
+    await saveArticlesToFirebase();
+    generateNewspaper();
+    initCarousel();
+    // إذا كنا في صفحة التقرير وهو نفس الفرع، ارجع للرئيسية
+    if (currentBulletinData && currentBulletinData.branchId == branchId) goToMainPage();
+    showCopyToast('تم حذف المقال');
+}
+
+async function deleteGlobalArticle(timestamp) {
+    if (!confirm('هل تريد حذف هذا المقال نهائياً؟')) return;
+    globalArticles = globalArticles.filter(a => a.timestamp !== timestamp);
+    await saveGlobalArticlesToFirebase();
+    generateNewspaper();
+    showCopyToast('تم حذف المقال');
 }
 
 // ============================================================
