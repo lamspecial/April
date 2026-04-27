@@ -169,17 +169,9 @@ textarea.article-input {
     direction: rtl;
 }
 
-/* ---- Article type tag pill ---- */
+/* ---- Article type tag pill (kept for legacy, not used in new cards) ---- */
 .article-type-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 999px;
-    border: 1px solid;
-    backdrop-filter: blur(4px);
+    display: none;
 }
 
 /* ---- Top contributor fade animation ---- */
@@ -195,3 +187,8 @@ textarea.article-input {
 @media (max-width: 380px) {
     #adminBtn span { max-width: 120px; }
 }
+
+/* ---- Performance optimizations ---- */
+#branchesCarousel { will-change: scroll-position; }
+.newspaper-card { contain: layout style; }
+.glass-panel { will-change: auto; }
