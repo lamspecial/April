@@ -343,9 +343,9 @@ function generatePromptText(branchId, snapshotData = null, snapshotScores = null
     const currentDay  = today.getDate();
 
     const performanceContext
-        : scores.total >= 6.5 ? "الأداء متوسط ومقبول ولكن يحتاج تحسين ملحوظ"
-        : scores.ptsSafety < 3 ? "هناك مشكلة جدية في السلامة تستوجب التنبيه العاجل"
-        : scores.ptsComplaints < 1 ? "ارتفاع مقلق في الشكاوى يستدعي تدخلاً فورياً"
+        = scores.total >= 6.5 ? "الأداء متوسط ومقبول ولكن يحتاج تحسين ملحوظ"
+        = scores.ptsSafety < 3 ? "هناك مشكلة جدية في السلامة تستوجب التنبيه العاجل"
+        = scores.ptsComplaints < 1 ? "ارتفاع مقلق في الشكاوى يستدعي تدخلاً فورياً"
         : "ضعف واضح في اكتساب التقييمات الإيجابية يحتاج معالجة";
 
     const safetyNote = data.safety > 0 ? `⚠️ تسجيل ${data.safety} حادثة سلامة هذا الشهر` : "لا حوادث سلامة مسجلة";
