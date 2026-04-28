@@ -873,10 +873,10 @@ function openBranchDetailModal(branchId) {
     let complaintsNote = '';
     let negativeNote   = '';
     if (scores.surplusForComplaints > 0) {
-        complaintsNote = `<span class="surplus-badge">تم استخدام ${scores.surplusForComplaints.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsComplaints - scores.rawPtsComplaints).toFixed(2)} من نقاط الشكاوى</span>`;
+        complaintsNote = `<span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط الشكاوى</span>`;
     }
     if (scores.surplusForNegative > 0) {
-        negativeNote = `<span class="surplus-badge">تم استخدام ${scores.surplusForNegative.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsNegative - scores.rawPtsNegative).toFixed(2)} من نقاط التقييمات السلبية</span>`;
+        negativeNote = `<span class="surplus-badge">تم استخدام المزيد من فائض التقييمات الإيجابية لتصحيح نقاط التقييمات السلبية</span>`;
     }
 
     const progressPct = Math.min(100, (scores.total / 11) * 100);
@@ -1114,7 +1114,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
         complaintsNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط الشكاوى</span></div>`;
     }
     if (scores.surplusForNegative > 0) {
-        negativeNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط التقييمات السلبية</span></div>`;
+        negativeNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام المزيد من فائض التقييمات الإيجابية لتصحيح نقاط التقييمات السلبية</span></div>`;
     }
 
     const adminButtons = isAdminLoggedIn ? `
