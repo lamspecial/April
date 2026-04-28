@@ -1111,10 +1111,10 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     let complaintsNote = '';
     let negativeNote   = '';
     if (scores.surplusForComplaints > 0) {
-        complaintsNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام ${scores.surplusForComplaints.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsComplaints - scores.rawPtsComplaints).toFixed(2)} من نقاط الشكاوى</span></div>`;
+        complaintsNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط الشكاوى</span></div>`;
     }
     if (scores.surplusForNegative > 0) {
-        negativeNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام ${scores.surplusForNegative.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsNegative - scores.rawPtsNegative).toFixed(2)} من نقاط التقييمات السلبية</span></div>`;
+        negativeNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط التقييمات السلبية</span></div>`;
     }
 
     const adminButtons = isAdminLoggedIn ? `
