@@ -55,42 +55,65 @@ const SHARE_SVG   = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="
 const MAP_PIN_SVG = `<svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/><circle cx="12" cy="9" r="2.5" fill="#FFF"/></svg>`;
 
 // ============================================================
-// تحميل البيانات من فايربيس
+// تحميل البيانات من فايربيس — مع timeout لضمان عدم التعليق
 // ============================================================
+
+// وعد مساعد: يُلغي الانتظار بعد ms مللي ثانية
+function _fbTimeout(ms) {
+    return new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('firebase_timeout')), ms)
+    );
+}
+
+async function _loadDoc(docRef) {
+    return Promise.race([docRef.get(), _fbTimeout(6000)]);
+}
+
 async function loadAllDataFromFirebase() {
     try {
-        const branchesDoc = await db.collection('appData').doc('branches').get();
-        if (branchesDoc.exists) branchesData = branchesDoc.data().data;
-        else await db.collection('appData').doc('branches').set({ data: branchesData });
-
-        const historyDoc = await db.collection('appData').doc('history').get();
-        if (historyDoc.exists) branchHistory = historyDoc.data().data;
-
-        const articlesDoc = await db.collection('appData').doc('articles').get();
-        if (articlesDoc.exists) {
-            let loadedArticles = articlesDoc.data().data;
-            // كود الترحيل: تحويل المقالات القديمة
-            for (let id in loadedArticles) {
-                if (!Array.isArray(loadedArticles[id])) {
-                    let oldData = loadedArticles[id];
-                    let text    = typeof oldData === 'string' ? oldData : oldData.text;
-                    let ts      = typeof oldData === 'object' && oldData.date ? oldData.date : new Date().getTime();
-                    let dateStr = new Date(ts).toISOString().split('T')[0];
-                    loadedArticles[id] = [{ type: 'performance', text, timestamp: ts, dateStr, snapshot: { ...branchesData[id] }, scores: calcScores(branchesData[id]) }];
-                } else {
-                    // تحديث المقالات القديمة التي ليس لها نوع
-                    loadedArticles[id] = loadedArticles[id].map(a => ({ type: 'performance', ...a }));
-                }
-            }
-            branchArticles = loadedArticles;
+        // الفروع
+        const branchesDoc = await _loadDoc(db.collection('appData').doc('branches'));
+        if (branchesDoc.exists) {
+            branchesData = branchesDoc.data().data;
+        } else {
+            // كتابة البيانات الافتراضية في الخلفية — لا ننتظرها
+            db.collection('appData').doc('branches').set({ data: branchesData }).catch(() => {});
         }
 
-        const globalDoc = await db.collection('appData').doc('globalArticles').get();
-        if (globalDoc.exists) globalArticles = globalDoc.data().data || [];
+        // السجل (غير حرج — نتجاهل الفشل)
+        try {
+            const historyDoc = await _loadDoc(db.collection('appData').doc('history'));
+            if (historyDoc.exists) branchHistory = historyDoc.data().data;
+        } catch (_) {}
 
-        // روابط الرأي — تأكد من وجود مجموعة
+        // المقالات
+        try {
+            const articlesDoc = await _loadDoc(db.collection('appData').doc('articles'));
+            if (articlesDoc.exists) {
+                const loadedArticles = articlesDoc.data().data;
+                for (const id in loadedArticles) {
+                    if (!Array.isArray(loadedArticles[id])) {
+                        const oldData = loadedArticles[id];
+                        const text    = typeof oldData === 'string' ? oldData : oldData.text;
+                        const ts      = typeof oldData === 'object' && oldData.date ? oldData.date : Date.now();
+                        const dateStr = new Date(ts).toISOString().split('T')[0];
+                        loadedArticles[id] = [{ type: 'performance', text, timestamp: ts, dateStr, snapshot: { ...branchesData[id] }, scores: calcScores(branchesData[id]) }];
+                    } else {
+                        loadedArticles[id] = loadedArticles[id].map(a => ({ type: 'performance', ...a }));
+                    }
+                }
+                branchArticles = loadedArticles;
+            }
+        } catch (_) {}
+
+        // المقالات العامة
+        try {
+            const globalDoc = await _loadDoc(db.collection('appData').doc('globalArticles'));
+            if (globalDoc.exists) globalArticles = globalDoc.data().data || [];
+        } catch (_) {}
+
     } catch (e) {
-        console.error("حدث خطأ أثناء تحميل البيانات من فايربيس:", e);
+        // Firebase غير متاح أو timeout — نعمل بالبيانات الافتراضية
     }
 }
 
@@ -98,37 +121,43 @@ async function loadAllDataFromFirebase() {
 // حفظ البيانات في فايربيس
 // ============================================================
 async function saveBranchesToFirebase() {
-    try { await db.collection('appData').doc('branches').set({ data: branchesData }); } catch (e) { console.error(e); }
+    try { await db.collection('appData').doc('branches').set({ data: branchesData }); } catch (_) {}
 }
 async function saveHistoryToFirebase() {
-    try { await db.collection('appData').doc('history').set({ data: branchHistory }); } catch (e) { console.error(e); }
+    try { await db.collection('appData').doc('history').set({ data: branchHistory }); } catch (_) {}
 }
 async function saveArticlesToFirebase() {
-    try { await db.collection('appData').doc('articles').set({ data: branchArticles }); } catch (e) { console.error(e); }
+    try { await db.collection('appData').doc('articles').set({ data: branchArticles }); } catch (_) {}
 }
 async function saveGlobalArticlesToFirebase() {
-    try { await db.collection('appData').doc('globalArticles').set({ data: globalArticles }); } catch (e) { console.error(e); }
+    try { await db.collection('appData').doc('globalArticles').set({ data: globalArticles }); } catch (_) {}
 }
 
 // ============================================================
-// لقطة يومية تلقائية
+// لقطة يومية تلقائية — تُشغَّل في الخلفية عند وقت فراغ المتصفح
 // ============================================================
 function autoSaveDailySnapshot() {
-    const today   = new Date();
-    const dateKey = today.toISOString().split('T')[0];
-    let changed   = false;
-    for (let id = 1; id <= 6; id++) {
-        if (!branchHistory[id]) branchHistory[id] = [];
-        const existsToday = branchHistory[id].some(r => r.date === dateKey);
-        if (!existsToday) {
-            const data = branchesData[id];
-            const scores = calcScores(data);
-            const latestArticle = getArticleData(id);
-            branchHistory[id].push({ date: dateKey, snapshot: { ...data }, scores: { ...scores }, article: latestArticle ? latestArticle.text : '' });
-            changed = true;
+    const run = () => {
+        const dateKey = new Date().toISOString().split('T')[0];
+        let changed = false;
+        for (let id = 1; id <= 6; id++) {
+            if (!branchHistory[id]) branchHistory[id] = [];
+            if (!branchHistory[id].some(r => r.date === dateKey)) {
+                const data    = branchesData[id];
+                const scores  = calcScores(data);
+                const article = getArticleData(id);
+                branchHistory[id].push({ date: dateKey, snapshot: { ...data }, scores: { ...scores }, article: article ? article.text : '' });
+                changed = true;
+            }
         }
+        if (changed) saveHistoryToFirebase();
+    };
+    // تأجيل حتى وقت فراغ المتصفح لتجنب إبطاء التحميل
+    if (typeof requestIdleCallback === 'function') {
+        requestIdleCallback(run, { timeout: 5000 });
+    } else {
+        setTimeout(run, 3000);
     }
-    if (changed) saveHistoryToFirebase();
 }
 
 // ============================================================
@@ -276,9 +305,11 @@ function updateBrandReviewsPanel() {
 
     function showName() {
         nameEl.classList.remove('name-fade');
-        void nameEl.offsetWidth;
-        nameEl.textContent = topNames[idx % topNames.length];
-        nameEl.classList.add('name-fade');
+        // تأجيل إضافة الكلاس لـ frame التالي بدلاً من void offsetWidth
+        requestAnimationFrame(() => {
+            nameEl.textContent = topNames[idx % topNames.length];
+            nameEl.classList.add('name-fade');
+        });
         idx++;
     }
     showName();
@@ -286,11 +317,16 @@ function updateBrandReviewsPanel() {
 }
 
 // ============================================================
-// تنسيق التاريخ في القائمة الرئيسية: "السبت ٢٥ أبريل"
+// تنسيق التاريخ — كاش DateTimeFormat لتجنب إعادة إنشائه
 // ============================================================
+const _dtfDayMonth    = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { weekday: 'long', day: 'numeric', month: 'long' });
+const _dtfFullDate    = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' });
+
 function formatDateArabic(dateStr) {
-    const dateObj = new Date(dateStr + 'T12:00:00');
-    return new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { weekday: 'long', day: 'numeric', month: 'long' }).format(dateObj);
+    return _dtfDayMonth.format(new Date(dateStr + 'T12:00:00'));
+}
+function formatFullDateArabic(date) {
+    return _dtfFullDate.format(date instanceof Date ? date : new Date(date));
 }
 
 // ============================================================
@@ -302,7 +338,7 @@ function generatePromptText(branchId, snapshotData = null, snapshotScores = null
     const tier   = getPerformanceTier(scores);
 
     const today       = new Date();
-    const dateStr     = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(today);
+    const dateStr     = formatFullDateArabic(today);
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
     const currentDay  = today.getDate();
 
@@ -375,7 +411,7 @@ function generatePromptText(branchId, snapshotData = null, snapshotScores = null
 // ============================================================
 function generateWeeklyPrompt(reasonsMap) {
     const today       = new Date();
-    const dateStr     = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(today);
+    const dateStr     = formatFullDateArabic(today);
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
     const currentDay  = today.getDate();
 
@@ -795,12 +831,11 @@ async function submitOpinionArticle() {
 // ============================================================
 function initCarousel() {
     const carousel = document.getElementById('branchesCarousel');
-    carousel.innerHTML = '';
+    const fragment  = document.createDocumentFragment(); // بناء في الذاكرة أولاً
 
-    // ترتيب حسب الأكثر تقييمات إيجابية
     const sortedIds = [1,2,3,4,5,6].sort((a,b) => (branchesData[b].positive||0) - (branchesData[a].positive||0));
 
-    for (const i of sortedIds) {
+    sortedIds.forEach((i, idx) => {
         const data = branchesData[i];
         const { ratingValue, reviewsCount } = calcRating(data);
         const scores = calcScores(data);
@@ -810,14 +845,13 @@ function initCarousel() {
         if (data.dName) mgtNames.push(data.dName);
         let mgtText = mgtNames.length > 0 ? `إدارة: ${mgtNames.join(' و ')}` : 'إدارة الفرع';
 
-        const idx  = i - 1;
+        const cardIdx = idx; // الترتيب الفعلي في الكاروسيل
         const card = document.createElement('div');
         card.className = `min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 glass-panel rounded-2xl p-5 snap-center transition-transform hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] cursor-pointer active:cursor-grabbing border border-white/60`;
 
-        // النقر على الخريطة يفتح الإيفريم، النقر على البطاقة يفتح إما التحرير أو التفاصيل
         card.onclick = (e) => {
             if (e.target.closest('.map-btn')) {
-                openIframeModal(data.iframeSrc, idx);
+                openIframeModal(data.iframeSrc, cardIdx);
                 return;
             }
             if (isAdminLoggedIn) {
@@ -856,8 +890,12 @@ function initCarousel() {
                 <div class="font-black text-emerald-700">${data.positive} <span class="text-xs font-bold">مراجعة إيجابية</span></div>
             </div>
         `;
-        carousel.appendChild(card);
-    }
+        fragment.appendChild(card);
+    });
+
+    // إضافة كل البطاقات دفعة واحدة → repaint واحد فقط
+    carousel.innerHTML = '';
+    carousel.appendChild(fragment);
 
     setupCarouselDots();
     setupCarouselEvents();
@@ -988,31 +1026,48 @@ function updateActiveDot() {
 }
 
 function scrollCarousel(direction) {
-    document.getElementById('branchesCarousel').scrollBy({ left: direction * -340, behavior: 'smooth' });
+    const el = document.getElementById('branchesCarousel');
+    if (el) el.scrollBy({ left: direction * -340, behavior: 'smooth' });
 }
+
+// ============================================================
+// الكاروسيل — نقاط وأحداث (مع منع تراكم listeners)
+// ============================================================
+let _carouselEventsAttached = false;
 
 function setupCarouselEvents() {
     const carousel = document.getElementById('branchesCarousel');
+
+    // إزالة listeners القديمة عبر استبدال العنصر بنسخة منقولة
+    if (_carouselEventsAttached) {
+        clearInterval(carouselInterval);
+        const clone = carousel.cloneNode(true);
+        carousel.parentNode.replaceChild(clone, carousel);
+    }
+
+    const el = document.getElementById('branchesCarousel'); // إعادة الإشارة بعد الاستبدال
+    _carouselEventsAttached = true;
+
     let scrollRaf = null;
-    carousel.addEventListener('scroll', () => {
+    el.addEventListener('scroll', () => {
         if (scrollRaf) return;
         scrollRaf = requestAnimationFrame(() => { updateActiveDot(); scrollRaf = null; });
-    });
+    }, { passive: true });
 
     const startAutoScroll = () => {
         clearInterval(carouselInterval);
         if (isCarouselPaused) return;
         carouselInterval = setInterval(() => {
-            const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-            if (Math.abs(carousel.scrollLeft) >= maxScroll - 10) carousel.scrollTo({ left: 0, behavior: 'smooth' });
-            else scrollCarousel(1);
+            const maxScroll = el.scrollWidth - el.clientWidth;
+            if (Math.abs(el.scrollLeft) >= maxScroll - 10) el.scrollTo({ left: 0, behavior: 'smooth' });
+            else el.scrollBy({ left: -340, behavior: 'smooth' });
         }, 6000);
     };
 
-    carousel.addEventListener('mouseenter', () => { if (!isCarouselPaused) clearInterval(carouselInterval); });
-    carousel.addEventListener('mouseleave', startAutoScroll);
-    carousel.addEventListener('touchstart', () => { if (!isCarouselPaused) clearInterval(carouselInterval); });
-    carousel.addEventListener('touchend', startAutoScroll);
+    el.addEventListener('mouseenter', () => { if (!isCarouselPaused) clearInterval(carouselInterval); }, { passive: true });
+    el.addEventListener('mouseleave', startAutoScroll, { passive: true });
+    el.addEventListener('touchstart', () => { if (!isCarouselPaused) clearInterval(carouselInterval); }, { passive: true });
+    el.addEventListener('touchend', startAutoScroll, { passive: true });
     startAutoScroll();
 }
 
@@ -1033,7 +1088,15 @@ function closeIframeModal(e) {
     setTimeout(() => {
         scrollToCard(lastClickedCardIndex);
         isCarouselPaused = false;
-        setupCarouselEvents();
+        // استئناف التمرير التلقائي فقط — بدون إعادة تسجيل listeners
+        clearInterval(carouselInterval);
+        const el = document.getElementById('branchesCarousel');
+        if (!el) return;
+        carouselInterval = setInterval(() => {
+            const maxScroll = el.scrollWidth - el.clientWidth;
+            if (Math.abs(el.scrollLeft) >= maxScroll - 10) el.scrollTo({ left: 0, behavior: 'smooth' });
+            else el.scrollBy({ left: -340, behavior: 'smooth' });
+        }, 6000);
     }, 3000);
 }
 
@@ -1048,17 +1111,17 @@ function openBulletinPage(branchId, timestamp = null) {
         if (articleData && articleData.snapshot) {
             data    = articleData.snapshot;
             scores  = articleData.scores || calcScores(data);
-            dateStr = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(articleData.timestamp));
+            dateStr = formatFullDateArabic(new Date(articleData.timestamp));
         } else {
             data    = branchesData[branchId];
             scores  = calcScores(data);
-            dateStr = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
+            dateStr = formatFullDateArabic(new Date());
         }
     } else {
         data        = branchesData[branchId];
         scores      = calcScores(data);
         articleData = getArticleData(branchId);
-        dateStr     = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
+        dateStr     = formatFullDateArabic(new Date());
     }
 
     const tier              = getPerformanceTier(scores);
@@ -1102,9 +1165,9 @@ function openBulletinPage(branchId, timestamp = null) {
 
     showPage('bulletin');
     const contentEl = document.getElementById('bulletinContent');
+    // إزالة الكلاس ثم إضافته في الـ frame التالي بدلاً من void offsetWidth (يسبب reflow)
     contentEl.classList.remove('slide-up');
-    void contentEl.offsetWidth;
-    contentEl.classList.add('slide-up');
+    requestAnimationFrame(() => contentEl.classList.add('slide-up'));
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1711,7 +1774,7 @@ function openHistoryModal(branchId) {
     } else {
         const sorted = [...history].reverse();
         container.innerHTML = sorted.map(entry => {
-            const dateFormatted = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(entry.date));
+            const dateFormatted = formatFullDateArabic(new Date(entry.date));
             const tier = getPerformanceTier(entry.scores);
             return `
             <div class="history-item bg-white/60 border border-white/50 rounded-xl p-5 shadow-sm backdrop-blur">
@@ -1748,8 +1811,7 @@ function setupDateCalculator() {
     const today       = new Date();
     const currentDay  = today.getDate();
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    document.getElementById('daysPassed').innerText    = currentDay;
-    document.getElementById('daysRemaining').innerText = daysInMonth - currentDay;
+    // autoMultiplier فقط — العناصر daysPassed/daysRemaining أُزيلت من HTML
     autoMultiplier = currentDay > 0 ? daysInMonth / currentDay : 1;
 }
 
