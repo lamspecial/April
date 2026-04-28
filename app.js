@@ -1,9 +1,9 @@
 // ============================================================
-// app.js — آي أم سبيشل — النسخة الكاملة المحدّثة
+// app.js — آي أم سبيشل — النسخة الكاملة المحدّثة (تم الإصلاح والتحسين)
 // ============================================================
 
 // ============================================================
-// إعداد فايربيس (Firebase Initialization)
+// إعداد فايربيس (Firebase Initialization) بأمان
 // ============================================================
 const firebaseConfig = {
     apiKey: "AIzaSyAkZHewymPnTYF43CzweqlzCN5w1bWSOZI",
@@ -13,8 +13,18 @@ const firebaseConfig = {
     messagingSenderId: "86730383077",
     appId: "1:86730383077:web:ebdf3c92e2239d477f7e0c"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+
+let db = null;
+try {
+    if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+    } else {
+        console.warn("مكتبات Firebase لم يتم تحميلها. سيتم استخدام البيانات الافتراضية.");
+    }
+} catch (e) {
+    console.error("خطأ في تهيئة Firebase:", e);
+}
 
 // ============================================================
 // حالة التطبيق
@@ -43,9 +53,7 @@ let branchesData = {
 };
 
 let branchHistory  = {};
-// كل مقال: { type, text, timestamp, dateStr, snapshot?, scores?, authorName?, authorBio?, opinionToken? }
 let branchArticles = {};
-// مقالات عامة (أسبوعي، إعلانات، آراء)
 let globalArticles = [];
 
 // ============================================================
@@ -55,10 +63,8 @@ const SHARE_SVG   = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="
 const MAP_PIN_SVG = `<svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/><circle cx="12" cy="9" r="2.5" fill="#FFF"/></svg>`;
 
 // ============================================================
-// تحميل البيانات من فايربيس — مع timeout لضمان عدم التعليق
+// تحميل البيانات من فايربيس
 // ============================================================
-
-// وعد مساعد: يُلغي الانتظار بعد ms مللي ثانية
 function _fbTimeout(ms) {
     return new Promise((_, reject) =>
         setTimeout(() => reject(new Error('firebase_timeout')), ms)
@@ -70,23 +76,20 @@ async function _loadDoc(docRef) {
 }
 
 async function loadAllDataFromFirebase() {
+    if (!db) return; // الخروج بأمان إذا لم يعمل فايربيس
     try {
-        // الفروع
         const branchesDoc = await _loadDoc(db.collection('appData').doc('branches'));
         if (branchesDoc.exists) {
             branchesData = branchesDoc.data().data;
         } else {
-            // كتابة البيانات الافتراضية في الخلفية — لا ننتظرها
             db.collection('appData').doc('branches').set({ data: branchesData }).catch(() => {});
         }
 
-        // السجل (غير حرج — نتجاهل الفشل)
         try {
             const historyDoc = await _loadDoc(db.collection('appData').doc('history'));
             if (historyDoc.exists) branchHistory = historyDoc.data().data;
         } catch (_) {}
 
-        // المقالات
         try {
             const articlesDoc = await _loadDoc(db.collection('appData').doc('articles'));
             if (articlesDoc.exists) {
@@ -106,35 +109,35 @@ async function loadAllDataFromFirebase() {
             }
         } catch (_) {}
 
-        // المقالات العامة
         try {
             const globalDoc = await _loadDoc(db.collection('appData').doc('globalArticles'));
             if (globalDoc.exists) globalArticles = globalDoc.data().data || [];
         } catch (_) {}
 
     } catch (e) {
-        // Firebase غير متاح أو timeout — نعمل بالبيانات الافتراضية
+        // Firebase timeout أو غير متاح
     }
 }
 
-// ============================================================
-// حفظ البيانات في فايربيس
-// ============================================================
 async function saveBranchesToFirebase() {
+    if(!db) return;
     try { await db.collection('appData').doc('branches').set({ data: branchesData }); } catch (_) {}
 }
 async function saveHistoryToFirebase() {
+    if(!db) return;
     try { await db.collection('appData').doc('history').set({ data: branchHistory }); } catch (_) {}
 }
 async function saveArticlesToFirebase() {
+    if(!db) return;
     try { await db.collection('appData').doc('articles').set({ data: branchArticles }); } catch (_) {}
 }
 async function saveGlobalArticlesToFirebase() {
+    if(!db) return;
     try { await db.collection('appData').doc('globalArticles').set({ data: globalArticles }); } catch (_) {}
 }
 
 // ============================================================
-// لقطة يومية تلقائية — تُشغَّل في الخلفية عند وقت فراغ المتصفح
+// لقطة يومية تلقائية
 // ============================================================
 function autoSaveDailySnapshot() {
     const run = () => {
@@ -152,7 +155,6 @@ function autoSaveDailySnapshot() {
         }
         if (changed) saveHistoryToFirebase();
     };
-    // تأجيل حتى وقت فراغ المتصفح لتجنب إبطاء التحميل
     if (typeof requestIdleCallback === 'function') {
         requestIdleCallback(run, { timeout: 5000 });
     } else {
@@ -160,9 +162,6 @@ function autoSaveDailySnapshot() {
     }
 }
 
-// ============================================================
-// جلب المقال
-// ============================================================
 function getArticleData(id, timestamp = null) {
     const articles = branchArticles[id];
     if (!articles || !Array.isArray(articles) || articles.length === 0) return null;
@@ -171,44 +170,20 @@ function getArticleData(id, timestamp = null) {
 }
 
 // ============================================================
-// حساب النقاط — المعادلة الجديدة
+// حساب النقاط
 // ============================================================
-/*
-  التقييمات الإيجابية: 4 نقاط كحد أقصى (proportional to target)
-  السلامة: 3 نقاط
-  الشكاوى: 2 نقاط
-  وزن التقييم السلبي:
-    W = target / (3*P + target)
-    عند P=0: W = 1
-    عند P=target: W = target/(3*target+target) = 1/4 = 0.25
-    نجعل نقطة البداية 1 عند P=0 و 0.25 عند P=target وأدنى حد 0.1
-    formula: W = max(0.1, target / (3*P + target))
-    لكن هذه المعادلة تعطي 1 عند P=0 و 0.25 عند P=target → مطابق للطلب
-    
-  إذا زادت الإيجابية عن الهدف (فائض):
-    surplus = positive - target
-    كل تقييم فائض يزيل أثر 0.2 شكوى (يضاف لـ ptsComplaints)
-    عند اكتمال تصحيح الشكاوى، كل تقييم فائض إضافي يزيل 0.2 تقييم سلبي من ptsNegative
-*/
 function calcScores(data) {
-    const P       = data.positive;
+    const P       = data.positive || 0;
     const target  = data.target || 50;
-
-    // --- السلامة (3 نقاط) ---
-    const ptsSafety = Math.max(0, 3 - data.safety);
-
-    // --- الشكاوى (2 نقاط) ---
-    const rawPtsComplaints = Math.max(0, 2 - (data.complaints / (data.visitors * 0.003)));
-
-    // --- الإيجابية (4 نقاط) ---
+    const ptsSafety = Math.max(0, 3 - (data.safety || 0));
+    const visitors = data.visitors || 1;
+    const rawPtsComplaints = Math.max(0, 2 - ((data.complaints || 0) / (visitors * 0.003)));
     const ptsPositive = Math.min(4, (P / target) * 4);
-
-    // --- وزن السلبية: تدرج خماسي، W=1 عند P=0، W=0.33 عند P=60، حد أدنى 0.2 ---
+    
     const steps = Math.floor(P / 5) * 5;
     const W = steps === 0 ? 1.0 : Math.max(0.2, 60 / (2 * steps + 60));
-    const rawPtsNegative = Math.max(0, 2 - (data.negative * W));
+    const rawPtsNegative = Math.max(0, 2 - ((data.negative || 0) * W));
 
-    // --- فائض الإيجابية (10 تقييمات فائضة لكل نقطة) ---
     let ptsComplaints = rawPtsComplaints;
     let ptsNegative   = rawPtsNegative;
     let surplusUsed   = 0;
@@ -286,7 +261,6 @@ function updateBrandReviewsPanel() {
     for (let i = 1; i <= 6; i++) total += (branchesData[i].positive || 0);
     document.getElementById('brandTotalReviews').textContent = total;
 
-    // جمع المساهمين (مديرات/نائبات) — فقط الفروع التي تجاوزت 20 تقييم
     let contributors = [];
     for (let i = 1; i <= 6; i++) {
         const d = branchesData[i];
@@ -305,7 +279,6 @@ function updateBrandReviewsPanel() {
 
     function showName() {
         nameEl.classList.remove('name-fade');
-        // تأجيل إضافة الكلاس لـ frame التالي بدلاً من void offsetWidth
         requestAnimationFrame(() => {
             nameEl.textContent = topNames[idx % topNames.length];
             nameEl.classList.add('name-fade');
@@ -317,7 +290,7 @@ function updateBrandReviewsPanel() {
 }
 
 // ============================================================
-// تنسيق التاريخ — كاش DateTimeFormat لتجنب إعادة إنشائه
+// تنسيق التاريخ 
 // ============================================================
 const _dtfDayMonth    = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { weekday: 'long', day: 'numeric', month: 'long' });
 const _dtfFullDate    = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -330,7 +303,7 @@ function formatFullDateArabic(date) {
 }
 
 // ============================================================
-// توليد نص Prompt للتقرير العادي
+// توليد نص Prompt
 // ============================================================
 function generatePromptText(branchId, snapshotData = null, snapshotScores = null) {
     const data   = snapshotData || branchesData[branchId];
@@ -342,10 +315,11 @@ function generatePromptText(branchId, snapshotData = null, snapshotScores = null
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
     const currentDay  = today.getDate();
 
-    const performanceContext
-        = scores.total >= 6.5 ? "الأداء متوسط ومقبول ولكن يحتاج تحسين ملحوظ"
-        = scores.ptsSafety < 3 ? "هناك مشكلة جدية في السلامة تستوجب التنبيه العاجل"
-        = scores.ptsComplaints < 1 ? "ارتفاع مقلق في الشكاوى يستدعي تدخلاً فورياً"
+    // تم إصلاح الخطأ القواعدي هنا (= بدلاً من :)
+    const performanceContext = 
+        scores.total >= 6.5 ? "الأداء متوسط ومقبول ولكن يحتاج تحسين ملحوظ"
+        : scores.ptsSafety < 3 ? "هناك مشكلة جدية في السلامة تستوجب التنبيه العاجل"
+        : scores.ptsComplaints < 1 ? "ارتفاع مقلق في الشكاوى يستدعي تدخلاً فورياً"
         : "ضعف واضح في اكتساب التقييمات الإيجابية يحتاج معالجة";
 
     const safetyNote = data.safety > 0 ? `⚠️ تسجيل ${data.safety} حادثة سلامة هذا الشهر` : "لا حوادث سلامة مسجلة";
@@ -406,9 +380,6 @@ function generatePromptText(branchId, snapshotData = null, snapshotScores = null
 - لا تضف أي عناوين فرعية أو تنسيقات إضافية غير المطلوبة أعلاه`;
 }
 
-// ============================================================
-// توليد Prompt للتحديث الأسبوعي
-// ============================================================
 function generateWeeklyPrompt(reasonsMap) {
     const today       = new Date();
     const dateStr     = formatFullDateArabic(today);
@@ -457,14 +428,7 @@ ${branchLines}
 }
 
 // ============================================================
-// دالة توافق: فتح مقال الأداء مباشرة من لوحة الإدارة (legacy support)
-// ============================================================
-function openArticleModalFromAdmin() {
-    openArticleTypeSelector();
-}
-
-// ============================================================
-// مودال اختيار نوع المقال
+// النوافذ (Modals)
 // ============================================================
 function openArticleTypeSelector() {
     const id = document.getElementById('branchSelector').value;
@@ -472,9 +436,8 @@ function openArticleTypeSelector() {
     closeAdmin();
     document.getElementById('articleTypeModal').style.display = 'flex';
 }
-function closeArticleTypeModal() {
-    document.getElementById('articleTypeModal').style.display = 'none';
-}
+function closeArticleTypeModal() { document.getElementById('articleTypeModal').style.display = 'none'; }
+
 function selectArticleType(type) {
     closeArticleTypeModal();
     currentArticleType = type;
@@ -484,9 +447,6 @@ function selectArticleType(type) {
     else if (type === 'opinion')      openOpinionLinkModal();
 }
 
-// ============================================================
-// مودال كتابة مقال الأداء
-// ============================================================
 function openArticleModal(branchId, timestamp = null) {
     currentArticleModalBranchId = branchId;
     currentArticleTimestamp     = timestamp;
@@ -588,9 +548,6 @@ async function saveArticleFromInput() {
     showCopyToast('تم حفظ المقال وارتباطه بأرقام اليوم');
 }
 
-// ============================================================
-// مودال الإعلان
-// ============================================================
 function openAnnouncementModal() {
     document.getElementById('articleModalTitle').textContent    = 'إعلان جديد';
     document.getElementById('articleModalSubtitle').textContent = 'مقال إعلاني يكتبه المستخدم مباشرةً';
@@ -628,9 +585,6 @@ async function saveAnnouncementArticle() {
     showCopyToast('تم نشر الإعلان');
 }
 
-// ============================================================
-// مودال التحديث الأسبوعي
-// ============================================================
 function openWeeklyModal() {
     let rows = '';
     for (let i = 1; i <= 6; i++) {
@@ -727,29 +681,21 @@ async function saveWeeklyArticle() {
     showCopyToast('تم حفظ التحديث الأسبوعي');
 }
 
-function closeWeeklyModal() {
-    document.getElementById('weeklyModal').style.display = 'none';
-}
+function closeWeeklyModal() { document.getElementById('weeklyModal').style.display = 'none'; }
 
-// ============================================================
-// مودال إنشاء رابط الرأي
-// ============================================================
 function openOpinionLinkModal() {
     document.getElementById('opinionAuthorName').value = '';
     document.getElementById('opinionAuthorBio').value  = '';
     document.getElementById('opinionLinkResult').classList.add('hidden');
     document.getElementById('opinionLinkModal').style.display = 'flex';
 }
-function closeOpinionLinkModal() {
-    document.getElementById('opinionLinkModal').style.display = 'none';
-}
+function closeOpinionLinkModal() { document.getElementById('opinionLinkModal').style.display = 'none'; }
 
 function generateOpinionLink() {
     const name = document.getElementById('opinionAuthorName').value.trim();
     const bio  = document.getElementById('opinionAuthorBio').value.trim();
     if (!name || !bio) { alert('يرجى إدخال الاسم والنبذة'); return; }
 
-    // توليد رمز مؤقت
     const token   = `op_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     const payload = btoa(encodeURIComponent(JSON.stringify({ name, bio, token, exp: Date.now() + 7 * 24 * 3600 * 1000 })));
     const url     = `${window.location.origin}${window.location.pathname}#opinion-${payload}`;
@@ -769,9 +715,6 @@ function copyOpinionLink() {
     }
 }
 
-// ============================================================
-// صفحة كتابة مقال الرأي للكاتب الخارجي
-// ============================================================
 let currentOpinionToken = null;
 let currentOpinionAuthor = null;
 
@@ -790,7 +733,6 @@ function openOpinionWritePage(payload) {
         document.getElementById('opinionTitleInput').value = '';
         document.getElementById('opinionBodyInput').value  = '';
         document.getElementById('opinionWritePage').style.display = 'flex';
-        // إخفاء بقية الصفحة
         document.getElementById('mainPageWrapper').style.display = 'none';
     } catch (e) {
         console.error('Opinion link parse error', e);
@@ -831,7 +773,7 @@ async function submitOpinionArticle() {
 // ============================================================
 function initCarousel() {
     const carousel = document.getElementById('branchesCarousel');
-    const fragment  = document.createDocumentFragment(); // بناء في الذاكرة أولاً
+    const fragment  = document.createDocumentFragment(); 
 
     const sortedIds = [1,2,3,4,5,6].sort((a,b) => (branchesData[b].positive||0) - (branchesData[a].positive||0));
 
@@ -845,7 +787,7 @@ function initCarousel() {
         if (data.dName) mgtNames.push(data.dName);
         let mgtText = mgtNames.length > 0 ? `إدارة: ${mgtNames.join(' و ')}` : 'إدارة الفرع';
 
-        const cardIdx = idx; // الترتيب الفعلي في الكاروسيل
+        const cardIdx = idx; 
         const card = document.createElement('div');
         card.className = `min-w-[85%] md:min-w-[320px] lg:min-w-[340px] flex-shrink-0 glass-panel rounded-2xl p-5 snap-center transition-transform hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] cursor-pointer active:cursor-grabbing border border-white/60`;
 
@@ -855,7 +797,6 @@ function initCarousel() {
                 return;
             }
             if (isAdminLoggedIn) {
-                // فتح نافذة التحرير
                 document.getElementById('branchSelector').value = i;
                 loadAdminData();
                 document.getElementById('adminModal').style.display = 'flex';
@@ -893,7 +834,6 @@ function initCarousel() {
         fragment.appendChild(card);
     });
 
-    // إضافة كل البطاقات دفعة واحدة → repaint واحد فقط
     carousel.innerHTML = '';
     carousel.appendChild(fragment);
 
@@ -901,9 +841,6 @@ function initCarousel() {
     setupCarouselEvents();
 }
 
-// ============================================================
-// نافذة تفاصيل الفرع (للعرض العام)
-// ============================================================
 function openBranchDetailModal(branchId) {
     const data   = branchesData[branchId];
     const scores = calcScores(data);
@@ -911,7 +848,6 @@ function openBranchDetailModal(branchId) {
 
     document.getElementById('branchDetailTitle').textContent = `مؤشرات فرع ${data.bName}`;
 
-    // بناء وسوم الفائض
     let complaintsNote = '';
     let negativeNote   = '';
     if (scores.surplusForComplaints > 0) {
@@ -987,9 +923,6 @@ function closeBranchDetailModal(e) {
     document.getElementById('branchDetailModal').style.display = 'none';
 }
 
-// ============================================================
-// الكاروسيل — نقاط وأحداث
-// ============================================================
 function setupCarouselDots() {
     const dotsContainer = document.getElementById('carouselDots');
     dotsContainer.innerHTML = '';
@@ -1031,28 +964,14 @@ function scrollCarousel(direction) {
 }
 
 // ============================================================
-// الكاروسيل — نقاط وأحداث (مع منع تراكم listeners)
+// إصلاح الكاروسيل (منع تدمير onclick عبر الاستنساخ)
 // ============================================================
 let _carouselEventsAttached = false;
+let scrollRaf = null;
 
 function setupCarouselEvents() {
-    const carousel = document.getElementById('branchesCarousel');
-
-    // إزالة listeners القديمة عبر استبدال العنصر بنسخة منقولة
-    if (_carouselEventsAttached) {
-        clearInterval(carouselInterval);
-        const clone = carousel.cloneNode(true);
-        carousel.parentNode.replaceChild(clone, carousel);
-    }
-
-    const el = document.getElementById('branchesCarousel'); // إعادة الإشارة بعد الاستبدال
-    _carouselEventsAttached = true;
-
-    let scrollRaf = null;
-    el.addEventListener('scroll', () => {
-        if (scrollRaf) return;
-        scrollRaf = requestAnimationFrame(() => { updateActiveDot(); scrollRaf = null; });
-    }, { passive: true });
+    const el = document.getElementById('branchesCarousel');
+    if(!el) return;
 
     const startAutoScroll = () => {
         clearInterval(carouselInterval);
@@ -1064,6 +983,18 @@ function setupCarouselEvents() {
         }, 6000);
     };
 
+    if (_carouselEventsAttached) {
+        // الإبقاء على نفس الـ listeners، فقط إعادة تعيين الـ Interval
+        startAutoScroll();
+        return; 
+    }
+    _carouselEventsAttached = true;
+
+    el.addEventListener('scroll', () => {
+        if (scrollRaf) return;
+        scrollRaf = requestAnimationFrame(() => { updateActiveDot(); scrollRaf = null; });
+    }, { passive: true });
+
     el.addEventListener('mouseenter', () => { if (!isCarouselPaused) clearInterval(carouselInterval); }, { passive: true });
     el.addEventListener('mouseleave', startAutoScroll, { passive: true });
     el.addEventListener('touchstart', () => { if (!isCarouselPaused) clearInterval(carouselInterval); }, { passive: true });
@@ -1071,9 +1002,6 @@ function setupCarouselEvents() {
     startAutoScroll();
 }
 
-// ============================================================
-// مودال الخريطة
-// ============================================================
 function openIframeModal(src, cardIndex) {
     if (cardIndex !== undefined) { lastClickedCardIndex = cardIndex; scrollToCard(cardIndex); }
     isCarouselPaused = true;
@@ -1081,6 +1009,7 @@ function openIframeModal(src, cardIndex) {
     document.getElementById('branchMapIframe').src = src;
     document.getElementById('iframeModal').style.display = 'flex';
 }
+
 function closeIframeModal(e) {
     if (e && e.target !== e.currentTarget && e.target.tagName !== 'BUTTON') return;
     document.getElementById('iframeModal').style.display = 'none';
@@ -1088,7 +1017,6 @@ function closeIframeModal(e) {
     setTimeout(() => {
         scrollToCard(lastClickedCardIndex);
         isCarouselPaused = false;
-        // استئناف التمرير التلقائي فقط — بدون إعادة تسجيل listeners
         clearInterval(carouselInterval);
         const el = document.getElementById('branchesCarousel');
         if (!el) return;
@@ -1100,9 +1028,6 @@ function closeIframeModal(e) {
     }, 3000);
 }
 
-// ============================================================
-// صفحة التقرير المستقلة (Bulletin)
-// ============================================================
 function openBulletinPage(branchId, timestamp = null) {
     let data, scores, articleData, dateStr;
 
@@ -1165,7 +1090,6 @@ function openBulletinPage(branchId, timestamp = null) {
 
     showPage('bulletin');
     const contentEl = document.getElementById('bulletinContent');
-    // إزالة الكلاس ثم إضافته في الـ frame التالي بدلاً من void offsetWidth (يسبب reflow)
     contentEl.classList.remove('slide-up');
     requestAnimationFrame(() => contentEl.classList.add('slide-up'));
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1174,7 +1098,6 @@ function openBulletinPage(branchId, timestamp = null) {
 function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, dateStr, progressPercent, branchId, hasArticle, timestampToPass) {
     const tsParam = timestampToPass ? timestampToPass : 'null';
 
-    // بناء وسوم الفائض
     let complaintsNote = '';
     let negativeNote   = '';
     if (scores.surplusForComplaints > 0) {
@@ -1334,9 +1257,6 @@ function buildPersonRow(name, role, withBorder) {
         </div>`;
 }
 
-// ============================================================
-// عرض المقالات العامة (أسبوعي، إعلان، رأي) كاملة
-// ============================================================
 function openGlobalArticleModal(timestamp) {
     const article = globalArticles.find(a => a.timestamp === timestamp);
     if (!article) return;
@@ -1359,19 +1279,21 @@ function openGlobalArticleModal(timestamp) {
     `;
     document.getElementById('globalArticleModal').style.display = 'flex';
 }
+
 function closeGlobalArticleModal(e) {
     if (e && e.target !== e.currentTarget) return;
     document.getElementById('globalArticleModal').style.display = 'none';
 }
 
-
+// ============================================================
+// تحسين سرعة العرض (DOM Reflows Fix)
+// ============================================================
 function generateNewspaper() {
     const timelineContainer = document.getElementById('newsTimeline');
     timelineContainer.innerHTML = '';
 
     let allReports = [];
 
-    // مقالات الفروع
     for (let i = 1; i <= 6; i++) {
         const articles = branchArticles[i];
         if (articles && Array.isArray(articles)) {
@@ -1390,7 +1312,6 @@ function generateNewspaper() {
         }
     }
 
-    // المقالات العامة (أسبوعي، إعلانات، آراء)
     globalArticles.forEach(art => {
         allReports.push({
             branchId:   null,
@@ -1427,6 +1348,9 @@ function generateNewspaper() {
         groupedReports[report.dateStr].push(report);
     });
 
+    // استخدام DocumentFragment لتقليل العبء على الـ CPU
+    const fragment = document.createDocumentFragment();
+
     Object.keys(groupedReports).sort((a, b) => new Date(b) - new Date(a)).forEach(dateKey => {
         const reports     = groupedReports[dateKey];
         const displayDate = formatDateArabic(dateKey);
@@ -1438,7 +1362,7 @@ function generateNewspaper() {
             <h3 class="text-xl font-black text-slate-800 mb-6 bg-white/60 backdrop-blur inline-block px-4 py-2 rounded-lg shadow-sm border border-white/80">${displayDate}</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid-${dateKey.replace(/[^a-z0-9]/gi,'_')}"></div>
         `;
-        timelineContainer.appendChild(dateSection);
+        
         const container = dateSection.querySelector(`[id="cardsGrid-${dateKey.replace(/[^a-z0-9]/gi,'_')}"]`);
 
         reports.forEach(item => {
@@ -1526,15 +1450,14 @@ function generateNewspaper() {
                     <div class="mt-auto pt-5 border-t border-white/40 bg-white/40 px-3 py-2 rounded-lg text-xs font-bold text-rose-700">مقال رأي خارجي</div>
                 `;
             }
-
             container.appendChild(cardEl);
         });
+        fragment.appendChild(dateSection);
     });
+    
+    timelineContainer.appendChild(fragment);
 }
 
-// ============================================================
-// صفحات
-// ============================================================
 function showPage(pageId) {
     const isMain = pageId === 'main';
     document.getElementById('mainPageWrapper').style.display    = isMain ? 'flex' : 'none';
@@ -1549,9 +1472,6 @@ function goToMainPage() {
     updateOGTags('التقارير - آي أم سبيشل', 'تقرير الأداء', window.location.href);
 }
 
-// ============================================================
-// OG Tags
-// ============================================================
 function updateOGTags(title, description, url) {
     ['og_title', 'twitter_title'].forEach(id => { const el = document.getElementById(id); if (el) el.setAttribute('content', title); });
     ['og_description', 'twitter_description', 'meta_description'].forEach(id => { const el = document.getElementById(id); if (el) el.setAttribute('content', description); });
@@ -1559,9 +1479,6 @@ function updateOGTags(title, description, url) {
     document.title = title;
 }
 
-// ============================================================
-// مشاركة صفحة التقرير
-// ============================================================
 function shareBulletinPage() {
     const url        = window.location.href;
     const branchName = currentBulletinData ? currentBulletinData.bName : '';
@@ -1572,9 +1489,6 @@ function shareBulletinPage() {
     window.open(`https://api.whatsapp.com/send?text=${waText}`, '_blank');
 }
 
-// ============================================================
-// Toast
-// ============================================================
 function showCopyToast(msg) {
     const toast = document.getElementById('copyToast');
     toast.textContent = msg || 'تم النسخ';
@@ -1583,9 +1497,6 @@ function showCopyToast(msg) {
     setTimeout(() => { toast.classList.add('hidden'); toast.classList.remove('copy-toast'); }, 2500);
 }
 
-// ============================================================
-// PIN / إدارة الجلسة
-// ============================================================
 const SESSION_KEY = 'ispecial_admin_session';
 
 function saveSession() {
@@ -1642,7 +1553,6 @@ function verifyMaintenance(enteredPin) {
 }
 
 function openMaintenanceAuth() {
-    // إذا كانت الجلسة محفوظة، ادخل مباشرة
     if (checkSession()) {
         isAdminLoggedIn = true;
         document.getElementById('adminModal').style.display = 'flex';
@@ -1655,17 +1565,9 @@ function openMaintenanceAuth() {
     setTimeout(() => pinBoxes[0].focus(), 100);
 }
 
-function closeMaintenanceAuth() {
-    document.getElementById('maintenanceAuthModal').style.display = 'none';
-}
+function closeMaintenanceAuth() { document.getElementById('maintenanceAuthModal').style.display = 'none'; }
+function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
 
-function closeAdmin() {
-    document.getElementById('adminModal').style.display = 'none';
-}
-
-// ============================================================
-// حذف المقالات
-// ============================================================
 async function deleteArticle(branchId, timestamp) {
     if (!confirm('هل تريد حذف هذا المقال نهائياً؟')) return;
     if (!branchArticles[branchId]) return;
@@ -1673,7 +1575,6 @@ async function deleteArticle(branchId, timestamp) {
     await saveArticlesToFirebase();
     generateNewspaper();
     initCarousel();
-    // إذا كنا في صفحة التقرير وهو نفس الفرع، ارجع للرئيسية
     if (currentBulletinData && currentBulletinData.branchId == branchId) goToMainPage();
     showCopyToast('تم حذف المقال');
 }
@@ -1686,9 +1587,6 @@ async function deleteGlobalArticle(timestamp) {
     showCopyToast('تم حذف المقال');
 }
 
-// ============================================================
-// تحميل وحفظ بيانات لوحة الإدارة
-// ============================================================
 function loadAdminData() {
     const id = document.getElementById('branchSelector').value;
     const d  = branchesData[id];
@@ -1760,9 +1658,6 @@ async function saveAdminData() {
     updateBrandReviewsPanel();
 }
 
-// ============================================================
-// مودال السجل التاريخي
-// ============================================================
 function openHistoryModal(branchId) {
     const data    = branchesData[branchId];
     const history = branchHistory[branchId] || [];
@@ -1797,9 +1692,6 @@ function openHistoryModal(branchId) {
 
 function closeHistoryModal() { document.getElementById('historyModal').style.display = 'none'; }
 
-// ============================================================
-// حاسبة التوقع
-// ============================================================
 function openPredictionModal() {
     document.getElementById('predictionModal').style.display = 'flex';
     setupDateCalculator();
@@ -1811,7 +1703,6 @@ function setupDateCalculator() {
     const today       = new Date();
     const currentDay  = today.getDate();
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    // autoMultiplier فقط — العناصر daysPassed/daysRemaining أُزيلت من HTML
     autoMultiplier = currentDay > 0 ? daysInMonth / currentDay : 1;
 }
 
@@ -1862,20 +1753,21 @@ function calculateTrial() {
 }
 
 // ============================================================
-// التهيئة عند تحميل الصفحة
+// تسريع التهيئة لتجاوز شاشة الانتظار بشكل استباقي ومضمون
 // ============================================================
-window.onload = async function () {
+document.addEventListener('DOMContentLoaded', async function () {
     await loadAllDataFromFirebase();
-    document.getElementById('loadingOverlay').style.display = 'none';
+    
+    // إخفاء الـ Loading Screen حالما تصبح البيانات جاهزة
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if(loadingOverlay) loadingOverlay.style.display = 'none';
 
-    // التحقق من جلسة الإدارة
     if (checkSession()) {
         isAdminLoggedIn = true;
     }
 
     const hash = window.location.hash;
 
-    // رابط كاتب خارجي (مقال رأي)
     if (hash && hash.startsWith('#opinion-')) {
         const payload = hash.replace('#opinion-', '');
         generateNewspaper();
@@ -1886,7 +1778,6 @@ window.onload = async function () {
         return;
     }
 
-    // رابط تقرير فرع
     if (hash && hash.startsWith('#bulletin-')) {
         const parts     = hash.split('-');
         const branchId  = parseInt(parts[1]);
@@ -1905,4 +1796,4 @@ window.onload = async function () {
     initCarousel();
     updateBrandReviewsPanel();
     autoSaveDailySnapshot();
-};
+});
