@@ -38,6 +38,7 @@ let carouselInterval;
 let currentArticleModalBranchId = null;
 let currentArticleTimestamp = null;
 let currentArticleType = 'performance'; // performance | weekly | announcement | opinion
+let isTimeCalcEnabled = true;
 let topContributorTimer = null;
 
 // ============================================================
@@ -1692,11 +1693,34 @@ function openHistoryModal(branchId) {
 
 function closeHistoryModal() { document.getElementById('historyModal').style.display = 'none'; }
 
+function toggleTimeCalc() {
+    isTimeCalcEnabled = !isTimeCalcEnabled;
+    const btn  = document.getElementById('timeCalcToggleBtn');
+    const note = document.getElementById('predictionNote');
+
+    if (isTimeCalcEnabled) {
+        btn.textContent = 'حاسبة زمنية';
+        btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200';
+        if (note) note.classList.remove('hidden');
+    } else {
+        btn.textContent = 'حاسبة';
+        btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-slate-100/70 border-slate-300 text-slate-600 hover:bg-slate-200';
+        if (note) note.classList.add('hidden');
+    }
+    calculateTrial();
+}
+
 function openPredictionModal() {
+    isTimeCalcEnabled = true;
+    const btn  = document.getElementById('timeCalcToggleBtn');
+    const note = document.getElementById('predictionNote');
+    if (btn)  { btn.textContent = 'حاسبة زمنية'; btn.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200'; }
+    if (note) note.classList.remove('hidden');
     document.getElementById('predictionModal').style.display = 'flex';
     setupDateCalculator();
     loadTrialDataFromDB();
 }
+
 function closePredictionModal() { document.getElementById('predictionModal').style.display = 'none'; }
 
 function setupDateCalculator() {
@@ -1725,7 +1749,8 @@ function calculateTrial() {
     const data       = branchesData[document.getElementById('trial_branch_select').value];
     const rawPositive = parseFloat(document.getElementById('trial_positive').value) || 0;
     const rawNegative = parseFloat(document.getElementById('trial_negative').value) || 0;
-    const projData   = { ...data, positive: rawPositive * autoMultiplier, negative: rawNegative };
+    const multiplier = isTimeCalcEnabled ? autoMultiplier : 1;
+    const projData   = { ...data, positive: rawPositive * multiplier, negative: rawNegative };
     const scores     = calcScores(projData);
 
     let total = Math.round((scores.ptsSafety + scores.ptsComplaints + scores.ptsPositive + scores.ptsNegative) * 100) / 100;
