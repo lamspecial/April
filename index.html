@@ -174,7 +174,7 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                     مقال
                 </button>
-                <button onclick="closeAdmin(); openPredictionModal();" class="bg-amber-500/90 hover:bg-amber-600 backdrop-blur text-white py-2 px-3 rounded-lg font-black text-sm transition shadow border border-white/20 flex items-center justify-center gap-1" title="حساب النتيجة">
+                <button onclick="closeAdmin(); openPredictionModal();" class="bg-amber-500/90 hover:bg-amber-600 backdrop-blur text-white py-2 px-3 rounded-lg font-black text-sm transition shadow border border-white/20 flex items-center justify-center gap-1" title="الوضع الحالي">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                     توقع
                 </button>
@@ -366,7 +366,7 @@
             <div>
                      
                 <div class="flex justify-between items-center mb-2">
-                    <label class="text-[8.4px] font-bold text-slate-199 leading-relaxed">قياس الاداء : <br> يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر  </label>
+                    <label class="text-[8.4px] font-bold text-slate-199 leading-relaxed">قياس الاداء : <br> يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر ، يمكن التبديل للوضع الحالي بضغط الزر  </label>
                     <button id="timeCalcToggleBtn" onclick="toggleTimeCalc()" class="text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-indigo-400 text-indigo-700 hover:bg-indigo-50/50 flex-shrink-0 mr-3">قياس الاداء</button>
                 </div>
                 <select id="trial_branch_select" onchange="loadTrialDataFromDB()" class="w-full p-3 rounded-lg glass-input font-bold focus:outline-none focus:ring-2 focus:ring-slate-400">
