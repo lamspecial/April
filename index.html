@@ -38,10 +38,10 @@
 </div>
 
 <!-- ===== HEADER ===== -->
-<header class="glass-header text-white p-3 sticky top-0 z-40">
+<header class="glass-header text-white px-4 py-4 sticky top-0 z-40">
     <div class="max-w-6xl mx-auto flex justify-between items-center gap-2">
-        <h1 class="text-xl sm:text-2xl font-black tracking-wide flex items-center gap-2 whitespace-nowrap drop-shadow-md flex-shrink-0 cursor-pointer" onclick="goToMainPage()">
-            <span class="text-red-500" onclick="event.stopPropagation(); openPredictionModal()">أي آم</span>&nbsp;<span class="text-yellow-400" onclick="event.stopPropagation(); openPredictionModal()">سبيشل</span>
+        <h1 class="text-xl sm:text-2xl font-black tracking-wide flex items-center gap-1.5 whitespace-nowrap drop-shadow-md flex-shrink-0 cursor-pointer" onclick="goToMainPage()">
+            <span class="text-red-500" onclick="event.stopPropagation(); openPredictionModal()">أي آم</span><span class="text-yellow-400" onclick="event.stopPropagation(); openPredictionModal()">سبيشل</span>
         </h1>
         <div class="flex gap-2 flex-shrink min-w-0">
             <button onclick="openMaintenanceAuth()" class="bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-slate-50 px-3 py-2 rounded-lg font-bold text-xs sm:text-sm transition flex items-center gap-1 shadow-sm min-w-0 leading-tight" id="adminBtn">
@@ -358,16 +358,12 @@
 
 <!-- Prediction Modal -->
 <div id="predictionModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-    <div class="glass-panel rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl border border-white/50">
-        <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur flex justify-between items-center rounded-t-2xl">
-            <h2 class="text-xl font-black text-slate-900">حاسبة التوقع</h2>
+    <div class="glass-panel rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto hide-scrollbar shadow-2xl border border-white/50">
+        <div class="p-5 flex justify-between items-center rounded-t-2xl">
+            <h2 class="text-xl font-black text-slate-900">توقع النتيجة حتى نهاية الشهر</h2>
             <button onclick="closePredictionModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60">✕</button>
         </div>
-        <div class="p-6 space-y-5">
-            <div class="flex gap-4 text-center text-sm bg-white/30 rounded-xl p-4 backdrop-blur border border-white/40">
-                <div class="flex-1"><p class="font-bold text-slate-600">أيام مضت</p><p class="text-2xl font-black text-slate-900" id="daysPassed">—</p></div>
-                <div class="flex-1"><p class="font-bold text-slate-600">أيام متبقية</p><p class="text-2xl font-black text-slate-900" id="daysRemaining">—</p></div>
-            </div>
+        <div class="px-5 pb-6 space-y-4">
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-2">اختر الفرع:</label>
                 <select id="trial_branch_select" onchange="loadTrialDataFromDB()" class="w-full p-3 rounded-lg glass-input font-bold focus:outline-none focus:ring-2 focus:ring-slate-400">
@@ -395,21 +391,28 @@
                 <div class="glass-panel rounded-xl p-3 border border-white/40"><p class="text-xs font-bold text-slate-600 mb-1">إيجابي</p><p class="text-xl font-black text-slate-900" id="resPos">—</p></div>
                 <div class="glass-panel rounded-xl p-3 border border-white/40"><p class="text-xs font-bold text-slate-600 mb-1">سلبي</p><p class="text-xl font-black text-slate-900" id="resNeg">—</p></div>
             </div>
-            <div class="text-center bg-white/40 backdrop-blur rounded-2xl p-4 border border-white/50">
-                <p class="text-xs font-bold text-slate-600 mb-1">إجمالي النقاط المتوقع</p>
-                <p class="text-5xl font-black text-slate-900" id="totalPoints">—</p>
-                <div class="w-full bg-slate-200/50 rounded-full h-3 mt-3 overflow-hidden border border-white/50 shadow-inner">
-                    <div id="progressBar" class="bg-slate-700 h-3 rounded-full transition-all" style="width:0%"></div>
+            <div id="rewardBox" class="p-5 rounded-xl text-center font-black text-xl backdrop-blur text-slate-800 border-2 bg-white/30">
+                <p class="text-4xl font-black text-slate-900 mb-1" id="totalPoints">—</p>
+                <div class="w-full bg-slate-200/50 rounded-full h-2.5 my-3 overflow-hidden border border-white/50 shadow-inner">
+                    <div id="progressBar" class="bg-slate-700 h-2.5 rounded-full transition-all" style="width:0%"></div>
                 </div>
-            </div>
-            <div id="rewardBox" class="p-4 rounded-xl text-center font-black text-lg backdrop-blur text-slate-800 border-2"></div>
-            <div class="flex gap-3">
-                <button onclick="clearTrialData()" class="flex-1 bg-white/60 hover:bg-white/80 border border-white/60 text-slate-700 font-bold py-3 rounded-xl transition text-sm">إعادة ضبط</button>
+                <p id="rewardText" class="text-base font-black">—</p>
+                <p class="text-xs font-bold text-slate-500 mt-1">عند الاستمرار بنفس الأداء</p>
             </div>
         </div>
     </div>
 </div>
 
 <script src="app.js"></script>
+
+<!-- Global Article Read Modal -->
+<div id="globalArticleModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeGlobalArticleModal(event)">
+    <div class="glass-panel rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto hide-scrollbar shadow-2xl border border-white/50" onclick="event.stopPropagation()">
+        <div class="sticky top-0 bg-white/40 backdrop-blur rounded-t-2xl p-4 flex justify-end">
+            <button onclick="closeGlobalArticleModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60">✕</button>
+        </div>
+        <div id="globalArticleModalBody" class="p-6 space-y-3"></div>
+    </div>
+</div>
 </body>
 </html>

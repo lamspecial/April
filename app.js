@@ -174,11 +174,12 @@ function calcScores(data) {
     // --- الإيجابية (4 نقاط) ---
     const ptsPositive = Math.min(4, (P / target) * 4);
 
-    // --- وزن السلبية ---
-    const W = P === 0 ? 1.0 : Math.max(0.1, target / (3 * P + target));
+    // --- وزن السلبية: تدرج خماسي، W=1 عند P=0، W=0.33 عند P=60، حد أدنى 0.2 ---
+    const steps = Math.floor(P / 5) * 5;
+    const W = steps === 0 ? 1.0 : Math.max(0.2, 60 / (2 * steps + 60));
     const rawPtsNegative = Math.max(0, 2 - (data.negative * W));
 
-    // --- فائض الإيجابية ---
+    // --- فائض الإيجابية (10 تقييمات فائضة لكل نقطة) ---
     let ptsComplaints = rawPtsComplaints;
     let ptsNegative   = rawPtsNegative;
     let surplusUsed   = 0;
@@ -186,18 +187,18 @@ function calcScores(data) {
     let surplusForNegative   = 0;
 
     if (P > target) {
-        const surplus = P - target;
-        const maxComplaintsBoost  = 2 - rawPtsComplaints; // ما يمكن تصحيحه من الشكاوى
-        const complaintsBoost     = Math.min(surplus * 0.2, maxComplaintsBoost);
-        ptsComplaints = Math.min(2, rawPtsComplaints + complaintsBoost);
-        surplusForComplaints      = complaintsBoost / 0.2; // عدد التقييمات المستخدمة
+        const surplus            = P - target;
+        const maxComplaintsBoost = 2 - rawPtsComplaints;
+        const complaintsBoost    = Math.min(surplus * 0.1, maxComplaintsBoost);
+        ptsComplaints            = Math.min(2, rawPtsComplaints + complaintsBoost);
+        surplusForComplaints     = complaintsBoost / 0.1;
 
-        const remainingSurplus    = surplus - surplusForComplaints;
+        const remainingSurplus   = surplus - surplusForComplaints;
         if (remainingSurplus > 0) {
             const maxNegativeBoost = 2 - rawPtsNegative;
-            const negativeBoost    = Math.min(remainingSurplus * 0.2, maxNegativeBoost);
+            const negativeBoost    = Math.min(remainingSurplus * 0.1, maxNegativeBoost);
             ptsNegative            = Math.min(2, rawPtsNegative + negativeBoost);
-            surplusForNegative     = negativeBoost / 0.2;
+            surplusForNegative     = negativeBoost / 0.1;
         }
         surplusUsed = surplusForComplaints + surplusForNegative;
     }
@@ -289,7 +290,7 @@ function updateBrandReviewsPanel() {
 // ============================================================
 function formatDateArabic(dateStr) {
     const dateObj = new Date(dateStr + 'T12:00:00');
-    return new Intl.DateTimeFormat('ar-SA', { weekday: 'long', day: 'numeric', month: 'long' }).format(dateObj);
+    return new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { weekday: 'long', day: 'numeric', month: 'long' }).format(dateObj);
 }
 
 // ============================================================
@@ -301,11 +302,11 @@ function generatePromptText(branchId, snapshotData = null, snapshotScores = null
     const tier   = getPerformanceTier(scores);
 
     const today       = new Date();
-    const dateStr     = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(today);
+    const dateStr     = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(today);
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
     const currentDay  = today.getDate();
 
-    const performanceContext = scores.total >= 9 ? "الأداء ممتاز ومتفوق ويستحق الإشادة والإبراز"
+    const performanceContext
         : scores.total >= 6.5 ? "الأداء متوسط ومقبول ولكن يحتاج تحسين ملحوظ"
         : scores.ptsSafety < 3 ? "هناك مشكلة جدية في السلامة تستوجب التنبيه العاجل"
         : scores.ptsComplaints < 1 ? "ارتفاع مقلق في الشكاوى يستدعي تدخلاً فورياً"
@@ -374,7 +375,7 @@ function generatePromptText(branchId, snapshotData = null, snapshotScores = null
 // ============================================================
 function generateWeeklyPrompt(reasonsMap) {
     const today       = new Date();
-    const dateStr     = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(today);
+    const dateStr     = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(today);
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
     const currentDay  = today.getDate();
 
@@ -796,7 +797,10 @@ function initCarousel() {
     const carousel = document.getElementById('branchesCarousel');
     carousel.innerHTML = '';
 
-    for (let i = 1; i <= 6; i++) {
+    // ترتيب حسب الأكثر تقييمات إيجابية
+    const sortedIds = [1,2,3,4,5,6].sort((a,b) => (branchesData[b].positive||0) - (branchesData[a].positive||0));
+
+    for (const i of sortedIds) {
         const data = branchesData[i];
         const { ratingValue, reviewsCount } = calcRating(data);
         const scores = calcScores(data);
@@ -873,10 +877,10 @@ function openBranchDetailModal(branchId) {
     let complaintsNote = '';
     let negativeNote   = '';
     if (scores.surplusForComplaints > 0) {
-        complaintsNote = `<span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط الشكاوى</span>`;
+        complaintsNote = `<span class="surplus-badge">تم استخدام ${scores.surplusForComplaints.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsComplaints - scores.rawPtsComplaints).toFixed(2)} من نقاط الشكاوى</span>`;
     }
     if (scores.surplusForNegative > 0) {
-        negativeNote = `<span class="surplus-badge">تم استخدام المزيد من فائض التقييمات الإيجابية لتصحيح نقاط التقييمات السلبية</span>`;
+        negativeNote = `<span class="surplus-badge">تم استخدام ${scores.surplusForNegative.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsNegative - scores.rawPtsNegative).toFixed(2)} من نقاط التقييمات السلبية</span>`;
     }
 
     const progressPct = Math.min(100, (scores.total / 11) * 100);
@@ -1002,7 +1006,7 @@ function setupCarouselEvents() {
             const maxScroll = carousel.scrollWidth - carousel.clientWidth;
             if (Math.abs(carousel.scrollLeft) >= maxScroll - 10) carousel.scrollTo({ left: 0, behavior: 'smooth' });
             else scrollCarousel(1);
-        }, 4000);
+        }, 6000);
     };
 
     carousel.addEventListener('mouseenter', () => { if (!isCarouselPaused) clearInterval(carouselInterval); });
@@ -1044,17 +1048,17 @@ function openBulletinPage(branchId, timestamp = null) {
         if (articleData && articleData.snapshot) {
             data    = articleData.snapshot;
             scores  = articleData.scores || calcScores(data);
-            dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(articleData.timestamp));
+            dateStr = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(articleData.timestamp));
         } else {
             data    = branchesData[branchId];
             scores  = calcScores(data);
-            dateStr = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
+            dateStr = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
         }
     } else {
         data        = branchesData[branchId];
         scores      = calcScores(data);
         articleData = getArticleData(branchId);
-        dateStr     = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
+        dateStr     = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
     }
 
     const tier              = getPerformanceTier(scores);
@@ -1111,10 +1115,10 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     let complaintsNote = '';
     let negativeNote   = '';
     if (scores.surplusForComplaints > 0) {
-        complaintsNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط الشكاوى</span></div>`;
+        complaintsNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام ${scores.surplusForComplaints.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsComplaints - scores.rawPtsComplaints).toFixed(2)} من نقاط الشكاوى</span></div>`;
     }
     if (scores.surplusForNegative > 0) {
-        negativeNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام المزيد من فائض التقييمات الإيجابية لتصحيح نقاط التقييمات السلبية</span></div>`;
+        negativeNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام ${scores.surplusForNegative.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsNegative - scores.rawPtsNegative).toFixed(2)} من نقاط التقييمات السلبية</span></div>`;
     }
 
     const adminButtons = isAdminLoggedIn ? `
@@ -1203,10 +1207,10 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
                 </div>
             </div>
             <div class="md:col-span-2 grid grid-cols-2 gap-4">
-                ${buildStatCard('نقاط السلامة', scores.ptsSafety, data.safety > 0 ? 'text-rose-700 bg-rose-100/60 border-rose-200' : 'text-emerald-700 bg-emerald-100/60 border-emerald-200', `${data.safety} حوادث`, 3, '')}
-                ${buildStatCard('نقاط الشكاوى', scores.ptsComplaints, 'text-amber-700 bg-amber-100/60 border-amber-200', `${data.complaints} شكوى`, 2, complaintsNote)}
-                ${buildStatCard('نقاط الإيجابية', scores.ptsPositive, 'text-emerald-700 bg-emerald-100/60 border-emerald-200', `${data.positive} تقييم`, 4, '')}
-                ${buildStatCard('نقاط السلبية', scores.ptsNegative, 'text-rose-700 bg-rose-100/60 border-rose-200', `${data.negative} تقييم`, 2, negativeNote)}
+                ${buildStatCard('نقاط السلامة',   scores.ptsSafety,    '', `${data.safety} حوادث`,   data.safety === 0 ? 'text-emerald-700 border-emerald-400' : 'text-rose-700 border-rose-400',    3, '')}
+                ${buildStatCard('نقاط الشكاوى',   scores.ptsComplaints,'', `${data.complaints} شكوى`, data.complaints === 0 ? 'text-emerald-700 border-emerald-400' : data.complaints === 1 ? 'text-amber-600 border-amber-400' : 'text-rose-700 border-rose-400', 2, complaintsNote)}
+                ${buildStatCard('نقاط الإيجابية', scores.ptsPositive,  '', `${data.positive} تقييم`,  data.positive >= 10 ? 'text-emerald-700 border-emerald-400' : 'text-amber-600 border-amber-400',  4, '')}
+                ${buildStatCard('نقاط السلبية',   scores.ptsNegative,  '', `${data.negative} تقييم`,  data.negative === 0 ? 'text-emerald-700 border-emerald-400' : data.negative === 1 ? 'text-amber-600 border-amber-400' : 'text-rose-700 border-rose-400',    2, negativeNote)}
             </div>
         </div>
 
@@ -1241,15 +1245,17 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     `;
 }
 
-function buildStatCard(title, pts, badgeClass, badgeText, maxPts, extraHTML) {
+function buildStatCard(title, pts, badgeClass, badgeText, badgeColorClass, maxPts, extraHTML) {
     return `
-        <div class="glass-panel rounded-xl p-5 flex flex-col justify-between hover:scale-[1.02] transition-transform">
-            <p class="text-slate-600 font-bold text-xs mb-1 bg-white/30 inline-block px-2 py-0.5 rounded">${title}</p>
-            <p class="text-3xl font-black text-slate-900 drop-shadow-sm">${pts.toFixed(2)}</p>
-            <div class="flex items-center gap-2 mt-2">
-                <span class="text-xs font-bold ${badgeClass} backdrop-blur px-2 py-1 rounded-md border shadow-sm">${badgeText}</span>
+        <div class="glass-panel rounded-xl p-4 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+            <div class="flex items-center justify-between mb-2">
+                <p class="text-slate-600 font-bold text-xs">${title}</p>
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full border ${badgeColorClass}">${badgeText}</span>
             </div>
-            <p class="text-slate-500 text-xs mt-2 font-medium">من أصل ${maxPts} نقاط</p>
+            <div class="flex items-baseline gap-2 mt-1">
+                <p class="text-3xl font-black text-slate-900 drop-shadow-sm">${pts.toFixed(2)}</p>
+                <p class="text-xs font-medium text-slate-400">من أصل ${maxPts} نقاط</p>
+            </div>
             ${extraHTML || ''}
         </div>`;
 }
@@ -1266,8 +1272,36 @@ function buildPersonRow(name, role, withBorder) {
 }
 
 // ============================================================
-// توليد الصحيفة (التايم لاين)
+// عرض المقالات العامة (أسبوعي، إعلان، رأي) كاملة
 // ============================================================
+function openGlobalArticleModal(timestamp) {
+    const article = globalArticles.find(a => a.timestamp === timestamp);
+    if (!article) return;
+    const lines = article.text ? article.text.split('\n').map(l => l.trim()).filter(l => l) : [];
+    const head  = lines[0] || article.title || '';
+    const body  = lines.slice(1).join('<br>') || article.body || '';
+    const typeLabels = { weekly: 'تحديث أسبوعي', announcement: 'إعلان', opinion: 'رأي' };
+    const typeLabelColors = { weekly: 'text-emerald-700 border-emerald-500', announcement: 'text-amber-700 border-amber-500', opinion: 'text-rose-700 border-rose-500' };
+    const label = typeLabels[article.type] || '';
+    const labelColor = typeLabelColors[article.type] || 'text-slate-700 border-slate-400';
+    const byline = article.authorName
+        ? `<p class="text-sm font-bold text-slate-500 mt-4 border-t border-slate-200/50 pt-3">${article.authorName}${article.authorBio ? ` — ${article.authorBio}` : ''}</p>`
+        : '';
+
+    document.getElementById('globalArticleModalBody').innerHTML = `
+        <span class="text-xs font-bold px-3 py-1 rounded-full border ${labelColor} mb-4 inline-block">${label}</span>
+        <h2 class="text-2xl font-black text-slate-900 mb-4 leading-snug">${head}</h2>
+        <p class="text-slate-700 text-sm leading-relaxed font-medium whitespace-pre-line">${body}</p>
+        ${byline}
+    `;
+    document.getElementById('globalArticleModal').style.display = 'flex';
+}
+function closeGlobalArticleModal(e) {
+    if (e && e.target !== e.currentTarget) return;
+    document.getElementById('globalArticleModal').style.display = 'none';
+}
+
+
 function generateNewspaper() {
     const timelineContainer = document.getElementById('newsTimeline');
     timelineContainer.innerHTML = '';
@@ -1338,7 +1372,7 @@ function generateNewspaper() {
         dateSection.className = "relative mb-12";
         dateSection.innerHTML = `
             <div class="absolute -right-6 top-0 w-4 h-4 rounded-full bg-slate-800 border-4 border-white/60 shadow-sm"></div>
-            <h3 class="text-xl font-black text-slate-800 mb-6 bg-white/60 backdrop-blur inline-block px-4 py-2 rounded-lg shadow-sm border border-white/80">📅 ${displayDate}</h3>
+            <h3 class="text-xl font-black text-slate-800 mb-6 bg-white/60 backdrop-blur inline-block px-4 py-2 rounded-lg shadow-sm border border-white/80">${displayDate}</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsGrid-${dateKey.replace(/[^a-z0-9]/gi,'_')}"></div>
         `;
         timelineContainer.appendChild(dateSection);
@@ -1382,7 +1416,7 @@ function generateNewspaper() {
                             <span class="text-emerald-700 border border-emerald-500 font-bold text-xs px-3 py-1.5 rounded-full">جميع الفروع</span>
                             ${isAdminLoggedIn ? `<button onclick="event.stopPropagation(); deleteGlobalArticle(${item.timestamp})" class="w-7 h-7 flex items-center justify-center bg-rose-50/80 hover:bg-rose-100 border border-rose-300 text-rose-600 rounded-full transition" title="حذف المقال"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
                         </div>
-                        <h3 class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 drop-shadow-sm">${headLine}</h3>
+                        <h3 onclick="openGlobalArticleModal(${item.timestamp})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition drop-shadow-sm">${headLine}</h3>
                         <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${leadLine}</p>
                     </div>
                     <div class="mt-auto pt-5 border-t border-white/40">
@@ -1403,7 +1437,7 @@ function generateNewspaper() {
                             <span class="text-amber-700 border border-amber-500 font-bold text-xs px-3 py-1.5 rounded-full">إعلان</span>
                             ${isAdminLoggedIn ? `<button onclick="event.stopPropagation(); deleteGlobalArticle(${item.timestamp})" class="w-7 h-7 flex items-center justify-center bg-rose-50/80 hover:bg-rose-100 border border-rose-300 text-rose-600 rounded-full transition" title="حذف المقال"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
                         </div>
-                        <h3 class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 drop-shadow-sm">${headLine}</h3>
+                        <h3 onclick="openGlobalArticleModal(${item.timestamp})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition drop-shadow-sm">${headLine}</h3>
                         <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${bodyLineShort}${bodyLine.length > 150 ? '...' : ''}</p>
                     </div>
                     <div class="mt-auto pt-5 border-t border-white/40 bg-white/40 px-3 py-2 rounded-lg text-xs font-bold text-amber-700">إعلان رسمي</div>
@@ -1422,7 +1456,7 @@ function generateNewspaper() {
                             <span class="text-rose-700 border border-rose-500 font-bold text-xs px-3 py-1.5 rounded-full">رأي</span>
                             ${isAdminLoggedIn ? `<button onclick="event.stopPropagation(); deleteGlobalArticle(${item.timestamp})" class="w-7 h-7 flex items-center justify-center bg-rose-50/80 hover:bg-rose-100 border border-rose-300 text-rose-600 rounded-full transition" title="حذف المقال"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
                         </div>
-                        <h3 class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 drop-shadow-sm">${headLine}</h3>
+                        <h3 onclick="openGlobalArticleModal(${item.timestamp})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition drop-shadow-sm">${headLine}</h3>
                         <p class="text-slate-700 text-sm font-medium mb-3 leading-relaxed">${bodyLine}${bodyRaw.length > 150 ? '...' : ''}</p>
                         ${byline}
                     </div>
@@ -1620,7 +1654,8 @@ async function saveAdminData() {
 
     const startReviews   = num('admin_startReviews', branchesData[id].baseReviews);
     const currentReviews = num('admin_currentReviews', startReviews + branchesData[id].positive);
-    let positiveReviews  = currentReviews - startReviews;
+    const negativeCount  = num('admin_negative');
+    let positiveReviews  = currentReviews - startReviews - negativeCount;
     if (positiveReviews < 0) positiveReviews = 0;
 
     branchesData[id] = {
@@ -1631,7 +1666,7 @@ async function saveAdminData() {
         visitors:    num('admin_visitors', 1),
         complaints:  num('admin_complaints'),
         positive:    positiveReviews,
-        negative:    num('admin_negative'),
+        negative:    negativeCount,
         target:      num('admin_target', 50),
         baseRating:  num('admin_baseRating', branchesData[id].baseRating),
         baseReviews: startReviews,
@@ -1676,7 +1711,7 @@ function openHistoryModal(branchId) {
     } else {
         const sorted = [...history].reverse();
         container.innerHTML = sorted.map(entry => {
-            const dateFormatted = new Intl.DateTimeFormat('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(entry.date));
+            const dateFormatted = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(entry.date));
             const tier = getPerformanceTier(entry.scores);
             return `
             <div class="history-item bg-white/60 border border-white/50 rounded-xl p-5 shadow-sm backdrop-blur">
@@ -1750,19 +1785,18 @@ function calculateTrial() {
     document.getElementById('totalPoints').innerText   = total;
     document.getElementById('progressBar').style.width = `${Math.min(100, (total / 11) * 100)}%`;
 
-    const additionText = "<br><span class='text-xs font-bold text-slate-500 mt-2 block'>عند الاستمرار بنفس الأداء</span>";
-    const rewardBox    = document.getElementById('rewardBox');
     const levels = [
-        { min: 9,        text: "التوقع: أداء مرتفع",  border: "#10b981", bg: "rgba(16, 185, 129, 0.1)" },
-        { min: 7,        text: "التوقع: أداء متوسط ◬", border: "#f59e0b", bg: "rgba(245, 158, 11, 0.1)" },
-        { min: 4,        text: "التوقع: أداء منخفض ⚠", border: "#f97316", bg: "rgba(249, 115, 22, 0.1)" },
-        { min: -Infinity, text: "التوقع: أداء حرج ⨂",  border: "#ef4444", bg: "rgba(239, 68, 68, 0.1)" }
+        { min: 9,         text: "أداء مرتفع ✓",  border: "#10b981", bar: "bg-emerald-500" },
+        { min: 7,         text: "أداء متوسط ◬",  border: "#f59e0b", bar: "bg-amber-500"   },
+        { min: 4,         text: "أداء منخفض ⚠",  border: "#f97316", bar: "bg-orange-500"  },
+        { min: -Infinity, text: "أداء حرج ⨂",    border: "#ef4444", bar: "bg-rose-500"    }
     ];
     const level = levels.find(l => total >= l.min);
-    rewardBox.innerHTML         = level.text + additionText;
-    rewardBox.className         = `mt-6 p-4 rounded-xl text-center font-black text-lg backdrop-blur text-slate-800 border-2`;
-    rewardBox.style.borderColor = level.border;
-    rewardBox.style.backgroundColor = level.bg;
+    const rewardBox = document.getElementById('rewardBox');
+    document.getElementById('rewardText').innerText = level.text;
+    document.getElementById('progressBar').className = `${level.bar} h-2.5 rounded-full transition-all`;
+    rewardBox.style.borderColor       = level.border;
+    rewardBox.style.backgroundColor   = `${level.border}18`;
 }
 
 // ============================================================
