@@ -1700,11 +1700,11 @@ function toggleTimeCalc() {
 
     if (isTimeCalcEnabled) {
         btn.textContent = 'حاسبة الاداء';
-        btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200';
+btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-indigo-400 text-indigo-700 hover:bg-indigo-50/50';
         if (note) note.classList.remove('hidden');
     } else {
         btn.textContent = 'حاسبة الأوزان';
-        btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-slate-100/70 border-slate-300 text-slate-600 hover:bg-slate-200';
+btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-slate-400 text-slate-500 hover:bg-slate-50/50';
         if (note) note.classList.add('hidden');
     }
     calculateTrial();
