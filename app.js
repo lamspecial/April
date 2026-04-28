@@ -1699,11 +1699,11 @@ function toggleTimeCalc() {
     const note = document.getElementById('predictionNote');
 
     if (isTimeCalcEnabled) {
-        btn.textContent = 'حاسبة الاداء';
+        btn.textContent = 'قياس الاداء';
 btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-indigo-400 text-indigo-700 hover:bg-indigo-50/50';
         if (note) note.classList.remove('hidden');
     } else {
-        btn.textContent = 'حاسبة الأوزان';
+        btn.textContent = 'حساب النتيجة';
 btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-slate-400 text-slate-500 hover:bg-slate-50/50';
         if (note) note.classList.add('hidden');
     }
@@ -1714,7 +1714,7 @@ function openPredictionModal() {
     isTimeCalcEnabled = true;
     const btn  = document.getElementById('timeCalcToggleBtn');
     const note = document.getElementById('predictionNote');
-    if (btn)  { btn.textContent = 'حاسبة الاداء'; btn.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200'; }
+    if (btn)  { btn.textContent = 'قياس الاداء'; btn.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200'; }
     if (note) note.classList.remove('hidden');
     document.getElementById('predictionModal').style.display = 'flex';
     setupDateCalculator();
