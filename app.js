@@ -1703,7 +1703,7 @@ function toggleTimeCalc() {
 btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-indigo-400 text-indigo-700 hover:bg-indigo-50/50';
         if (note) note.classList.remove('hidden');
     } else {
-        btn.textContent = 'حساب النتيجة';
+        btn.textContent = 'الوضع الحالي';
 btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-slate-400 text-slate-500 hover:bg-slate-50/50';
         if (note) note.classList.add('hidden');
     }
