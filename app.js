@@ -1698,14 +1698,17 @@ function toggleTimeCalc() {
     const btn  = document.getElementById('timeCalcToggleBtn');
     const note = document.getElementById('predictionNote');
 
-    if (isTimeCalcEnabled) {
-        btn.textContent = 'قياس الاداء';
-btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-indigo-400 text-indigo-700 hover:bg-indigo-50/50';
-        if (note) note.classList.remove('hidden');
-    } else {
-        btn.textContent = 'الوضع الحالي';
-btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-slate-400 text-slate-500 hover:bg-slate-50/50';
-        if (note) note.classList.add('hidden');
+    ‏    const label = document.getElementById('timeCalcLabel');
+‏    if (isTimeCalcEnabled) {
+‏        btn.textContent = 'قياس الاداء';
+‏        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-indigo-500 text-indigo-600';
+‏        if (note)  note.classList.remove('hidden');
+        if (label) label.innerHTML = 'قياس الاداء<br>  يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر ';
+‏    } else {
+‏        btn.textContent = 'حساب النتيجة';
+‏        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-slate-400 text-slate-500';
+‏        if (note)  note.classList.add('hidden');
+        if (label) label.innerHTML = 'حساب النتيجة<br>يحسب المعدل الشهري مثال: عند ادخال 50 تقييم سيخبرك ان النتيجة 11 نقطة ';
     }
     calculateTrial();
 }
