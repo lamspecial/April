@@ -181,7 +181,7 @@ function calcScores(data) {
     const ptsPositive = Math.min(4, (P / target) * 4);
     
     const steps = Math.floor(P / 5) * 5;
-    const W = steps === 0 ? 1.0 : Math.max(0.2, 60 / (2 * steps + 60));
+    const W = steps === 0 ? 1.0 : Math.max(0.2, 60 / (1.3 * steps + 60));
     const rawPtsNegative = Math.max(0, 2 - ((data.negative || 0) * W));
 
     let ptsComplaints = rawPtsComplaints;
@@ -200,9 +200,9 @@ function calcScores(data) {
         const remainingSurplus   = surplus - surplusForComplaints;
         if (remainingSurplus > 0) {
             const maxNegativeBoost = 2 - rawPtsNegative;
-            const negativeBoost    = Math.min(remainingSurplus * 0.1, maxNegativeBoost);
+            const negativeBoost    = Math.min(remainingSurplus * 0.075, maxNegativeBoost);
             ptsNegative            = Math.min(2, rawPtsNegative + negativeBoost);
-            surplusForNegative     = negativeBoost / 0.1;
+            surplusForNegative     = negativeBoost / 0.075;
         }
         surplusUsed = surplusForComplaints + surplusForNegative;
     }
@@ -851,10 +851,10 @@ function openBranchDetailModal(branchId) {
     let complaintsNote = '';
     let negativeNote   = '';
     if (scores.surplusForComplaints > 0) {
-        complaintsNote = `<span class="surplus-badge">تم استخدام ${scores.surplusForComplaints.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsComplaints - scores.rawPtsComplaints).toFixed(2)} من نقاط الشكاوى</span>`;
+        complaintsNote = `<span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط الشكاوى</span>`;
     }
     if (scores.surplusForNegative > 0) {
-        negativeNote = `<span class="surplus-badge">تم استخدام ${scores.surplusForNegative.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsNegative - scores.rawPtsNegative).toFixed(2)} من نقاط التقييمات السلبية</span>`;
+        negativeNote = `<span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط السلبية</span>`;
     }
 
     const progressPct = Math.min(100, (scores.total / 11) * 100);
@@ -1101,10 +1101,10 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     let complaintsNote = '';
     let negativeNote   = '';
     if (scores.surplusForComplaints > 0) {
-        complaintsNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام ${scores.surplusForComplaints.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsComplaints - scores.rawPtsComplaints).toFixed(2)} من نقاط الشكاوى</span></div>`;
+        complaintsNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام  فائض التقييمات الإيجابية لتصحيح نقاط الشكاوى</span></div>`;
     }
     if (scores.surplusForNegative > 0) {
-        negativeNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام ${scores.surplusForNegative.toFixed(1)} من فائض التقييمات الإيجابية لتصحيح ${(scores.ptsNegative - scores.rawPtsNegative).toFixed(2)} من نقاط التقييمات السلبية</span></div>`;
+        negativeNote = `<div class="mt-2"><span class="surplus-badge">تم استخدام فائض التقييمات الإيجابية لتصحيح نقاط السلبية</span></div>`;
     }
 
     const adminButtons = isAdminLoggedIn ? `
