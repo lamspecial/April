@@ -1699,7 +1699,7 @@ function toggleTimeCalc() {
     const note = document.getElementById('predictionNote');
 
     if (isTimeCalcEnabled) {
-        btn.textContent = 'حاسبة زمنية';
+        btn.textContent = 'توقع النتيجة الشهرية';
         btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200';
         if (note) note.classList.remove('hidden');
     } else {
