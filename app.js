@@ -1699,11 +1699,11 @@ function toggleTimeCalc() {
     const note = document.getElementById('predictionNote');
 
     if (isTimeCalcEnabled) {
-        btn.textContent = 'توقع النتيجة الشهرية';
+        btn.textContent = 'حاسبة الاداء';
         btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200';
         if (note) note.classList.remove('hidden');
     } else {
-        btn.textContent = 'حاسبة';
+        btn.textContent = 'حاسبة الأوزان';
         btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-slate-100/70 border-slate-300 text-slate-600 hover:bg-slate-200';
         if (note) note.classList.add('hidden');
     }
@@ -1714,7 +1714,7 @@ function openPredictionModal() {
     isTimeCalcEnabled = true;
     const btn  = document.getElementById('timeCalcToggleBtn');
     const note = document.getElementById('predictionNote');
-    if (btn)  { btn.textContent = 'حاسبة زمنية'; btn.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200'; }
+    if (btn)  { btn.textContent = 'حاسبة الاداء'; btn.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200'; }
     if (note) note.classList.remove('hidden');
     document.getElementById('predictionModal').style.display = 'flex';
     setupDateCalculator();
