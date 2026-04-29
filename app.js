@@ -1698,14 +1698,17 @@ function toggleTimeCalc() {
     const btn  = document.getElementById('timeCalcToggleBtn');
     const note = document.getElementById('predictionNote');
 
+        const label = document.getElementById('timeCalcLabel');
     if (isTimeCalcEnabled) {
         btn.textContent = 'قياس الاداء';
-btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-indigo-400 text-indigo-700 hover:bg-indigo-50/50';
-        if (note) note.classList.remove('hidden');
+        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-emerald-500 text-emerald-600 flex-shrink-0';
+        if (note)  note.classList.remove('hidden');
+        if (label) label.innerHTML = 'قياس الاداء<br><span class="font-medium text-slate-400">يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر، يمكن التبديل لوضع الحاسبة بضغط الزر</span>';
     } else {
-        btn.textContent = 'الوضع الحالي';
-btn.className   = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-slate-400 text-slate-500 hover:bg-slate-50/50';
-        if (note) note.classList.add('hidden');
+        btn.textContent = 'حساب النتيجة';
+        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-blue-500 text-blue-600 flex-shrink-0';
+        if (note)  note.classList.add('hidden');
+        if (label) label.innerHTML = 'الحاسبة<br><span class="font-medium text-slate-400">يحسب بناء على 30 يوم ويطبق نظام التعويض ويخفض وزن التقييمات السلبية عند ارتفاع عدد التقييمات الايجابية</span>';
     }
     calculateTrial();
 }
@@ -1714,7 +1717,7 @@ function openPredictionModal() {
     isTimeCalcEnabled = true;
     const btn  = document.getElementById('timeCalcToggleBtn');
     const note = document.getElementById('predictionNote');
-    if (btn)  { btn.textContent = 'قياس الاداء'; btn.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-indigo-100/70 border-indigo-300 text-indigo-800 hover:bg-indigo-200'; }
+    if (btn)  { btn.textContent = 'قياس الاداء'; btn.className = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-emerald-500 text-emerald-600 flex-shrink-0'; }
     if (note) note.classList.remove('hidden');
     document.getElementById('predictionModal').style.display = 'flex';
     setupDateCalculator();
