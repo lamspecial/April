@@ -263,8 +263,8 @@ function generateWeeklyPrompt(reasonsMap) {
         const d=branchesData[i],s=calcScores(d),tier=getPerformanceTier(s);
         lines+=`\n• فرع ${d.bName}:\n  - الإيجابية: ${d.positive}/${d.target} (${Math.round((d.positive/d.target)*100)}%)\n  - الشكاوى: ${d.complaints} | السلامة: ${d.safety} | سلبي: ${d.negative}\n  - النقاط: ${s.total}/11 | التصنيف: ${tier.label}\n  - ملاحظة: ${reasonsMap[i]||'لم يُذكر'}\n`;
     }
-    return `أنت محرر محتوى متخصص في التحديثات الأسبوعية الداخلية لمجموعة "أي آم سبيشل".
-اكتب تحديثاً أسبوعياً بتاريخ ${dateStr} (اليوم ${curDay} من أصل ${dim}):\n${lines}
+    return `أنت محرر محتوى متخصص في التحديثات الاسبوعية الداخلية لمجموعة "أي آم سبيشل".
+اكتب تحديثاً اسبوعياً بتاريخ ${dateStr} (اليوم ${curDay} من أصل ${dim}):\n${lines}
 متطلبات: عنوان (12 كلمة)، مقدمة (30-40 كلمة)، تحليل كل فرع (20-30 كلمة)، خاتمة (20-30 كلمة).
 أسلوب داخلي مباشر، لا عناوين فرعية.`;
 }
@@ -393,8 +393,8 @@ function openWeeklyModal() {
             <pre id="weeklyPromptBox" class="prompt-box p-5 text-sm overflow-auto max-h-64 hidden"></pre>
             <button id="weeklyPromptCopyBtn" onclick="copyWeeklyPrompt()" class="absolute top-3 left-3 btn-solid-dark text-xs px-4 py-2 rounded-lg hidden">نسخ</button>
         </div>
-        <div><label class="block text-sm font-bold text-slate-700 mb-2">المقال الأسبوعي (الصقه هنا)</label>
-        <textarea id="weeklyArticleText" rows="6" class="w-full p-4 rounded-xl glass-input text-sm leading-relaxed resize-y" placeholder="الصق المقال الأسبوعي هنا..."></textarea></div>
+        <div><label class="block text-sm font-bold text-slate-700 mb-2">المقال الاسبوعي (الصقه هنا)</label>
+        <textarea id="weeklyArticleText" rows="6" class="w-full p-4 rounded-xl glass-input text-sm leading-relaxed resize-y" placeholder="الصق المقال الاسبوعي هنا..."></textarea></div>
         <div class="flex gap-3">
             <button onclick="generateWeeklyPromptUI()" class="flex-1 btn-outline btn-outline-emerald py-3 rounded-xl font-black text-sm">توليد البرومبت</button>
             <button onclick="saveWeeklyArticle()" class="flex-1 btn-solid-dark py-3 rounded-xl text-sm">حفظ المقال</button>
@@ -411,14 +411,14 @@ function generateWeeklyPromptUI() {
 function copyWeeklyPrompt() { _fallbackCopy(document.getElementById('weeklyPromptBox').textContent); }
 async function saveWeeklyArticle() {
     const text=document.getElementById('weeklyArticleText').value.trim();
-    if(!text){ alert('يرجى لصق المقال الأسبوعي أولاً'); return; }
+    if(!text){ alert('يرجى لصق المقال الاسبوعي أولاً'); return; }
     const rm={};
     for(let i=1;i<=6;i++){ const el=document.getElementById(`weeklyReason_${i}`); rm[i]=el?el.value.trim():''; }
     const ts=Date.now(), dateStr=new Date(ts).toISOString().split('T')[0];
     const lines=text.split('\n').map(l=>l.trim()).filter(l=>l);
-    globalArticles.push({ type:'weekly', text, title:lines[0]||'التحديث الأسبوعي', timestamp:ts, dateStr, reasons:rm,
+    globalArticles.push({ type:'weekly', text, title:lines[0]||'التحديث الاسبوعي', timestamp:ts, dateStr, reasons:rm,
         branchSnapshots:Object.fromEntries(Object.keys(branchesData).map(i=>[i,{...branchesData[i],scores:calcScores(branchesData[i])}])) });
-    await saveGlobalArticlesToFirebase(); closeWeeklyModal(); generateNewspaper(); showCopyToast('تم حفظ التحديث الأسبوعي');
+    await saveGlobalArticlesToFirebase(); closeWeeklyModal(); generateNewspaper(); showCopyToast('تم حفظ التحديث الاسبوعي');
 }
 function closeWeeklyModal() { document.getElementById('weeklyModal').style.display='none'; }
 
@@ -760,7 +760,7 @@ function openGlobalArticleModal(ts) {
     const art=globalArticles.find(a=>a.timestamp===ts); if(!art) return;
     const lines=art.text?art.text.split('\n').map(l=>l.trim()).filter(l=>l):[];
     const head=lines[0]||art.title||'', body=lines.slice(1).join('<br>')||art.body||'';
-    const typeLabels={weekly:'تحديث أسبوعي',announcement:'إعلان',opinion:'رأي'};
+    const typeLabels={weekly:'',announcement:'إعلان',opinion:'رأي'};
     const typeBadge={weekly:'badge-emerald',announcement:'badge-amber',opinion:'badge-rose'};
     const byline=art.authorName?`<p class="text-sm font-bold text-slate-500 mt-4 border-t border-slate-200/50 pt-3">${art.authorName}${art.authorBio?` — ${art.authorBio}`:''}</p>`:'';
     document.getElementById('globalArticleModalBody').innerHTML=`
@@ -821,12 +821,12 @@ function generateNewspaper() {
             } else if(item.type==='weekly'){
                 const lines=item.article?item.article.split('\n').map(l=>l.trim()).filter(l=>l):[];
                 card.innerHTML=`<div>
-                    <div class="flex justify-between items-start mb-3"><span class="badge badge-emerald">جميع الفروع</span>${delBtn}</div>
-                    <h3 onclick="openGlobalArticleModal(${item.timestamp})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition">${lines[0]||'التحديث الأسبوعي'}</h3>
+                    <div class="flex justify-between items-start mb-3"><span class="badge badge-emerald">لمح</span>${delBtn}</div>
+                    <h3 onclick="openGlobalArticleModal(${item.timestamp})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition">${lines[0]||'التحديث الاسبوعي'}</h3>
                     <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${lines[1]||''}</p>
                 </div>
                 <div class="mt-auto pt-5 border-t border-white/40 flex justify-between items-center bg-white/40 px-3 py-2 rounded-lg">
-                    <span class="text-sm font-bold text-slate-700">تحديث أسبوعي</span><span class="badge badge-emerald text-xs">شامل</span>
+                    <span class="text-sm font-bold text-slate-700"></span><span class="badge badge-emerald text-xs">لمحة</span>
                 </div>`;
             } else if(item.type==='announcement'){
                 const lines=item.article?item.article.split('\n').map(l=>l.trim()).filter(l=>l):[];
