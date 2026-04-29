@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آي أم سبيشل </title>
-
-    <meta property="og:title" id="og_title" content="آي أم سبيشل | تقرير الأداء للفروع">
-    <meta property="og:description" id="og_description" content="تابع تقرير الأداء لمجموعة فروع أي آم سبيشل، حيث نستعرض نتائج ومؤشرات الجودة والخدمة لضمان التميز الدائم والارتقاء المستمر.">
-    <meta property="og:type" content="website">
+    <title>آي أم سبيشل</title>
+    <meta property="og:title"       id="og_title"       content="آي أم سبيشل | تقرير الأداء للفروع">
+    <meta property="og:description" id="og_description" content="تابع تقرير الأداء لمجموعة فروع أي آم سبيشل.">
+    <meta property="og:type"    content="website">
     <meta property="og:site_name" content="أي آم سبيشل">
-    <meta property="og:locale" content="ar_SA">
-    <meta property="og:url" id="og_url" content="">
-    <meta property="og:image" id="og_image" content="special.png">
-    <meta property="og:image:width" content="1200">
+    <meta property="og:locale"  content="ar_SA">
+    <meta property="og:url"     id="og_url"   content="">
+    <meta property="og:image"   id="og_image" content="special.png">
+    <meta property="og:image:width"  content="1200">
     <meta property="og:image:height" content="630">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" id="twitter_title" content="آي أم سبيشل">
-    <meta name="twitter:description" id="twitter_description" content="تقارير الأداء .">
-    <meta name="twitter:image" id="twitter_image" content="special.png">
-    <meta name="description" id="meta_description" content=" آي أم سبيشل">
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       id="twitter_title"       content="آي أم سبيشل">
+    <meta name="twitter:description" id="twitter_description" content="تقارير الأداء.">
+    <meta name="twitter:image"       id="twitter_image"       content="special.png">
+    <meta name="description"         id="meta_description"    content="آي أم سبيشل">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -34,17 +33,19 @@
 
 <div id="loadingOverlay">
     <div class="w-12 h-12 border-4 border-slate-300 border-t-slate-800 rounded-full animate-spin mb-4"></div>
-    <p class="text-slate-800 font-bold">I am Special...</p>
+    <p class="text-slate-700 font-bold">I am Special...</p>
 </div>
 
 <!-- ===== HEADER ===== -->
 <header class="glass-header text-white px-4 py-4 sticky top-0 z-40">
     <div class="max-w-6xl mx-auto flex justify-between items-center gap-2">
         <h1 class="text-xl sm:text-2xl font-black tracking-wide flex items-center gap-1.5 whitespace-nowrap drop-shadow-md flex-shrink-0 cursor-pointer" onclick="goToMainPage()">
-            <span class="text-red-500" onclick="event.stopPropagation(); openPredictionModal()">أي آم</span><span class="text-yellow-400" onclick="event.stopPropagation(); openPredictionModal()">سبيشل</span>
+            <span class="text-red-400"    onclick="event.stopPropagation(); openPredictionModal()">أي آم</span>
+            <span class="text-yellow-400" onclick="event.stopPropagation(); openPredictionModal()">سبيشل</span>
         </h1>
         <div class="flex gap-2 flex-shrink min-w-0">
-            <button onclick="openMaintenanceAuth()" class="bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-slate-50 px-3 py-2 rounded-lg font-bold text-xs sm:text-sm transition flex items-center gap-1 shadow-sm min-w-0 leading-tight" id="adminBtn">
+            <button onclick="openMaintenanceAuth()" id="adminBtn"
+                class="bg-white/10 hover:bg-white/18 border border-white/20 text-slate-50 px-3 py-2 rounded-lg font-bold text-xs sm:text-sm transition flex items-center gap-1 shadow-sm min-w-0 leading-tight">
                 <span class="truncate">محمد عبدالعزيز الحبيب</span>
             </button>
         </div>
@@ -55,14 +56,14 @@
 <div id="mainPageWrapper">
     <div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
         <div class="space-y-2 mb-8 text-center">
-            <h2 class="text-3xl font-black text-slate-800 tracking-wide whitespace-nowrap drop-shadow-sm">تعزيز السمعة الرقمية </h2>
-            <p class="text-slate-600 font-medium bg-white/40 inline-block px-4 py-1 rounded-full backdrop-blur-sm border border-white/50">بروتوكول إدارات الفروع</p>
+            <h2 class="text-3xl font-black text-slate-800 tracking-wide drop-shadow-sm">تعزيز السمعة الرقمية</h2>
+            <p class="text-slate-600 font-medium bg-white/40 inline-block px-4 py-1 rounded-full border border-white/50">بروتوكول إدارات الفروع</p>
         </div>
 
         <!-- Carousel -->
         <div class="mb-6 relative w-full group">
-            <button onclick="scrollCarousel(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 glass-panel rounded-full w-10 h-10 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 transition transform hover:scale-105 opacity-0 group-hover:opacity-100 font-bold text-lg">❯</button>
-            <button onclick="scrollCarousel(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-4 glass-panel rounded-full w-10 h-10 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 transition transform hover:scale-105 opacity-0 group-hover:opacity-100 font-bold text-lg">❮</button>
+            <button onclick="scrollCarousel(1)"  class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-4 glass-panel rounded-full w-10 h-10 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 transition opacity-0 group-hover:opacity-100 font-bold text-lg">❯</button>
+            <button onclick="scrollCarousel(-1)" class="absolute left-0  top-1/2 -translate-y-1/2 z-10 -translate-x-4 glass-panel rounded-full w-10 h-10 hidden md:flex items-center justify-center text-slate-600 hover:text-slate-900 transition opacity-0 group-hover:opacity-100 font-bold text-lg">❮</button>
             <div id="branchesCarousel" class="flex gap-5 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4 pt-2 scroll-smooth px-2"></div>
             <div id="carouselDots" class="flex justify-center items-center gap-2 mt-4 w-full"></div>
         </div>
@@ -72,12 +73,12 @@
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div class="text-center sm:text-right">
                     <p class="text-xs font-bold text-slate-500 mb-1">التقييمات من بداية الشهر</p>
-                    <p id="brandTotalReviews" class="text-5xl font-black text-slate-900 drop-shadow-sm">0</p>
+                    <p id="brandTotalReviews" class="text-5xl font-black text-slate-900">0</p>
                 </div>
                 <div class="text-center">
                     <p class="text-xs font-bold text-slate-500 mb-2">الأكثر مساهمة</p>
                     <div id="topContributorDisplay" class="h-8 relative overflow-hidden min-w-[160px]">
-                        <p id="topContributorName" class="text-base font-black text-indigo-700 transition-opacity duration-500 opacity-0 absolute inset-0 flex items-center justify-center"></p>
+                        <p id="topContributorName" class="text-base font-black text-indigo-700 opacity-0 absolute inset-0 flex items-center justify-center"></p>
                     </div>
                 </div>
             </div>
@@ -95,9 +96,9 @@
             <div class="flex-grow">
                 <span id="bulletinBreadcrumb" class="text-slate-500 text-sm font-medium">التقرير الدوري</span>
                 <span class="text-slate-400 mx-2">◂</span>
-                <span id="bulletinBreadcrumbBranch" class="text-slate-800 font-bold text-sm bg-white/40 px-2 py-0.5 rounded backdrop-blur"></span>
+                <span id="bulletinBreadcrumbBranch" class="text-slate-800 font-bold text-sm bg-white/40 px-2 py-0.5 rounded"></span>
             </div>
-            <button onclick="shareBulletinPage()" class="flex items-center justify-center share-btn text-[#25D366] hover:text-[#1ebe57] transition drop-shadow-md bg-white/50 p-2 rounded-full border border-white/50" title="مشاركة عبر واتساب">
+            <button onclick="shareBulletinPage()" class="share-btn text-[#25D366] bg-white/50 p-2 rounded-full border border-white/50" title="مشاركة عبر واتساب">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </button>
         </div>
@@ -108,56 +109,53 @@
 <!-- ===== MODALS ===== -->
 
 <!-- Iframe Map Modal -->
-<div id="iframeModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-2" onclick="closeIframeModal(event)">
-    <div class="w-full h-[80vh] max-w-5xl rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/20 relative bg-slate-100/50 backdrop-blur-lg" onclick="event.stopPropagation()">
-        <button onclick="closeIframeModal(event)" class="absolute top-4 left-4 bg-white/80 hover:bg-white text-slate-800 w-10 h-10 rounded-full shadow flex items-center justify-center font-bold text-lg z-10 transition backdrop-blur">✕</button>
-        <iframe id="branchMapIframe" src="" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<div id="iframeModal" class="fixed inset-0 bg-slate-900/55 backdrop-blur-sm z-50 hidden items-center justify-center p-2" onclick="closeIframeModal(event)">
+    <div class="w-full h-[80vh] max-w-5xl rounded-2xl overflow-hidden shadow-2xl border border-white/20 relative" onclick="event.stopPropagation()">
+        <button onclick="closeIframeModal(event)" class="absolute top-4 left-4 bg-white/80 hover:bg-white text-slate-800 w-10 h-10 rounded-full shadow flex items-center justify-center font-bold text-lg z-10 transition">✕</button>
+        <iframe id="branchMapIframe" src="" width="100%" height="100%" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 </div>
 
-<!-- Branch Detail Modal (public view) -->
+<!-- Branch Detail Modal -->
 <div id="branchDetailModal" class="fixed inset-0 bg-white/20 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeBranchDetailModal(event)">
-    <div class="bg-white/60 backdrop-blur-xl rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto hide-scrollbar shadow-lg border border-white/80 relative" onclick="event.stopPropagation()">
-
-        <div class="p-5 border-b border-white/30 bg-white/30 backdrop-blur flex justify-between items-center rounded-t-2xl sticky top-0">
+    <div class="bg-white/75 backdrop-blur-xl rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto hide-scrollbar shadow-lg border border-white/80 relative" onclick="event.stopPropagation()">
+        <div class="p-5 border-b border-white/30 bg-white/40 flex justify-between items-center rounded-t-2xl sticky top-0">
             <h2 class="text-lg font-black text-slate-900" id="branchDetailTitle">مؤشرات الفرع</h2>
-            <button onclick="closeBranchDetailModal()" class="text-slate-600 hover:text-slate-900 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60 font-bold">✕</button>
+            <button onclick="closeBranchDetailModal()" class="text-slate-600 hover:text-slate-900 w-8 h-8 rounded-full bg-white/60 hover:bg-white flex items-center justify-center transition shadow border border-white/60 font-bold">✕</button>
         </div>
         <div id="branchDetailContent" class="p-5 space-y-4"></div>
     </div>
 </div>
 
 <!-- Toast -->
-<div id="copyToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/90 backdrop-blur-md border border-white/20 text-white font-bold px-6 py-3 rounded-xl shadow-2xl z-[60] hidden text-sm">
+<div id="copyToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-800/90 border border-white/20 text-white font-bold px-6 py-3 rounded-xl shadow-2xl z-[60] hidden text-sm">
     تم النسخ
 </div>
 
 <!-- PIN Auth Modal -->
-<div id="maintenanceAuthModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+<div id="maintenanceAuthModal" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div class="glass-panel rounded-2xl p-8 shadow-2xl max-w-sm w-full text-center border border-white/50">
         <h3 class="font-black text-xl mb-2 text-slate-900">الإدارة العليا</h3>
         <p class="mb-6 font-medium text-slate-600 text-sm bg-white/30 inline-block px-3 py-1 rounded-full">أدخل كلمة المرور</p>
         <div class="flex gap-4 justify-center mb-8" dir="ltr">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this, 0)" onkeydown="handleBoxKey(event, 0)">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this, 1)" onkeydown="handleBoxKey(event, 1)">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this, 2)" onkeydown="handleBoxKey(event, 2)">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this, 3)" onkeydown="handleBoxKey(event, 3)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this,0)" onkeydown="handleBoxKey(event,0)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this,1)" onkeydown="handleBoxKey(event,1)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this,2)" onkeydown="handleBoxKey(event,2)">
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this,3)" onkeydown="handleBoxKey(event,3)">
         </div>
-        <button onclick="closeMaintenanceAuth()" class="w-full py-3 bg-white/50 hover:bg-white/70 border border-white/60 text-slate-800 font-bold rounded-lg transition shadow-sm backdrop-blur">إلغاء</button>
+        <button onclick="closeMaintenanceAuth()" class="w-full py-3 bg-white/50 hover:bg-white/70 border border-white/60 text-slate-800 font-bold rounded-lg transition shadow-sm">إلغاء</button>
     </div>
 </div>
 
-<!-- Admin Edit Modal (inline edit on card click) -->
-<div id="adminModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-    <div class="glass-panel rounded-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto shadow-[0_15px_40px_rgba(0,0,0,0.2)] border border-white/60 flex flex-col">
-        <!-- Sticky top bar with actions -->
-        <div class="p-4 border-b border-white/30 bg-white/30 backdrop-blur rounded-t-2xl sticky top-0 z-10">
+<!-- Admin Edit Modal -->
+<div id="adminModal" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto shadow-xl border border-white/60 flex flex-col">
+        <div class="p-4 border-b border-white/30 bg-white/30 rounded-t-2xl sticky top-0 z-10">
             <div class="flex justify-between items-center mb-3">
                 <h2 class="text-base font-black text-slate-900">تحرير بيانات الفرع</h2>
                 <button onclick="closeAdmin()" class="text-slate-600 hover:text-slate-900 font-bold text-xl bg-white/40 hover:bg-white/60 w-8 h-8 rounded-full flex items-center justify-center transition">✕</button>
             </div>
-            <!-- Branch selector -->
-            <select id="branchSelector" onchange="loadAdminData()" class="w-full p-2 rounded-lg glass-input font-bold focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm mb-3">
+            <select id="branchSelector" onchange="loadAdminData()" class="w-full p-2 rounded-lg glass-input font-bold text-sm mb-3">
                 <option value="1">فرع 1 (شرق بلازا)</option>
                 <option value="2">فرع 2 (الرياض جاليري)</option>
                 <option value="3">فرع 3 (ذافيو)</option>
@@ -165,112 +163,74 @@
                 <option value="5">فرع 5 (سلام مول)</option>
                 <option value="6">فرع 6 (مركز المملكة)</option>
             </select>
-            <!-- Action buttons at top -->
             <div class="flex gap-2 flex-wrap">
-                <button onclick="saveAdminData()" class="flex-1 bg-slate-800/90 hover:bg-slate-900 backdrop-blur text-white py-2 rounded-lg font-black text-sm transition shadow border border-white/20 flex items-center justify-center gap-1 min-w-[70px]">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13"/><polyline points="7 3 7 8 15 8"/></svg>
+                <button onclick="saveAdminData()" class="btn-solid-dark flex-1 py-2 text-sm flex items-center justify-center gap-1 min-w-[70px]">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13"/><polyline points="7 3 7 8 15 8"/></svg>
                     حفظ
                 </button>
-                <button onclick="openArticleTypeSelector()" class="flex-1 bg-indigo-600/90 hover:bg-indigo-700 backdrop-blur text-white py-2 rounded-lg font-black text-sm transition shadow border border-white/20 flex items-center justify-center gap-1 min-w-[90px]">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <button onclick="openArticleTypeSelector()" class="flex-1 btn-outline btn-outline-indigo py-2 text-sm flex items-center justify-center gap-1 min-w-[90px]">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                     مقال
                 </button>
-                <button onclick="closeAdmin(); openPredictionModal();" class="bg-amber-500/90 hover:bg-amber-600 backdrop-blur text-white py-2 px-3 rounded-lg font-black text-sm transition shadow border border-white/20 flex items-center justify-center gap-1" title="الوضع الحالي">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <button onclick="closeAdmin(); openPredictionModal();" class="btn-outline btn-outline-amber py-2 px-3 text-sm flex items-center justify-center gap-1" title="قياس الأداء">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                     توقع
                 </button>
             </div>
         </div>
-
         <div class="p-4 space-y-4">
-            <!-- Names row -->
             <div class="grid grid-cols-3 gap-3">
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">اسم الفرع</label>
-                    <input type="text" id="admin_bName" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">اسم المديرة</label>
-                    <input type="text" id="admin_mName" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">اسم النائبة</label>
-                    <input type="text" id="admin_dName" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">اسم الفرع</label><input type="text" id="admin_bName" class="w-full p-2 rounded-lg glass-input text-sm"></div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">اسم المديرة</label><input type="text" id="admin_mName" class="w-full p-2 rounded-lg glass-input text-sm"></div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">اسم النائبة</label><input type="text" id="admin_dName" class="w-full p-2 rounded-lg glass-input text-sm"></div>
             </div>
-
-            <!-- Numbers grid -->
             <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">حوادث السلامة</label>
-                    <input type="number" id="admin_safety" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">الشكاوى</label>
-                    <input type="number" id="admin_complaints" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">تقييمات بداية الشهر</label>
-                    <input type="number" id="admin_startReviews" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">التقييمات الحالية الإجمالية</label>
-                    <input type="number" id="admin_currentReviews" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">تقييم سلبي (يدوي)</label>
-                    <input type="number" id="admin_negative" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">التقييم العام للفرع</label>
-                    <input type="number" id="admin_baseRating" step="0.1" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-slate-700">الزوار (مخفي)</label>
-                    <input type="number" id="admin_visitors" class="w-full p-2 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs mb-1 font-bold text-amber-800 bg-amber-50/60 px-2 rounded">الهدف الشهري</label>
-                    <input type="number" id="admin_target" class="w-full p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm" style="background: rgba(255, 251, 235, 0.6); border: 1px solid rgba(255,255,255,0.8);">
-                </div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">حوادث السلامة</label><input type="number" id="admin_safety" class="w-full p-2 rounded-lg glass-input text-sm"></div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">الشكاوى</label><input type="number" id="admin_complaints" class="w-full p-2 rounded-lg glass-input text-sm"></div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">تقييمات بداية الشهر</label><input type="number" id="admin_startReviews" class="w-full p-2 rounded-lg glass-input text-sm"></div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">التقييمات الحالية الإجمالية</label><input type="number" id="admin_currentReviews" class="w-full p-2 rounded-lg glass-input text-sm"></div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">تقييم سلبي (يدوي)</label><input type="number" id="admin_negative" class="w-full p-2 rounded-lg glass-input text-sm"></div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">التقييم العام للفرع</label><input type="number" id="admin_baseRating" step="0.1" class="w-full p-2 rounded-lg glass-input text-sm"></div>
+                <div><label class="block text-xs mb-1 font-bold text-slate-600">الزوار (مخفي)</label><input type="number" id="admin_visitors" class="w-full p-2 rounded-lg glass-input text-sm"></div>
+                <div><label class="block text-xs mb-1 font-bold text-amber-700">الهدف الشهري</label><input type="number" id="admin_target" class="w-full p-2 rounded-lg glass-input text-sm border-amber-300/60"></div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Article Type Selector Modal -->
-<div id="articleTypeModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-[60] hidden items-center justify-center p-4">
+<div id="articleTypeModal" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-[60] hidden items-center justify-center p-4">
     <div class="glass-panel rounded-2xl p-6 shadow-2xl max-w-sm w-full border border-white/50">
         <div class="flex justify-between items-center mb-5">
             <h3 class="font-black text-lg text-slate-900">نوع المقال</h3>
             <button onclick="closeArticleTypeModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition border border-white/60">✕</button>
         </div>
         <div class="space-y-3">
-            <button onclick="selectArticleType('performance')" class="w-full text-right p-4 rounded-xl bg-indigo-50/70 hover:bg-indigo-100/80 border border-indigo-200/60 transition shadow-sm">
-                <div class="font-black text-indigo-900 text-sm mb-1"> تقرير أداء الفرع</div>
-                <div class="text-xs text-indigo-700 font-medium">يولّد النظام برومبت للذكاء الاصطناعي بناءً على مؤشرات الفرع</div>
+            <button onclick="selectArticleType('performance')" class="w-full text-right p-4 rounded-xl border border-indigo-200/70 bg-transparent hover:bg-indigo-50/40 transition">
+                <div class="font-black text-indigo-800 text-sm mb-1">تقرير أداء الفرع</div>
+                <div class="text-xs text-indigo-600 font-medium">يولّد النظام برومبت للذكاء الاصطناعي بناءً على مؤشرات الفرع</div>
             </button>
-            <button onclick="selectArticleType('weekly')" class="w-full text-right p-4 rounded-xl bg-emerald-50/70 hover:bg-emerald-100/80 border border-emerald-200/60 transition shadow-sm">
-                <div class="font-black text-emerald-900 text-sm mb-1"> التحديث الأسبوعي</div>
-                <div class="text-xs text-emerald-700 font-medium">مقال يحتوي أرقام جميع الفروع وأسباب الانخفاض — يولّد برومبت شامل</div>
+            <button onclick="selectArticleType('weekly')" class="w-full text-right p-4 rounded-xl border border-emerald-200/70 bg-transparent hover:bg-emerald-50/40 transition">
+                <div class="font-black text-emerald-800 text-sm mb-1">التحديث الأسبوعي</div>
+                <div class="text-xs text-emerald-600 font-medium">مقال يحتوي أرقام جميع الفروع وأسباب الانخفاض</div>
             </button>
-            <button onclick="selectArticleType('announcement')" class="w-full text-right p-4 rounded-xl bg-amber-50/70 hover:bg-amber-100/80 border border-amber-200/60 transition shadow-sm">
-                <div class="font-black text-amber-900 text-sm mb-1"> إعلان</div>
-                <div class="text-xs text-amber-700 font-medium">مقال يكتبه المستخدم مباشرةً</div>
+            <button onclick="selectArticleType('announcement')" class="w-full text-right p-4 rounded-xl border border-amber-200/70 bg-transparent hover:bg-amber-50/40 transition">
+                <div class="font-black text-amber-800 text-sm mb-1">إعلان</div>
+                <div class="text-xs text-amber-600 font-medium">مقال يكتبه المستخدم مباشرةً</div>
             </button>
-            <button onclick="selectArticleType('opinion')" class="w-full text-right p-4 rounded-xl bg-rose-50/70 hover:bg-rose-100/80 border border-rose-200/60 transition shadow-sm">
-                <div class="font-black text-rose-900 text-sm mb-1">رأي</div>
-                <div class="text-xs text-rose-700 font-medium">أنشئ رابطاً خاصاً مرتبطاً باسم الموظفة ونبذتها لكاتب خارجي</div>
+            <button onclick="selectArticleType('opinion')" class="w-full text-right p-4 rounded-xl border border-rose-200/70 bg-transparent hover:bg-rose-50/40 transition">
+                <div class="font-black text-rose-800 text-sm mb-1">رأي</div>
+                <div class="text-xs text-rose-600 font-medium">أنشئ رابطاً خاصاً مرتبطاً باسم الموظفة ونبذتها لكاتب خارجي</div>
             </button>
         </div>
     </div>
 </div>
 
-<!-- Article Modal (Performance + Announcement types) -->
-<div id="articleModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+<!-- Article Modal -->
+<div id="articleModal" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div class="glass-panel rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto relative shadow-2xl border border-white/50">
         <button onclick="closeArticleModal()" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60 z-10">✕</button>
-        <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur rounded-t-2xl">
+        <div class="p-6 border-b border-white/30 bg-white/30 rounded-t-2xl">
             <h2 class="text-xl font-black text-slate-900 mb-1" id="articleModalTitle">كتابة مقال الفرع</h2>
             <p class="text-slate-600 text-sm font-bold bg-white/40 inline-block px-2 py-0.5 rounded" id="articleModalSubtitle">الفرع: —</p>
         </div>
@@ -279,10 +239,10 @@
 </div>
 
 <!-- Weekly Update Modal -->
-<div id="weeklyModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+<div id="weeklyModal" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div class="glass-panel rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto relative shadow-2xl border border-white/50">
         <button onclick="closeWeeklyModal()" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60 z-10">✕</button>
-        <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur rounded-t-2xl">
+        <div class="p-6 border-b border-white/30 bg-white/30 rounded-t-2xl">
             <h2 class="text-xl font-black text-slate-900 mb-1">التحديث الأسبوعي</h2>
             <p class="text-slate-600 text-sm font-bold bg-white/40 inline-block px-2 py-0.5 rounded">أدخل سبب الانخفاض لكل فرع ثم انسخ البرومبت</p>
         </div>
@@ -291,51 +251,51 @@
 </div>
 
 <!-- Opinion Link Generator Modal -->
-<div id="opinionLinkModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+<div id="opinionLinkModal" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div class="glass-panel rounded-2xl w-full max-w-md shadow-2xl border border-white/50">
-        <div class="p-5 border-b border-white/30 bg-white/30 backdrop-blur rounded-t-2xl flex justify-between items-center">
+        <div class="p-5 border-b border-white/30 bg-white/30 rounded-t-2xl flex justify-between items-center">
             <h2 class="text-lg font-black text-slate-900">إنشاء رابط رأي</h2>
             <button onclick="closeOpinionLinkModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition border border-white/60">✕</button>
         </div>
         <div class="p-5 space-y-4">
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-1">اسم الكاتبة / الموظفة</label>
-                <input type="text" id="opinionAuthorName" placeholder="مثال: سارة الأحمد" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm">
+                <input type="text" id="opinionAuthorName" placeholder="مثال: سارة الأحمد" class="w-full p-3 rounded-lg glass-input text-sm">
             </div>
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-1">النبذة التعريفية</label>
-                <textarea id="opinionAuthorBio" placeholder="مثال: مديرة فرع شرق بلازا، خبرة 5 سنوات في مجال ترفيه الأطفال" rows="3" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm resize-none"></textarea>
+                <textarea id="opinionAuthorBio" placeholder="مثال: مديرة فرع شرق بلازا، خبرة 5 سنوات" rows="3" class="w-full p-3 rounded-lg glass-input text-sm resize-none"></textarea>
             </div>
-            <button onclick="generateOpinionLink()" class="w-full bg-rose-600/90 hover:bg-rose-700 text-white font-black py-3 rounded-xl transition shadow border border-white/20 text-sm">إنشاء الرابط</button>
+            <button onclick="generateOpinionLink()" class="w-full btn-outline btn-outline-rose py-3 rounded-xl text-sm font-black">إنشاء الرابط</button>
             <div id="opinionLinkResult" class="hidden">
                 <p class="text-xs font-bold text-slate-600 mb-2">الرابط الخاص بالكاتبة:</p>
                 <div class="flex gap-2">
-                    <input type="text" id="opinionLinkUrl" readonly class="flex-1 p-2 rounded-lg glass-input text-xs font-mono text-slate-700 focus:outline-none">
-                    <button onclick="copyOpinionLink()" class="bg-slate-800/90 text-white px-3 py-2 rounded-lg text-xs font-bold transition hover:bg-slate-900">نسخ</button>
+                    <input type="text" id="opinionLinkUrl" readonly class="flex-1 p-2 rounded-lg glass-input text-xs font-mono text-slate-700">
+                    <button onclick="copyOpinionLink()" class="btn-solid-dark px-3 py-2 rounded-lg text-xs font-bold">نسخ</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Opinion Writing Page (for external writer via special link) -->
-<div id="opinionWritePage" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-[70] hidden items-center justify-center p-4">
+<!-- Opinion Writing Page -->
+<div id="opinionWritePage" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-[70] hidden items-center justify-center p-4">
     <div class="glass-panel rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-white/50">
-        <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur rounded-t-2xl">
+        <div class="p-6 border-b border-white/30 bg-white/30 rounded-t-2xl">
             <h2 class="text-xl font-black text-slate-900 mb-1" id="opinionWriteTitle">كتابة مقال رأي</h2>
             <p class="text-slate-600 text-sm font-medium" id="opinionWriteSubtitle"></p>
         </div>
         <div class="p-6 space-y-5">
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-2">عنوان المقال</label>
-                <input type="text" id="opinionTitleInput" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm" placeholder="أدخل عنوان المقال">
+                <input type="text" id="opinionTitleInput" class="w-full p-3 rounded-lg glass-input text-sm" placeholder="أدخل عنوان المقال">
             </div>
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-2">محتوى المقال</label>
-                <textarea id="opinionBodyInput" rows="10" class="w-full p-4 rounded-xl glass-input focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm leading-relaxed resize-y" placeholder="اكتب مقالك هنا..."></textarea>
+                <textarea id="opinionBodyInput" rows="10" class="w-full p-4 rounded-xl glass-input text-sm leading-relaxed resize-y" placeholder="اكتب مقالك هنا..."></textarea>
             </div>
             <div class="flex gap-3">
-                <button onclick="submitOpinionArticle()" class="flex-1 bg-rose-600/90 hover:bg-rose-700 text-white font-black py-3 rounded-xl transition shadow border border-white/20">إرسال المقال</button>
+                <button onclick="submitOpinionArticle()" class="flex-1 btn-outline btn-outline-rose py-3 rounded-xl font-black">إرسال المقال</button>
                 <button onclick="document.getElementById('opinionWritePage').style.display='none'" class="bg-white/60 hover:bg-white/80 text-slate-800 font-bold py-3 px-5 rounded-xl border border-white/60 transition">إلغاء</button>
             </div>
         </div>
@@ -343,9 +303,9 @@
 </div>
 
 <!-- History Modal -->
-<div id="historyModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+<div id="historyModal" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div class="glass-panel rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-white/50">
-        <div class="p-6 border-b border-white/30 bg-white/30 backdrop-blur flex justify-between items-center rounded-t-2xl">
+        <div class="p-6 border-b border-white/30 bg-white/30 flex justify-between items-center rounded-t-2xl">
             <div>
                 <h2 class="text-xl font-black text-slate-900" id="historyModalTitle">سجل الفرع</h2>
                 <p class="text-slate-600 text-sm font-bold mt-1 bg-white/40 inline-block px-2 py-0.5 rounded">التاريخ من بداية الشهر</p>
@@ -357,51 +317,73 @@
 </div>
 
 <!-- Prediction Modal -->
-<div id="predictionModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-    <div class="glass-panel rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto hide-scrollbar shadow-2xl border border-white/50">
-        <div class="p-5 flex justify-between items-center rounded-t-2xl">
-               <button onclick="closePredictionModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60">✕</button>
-         <h2 class="text-xl font-black text-slate-900">قياس الاداء</h2>
-          </div>
-        <div class="px-5 pb-6 space-y-4">
-            <div>
-                     
-                <div class="flex justify-between items-start mb-2 gap-3">
-    <label id="timeCalcLabel" class="text-[12px] font-bold text-slate-500 leading-relaxed">قياس الاداء<br><span class="font-medium text-slate-199">يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر، يمكن التبديل لوضع الحاسبة بضغط الزر</span></label>
-    <button id="timeCalcToggleBtn" onclick="toggleTimeCalc()" class="w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-emerald-500 text-emerald-600 flex-shrink-0">قياس الاداء</button>
-</div>
-                <select id="trial_branch_select" onchange="loadTrialDataFromDB()" class="w-full p-3 rounded-lg glass-input font-bold focus:outline-none focus:ring-2 focus:ring-slate-199">
-                  <option value="1">شرق بلازا</option>
-                    <option value="2">الرياض جاليري</option>
-                    <option value="3">ذافيو</option>
-                    <option value="4">القصر مول</option>
-                    <option value="5">سلام مول</option>
-                    <option value="6">مركز المملكة</option>
-                </select>
+<div id="predictionModal" class="fixed inset-0 bg-white/25 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto hide-scrollbar shadow-2xl border border-white/90" style="background:rgba(255,255,255,0.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);">
+        <div class="p-5 flex justify-between items-center rounded-t-2xl border-b border-white/50">
+            <h2 class="text-xl font-black text-slate-900">قياس الأداء</h2>
+            <button onclick="closePredictionModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/60 hover:bg-white flex items-center justify-center transition shadow border border-white/60">✕</button>
+        </div>
+        <div class="px-5 pb-6 pt-4 space-y-4">
+            <!-- زر التبديل + النص -->
+            <div class="flex justify-between items-start gap-3">
+                <label id="timeCalcLabel" class="text-[11px] font-bold text-slate-500 leading-relaxed">
+                    قياس الأداء<br>
+                    <span class="font-medium text-slate-400">يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط — يمكن التبديل بضغط الزر</span>
+                </label>
+                <button id="timeCalcToggleBtn" onclick="toggleTimeCalc()"
+                    class="w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-emerald-500 text-emerald-600 flex-shrink-0">
+                    قياس الأداء
+                </button>
             </div>
+
+            <select id="trial_branch_select" onchange="loadTrialDataFromDB()" class="w-full p-3 rounded-lg glass-input font-bold">
+                <option value="1">شرق بلازا</option>
+                <option value="2">الرياض جاليري</option>
+                <option value="3">ذافيو</option>
+                <option value="4">القصر مول</option>
+                <option value="5">سلام مول</option>
+                <option value="6">مركز المملكة</option>
+            </select>
+
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2">تقييمات إيجابية:</label>
-                    <input type="number" id="trial_positive" oninput="calculateTrial()" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400">
+                    <input type="number" id="trial_positive" oninput="calculateTrial()" class="w-full p-3 rounded-lg glass-input">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">تقييمات سلبية :</label>
-                    <input type="number" id="trial_negative" oninput="calculateTrial()" class="w-full p-3 rounded-lg glass-input focus:outline-none focus:ring-2 focus:ring-slate-400">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">تقييمات سلبية:</label>
+                    <input type="number" id="trial_negative" oninput="calculateTrial()" class="w-full p-3 rounded-lg glass-input">
                 </div>
             </div>
-            <div class="grid grid-cols-4 gap-3 text-center">
-                <div class="glass-panel rounded-xl p-3 border border-white/40"><p class="text-xs font-bold text-slate-600 mb-1">السلامة</p><p class="text-xl font-black text-slate-900" id="resSafety">—</p></div>
-                <div class="glass-panel rounded-xl p-3 border border-white/40"><p class="text-xs font-bold text-slate-600 mb-1">الشكاوى</p><p class="text-xl font-black text-slate-900" id="resComplaints">—</p></div>
-                <div class="glass-panel rounded-xl p-3 border border-white/40"><p class="text-xs font-bold text-slate-600 mb-1">إيجابي</p><p class="text-xl font-black text-slate-900" id="resPos">—</p></div>
-                <div class="glass-panel rounded-xl p-3 border border-white/40"><p class="text-xs font-bold text-slate-600 mb-1">سلبي</p><p class="text-xl font-black text-slate-900" id="resNeg">—</p></div>
+
+            <!-- نتائج المكوّنات -->
+            <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="rounded-xl p-3 border border-slate-200/70 bg-white/50">
+                    <p class="text-xs font-bold text-slate-500 mb-1">السلامة</p>
+                    <p class="text-xl font-black text-slate-900" id="resSafety">—</p>
+                </div>
+                <div class="rounded-xl p-3 border border-slate-200/70 bg-white/50">
+                    <p class="text-xs font-bold text-slate-500 mb-1">الشكاوى</p>
+                    <p class="text-xl font-black text-slate-900" id="resComplaints">—</p>
+                </div>
+                <div class="rounded-xl p-3 border border-slate-200/70 bg-white/50">
+                    <p class="text-xs font-bold text-slate-500 mb-1">إيجابي</p>
+                    <p class="text-xl font-black text-slate-900" id="resPos">—</p>
+                </div>
+                <div class="rounded-xl p-3 border border-slate-200/70 bg-white/50">
+                    <p class="text-xs font-bold text-slate-500 mb-1">سلبي</p>
+                    <p class="text-xl font-black text-slate-900" id="resNeg">—</p>
+                </div>
             </div>
-            <div id="rewardBox" class="p-5 rounded-xl text-center font-black text-xl backdrop-blur text-slate-800 border-2 bg-white/30">
+
+            <!-- صندوق النتيجة -->
+            <div id="rewardBox" class="p-5 rounded-xl text-center border-2 bg-white/40">
                 <p class="text-4xl font-black text-slate-900 mb-1" id="totalPoints">—</p>
-                <div class="w-full bg-slate-200/50 rounded-full h-2.5 my-3 overflow-hidden border border-white/50 shadow-inner">
+                <div class="w-full bg-slate-200/50 rounded-full h-2.5 my-3 overflow-hidden border border-white/50">
                     <div id="progressBar" class="bg-slate-700 h-2.5 rounded-full transition-all" style="width:0%"></div>
                 </div>
-                <p id="rewardText" class="text-base font-black">—</p>
-                <p id="predictionNote" class="text-xs font-bold text-slate-500 mt-1">توقع مبني على اداء الفرع وعدد الملاحظات المسجلة</p>
+                <p id="rewardText" class="text-base font-black text-slate-800">—</p>
+                <p id="predictionNote" class="text-xs font-bold text-slate-400 mt-1">توقع مبني على أداء الفرع وعدد الملاحظات المسجلة</p>
             </div>
         </div>
     </div>
@@ -410,13 +392,14 @@
 <script src="app.js"></script>
 
 <!-- Global Article Read Modal -->
-<div id="globalArticleModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeGlobalArticleModal(event)">
+<div id="globalArticleModal" class="fixed inset-0 bg-slate-900/55 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeGlobalArticleModal(event)">
     <div class="glass-panel rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto hide-scrollbar shadow-2xl border border-white/50" onclick="event.stopPropagation()">
-        <div class="sticky top-0 bg-white/40 backdrop-blur rounded-t-2xl p-4 flex justify-end">
+        <div class="sticky top-0 bg-white/40 rounded-t-2xl p-4 flex justify-end">
             <button onclick="closeGlobalArticleModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60">✕</button>
         </div>
         <div id="globalArticleModalBody" class="p-6 space-y-3"></div>
     </div>
 </div>
+
 </body>
 </html>

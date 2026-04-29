@@ -1,51 +1,129 @@
 /* ============================================================
-   style.css — آي أم سبيشل
+   style.css — آي أم سبيشل — نسخة محسّنة (أداء + هوية بصرية موحّدة)
    ============================================================ */
 
 body {
     font-family: 'Tajawal', sans-serif;
     background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     background-attachment: fixed;
-    margin: 0; padding: 0;
+    margin: 0;
+    padding: 0;
+    color: #1e293b;
 }
 
-/* ---- Decorative background blobs ---- */
-.bg-blob-1 { position: fixed; top: -10%; right: -5%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
-.bg-blob-2 { position: fixed; bottom: -20%; left: -10%; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
-.bg-blob-3 { position: fixed; top: 40%; left: 40%; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(234,179,8,0.1) 0%, rgba(0,0,0,0) 70%); z-index: -1; }
+/* ---- Decorative background blobs (GPU-only, لا repaints) ---- */
+.bg-blob-1,
+.bg-blob-2,
+.bg-blob-3 {
+    position: fixed;
+    border-radius: 50%;
+    z-index: -1;
+    pointer-events: none;
+    will-change: transform; /* يحجز طبقة compositor */
+}
+.bg-blob-1 { top: -10%; right: -5%;  width: 500px; height: 500px; background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%); }
+.bg-blob-2 { bottom: -20%; left: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(236,72,153,0.09) 0%, transparent 70%); }
+.bg-blob-3 { top: 40%; left: 40%;  width: 400px; height: 400px; background: radial-gradient(circle, rgba(234,179,8,0.08) 0%, transparent 70%); }
 
 /* ---- Glass panels ---- */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    background: rgba(255,255,255,0.42);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: 0 4px 20px rgba(31,38,135,0.06);
 }
 
 .glass-header {
-    background: rgba(15, 23, 42, 0.25);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    background: rgba(15,23,42,0.22);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255,255,255,0.13);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
 }
 
 .glass-input {
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255,255,255,0.48);
+    border: 1px solid rgba(255,255,255,0.75);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 .glass-input:focus {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255,255,255,0.75);
     border-color: #64748b;
+    outline: none;
 }
 
+/* ============================================================
+   هوية بصرية موحّدة — الأوسمة والعلامات (outline فقط)
+   ============================================================ */
+
+/* وسم الأداء العام — أخضر/أصفر/أحمر */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1.5px solid;
+    background: transparent;
+    line-height: 1.6;
+}
+.badge-green  { color: #059669; border-color: #059669; }
+.badge-yellow { color: #d97706; border-color: #d97706; }
+.badge-red    { color: #dc2626; border-color: #dc2626; }
+.badge-blue   { color: #2563eb; border-color: #2563eb; }
+.badge-indigo { color: #4f46e5; border-color: #4f46e5; }
+.badge-rose   { color: #e11d48; border-color: #e11d48; }
+.badge-amber  { color: #d97706; border-color: #d97706; }
+.badge-emerald{ color: #059669; border-color: #059669; }
+.badge-slate  { color: #475569; border-color: #475569; }
+
+/* أزرار outline موحّدة */
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-weight: 700;
+    border-radius: 10px;
+    border: 2px solid;
+    background: transparent;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+    line-height: 1.4;
+}
+.btn-outline:hover  { opacity: 0.75; }
+.btn-outline:active { transform: scale(0.97); }
+
+.btn-outline-slate  { color: #475569; border-color: #475569; }
+.btn-outline-indigo { color: #4f46e5; border-color: #4f46e5; }
+.btn-outline-emerald{ color: #059669; border-color: #059669; }
+.btn-outline-blue   { color: #2563eb; border-color: #2563eb; }
+.btn-outline-rose   { color: #e11d48; border-color: #e11d48; }
+.btn-outline-amber  { color: #d97706; border-color: #d97706; }
+
+/* أزرار solid (للإجراءات الأساسية فقط) */
+.btn-solid-dark {
+    background: rgba(15,23,42,0.88);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+.btn-solid-dark:hover { opacity: 0.85; }
+
 /* ---- Newspaper cards ---- */
-.newspaper-card { border-right: 4px solid rgba(30, 58, 138, 0.8); }
+.newspaper-card {
+    border-right: 3px solid rgba(30,58,138,0.7);
+    contain: layout style paint; /* تقليل reflows */
+}
 
 /* ---- PIN boxes ---- */
-.pin-box { transition: all 0.2s; }
+.pin-box { transition: transform 0.15s; }
 .pin-box:focus { transform: scale(1.05); }
 
 /* ---- Hide number spinners ---- */
@@ -54,15 +132,15 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
 input[type="number"] { -moz-appearance: textfield; }
 
 /* ---- Timeline ---- */
-.timeline-border { border-right: 2px dashed rgba(203, 213, 225, 0.7); }
+.timeline-border { border-right: 2px dashed rgba(203,213,225,0.65); }
 
 /* ---- Scrollbar hide ---- */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* ---- Google stars ---- */
-.google-star { color: #fbbc04; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-.google-star-empty { color: rgba(218, 220, 224, 0.6); }
+.google-star       { color: #fbbc04; }
+.google-star-empty { color: rgba(218,220,224,0.55); }
 
 /* ---- Page visibility helpers ---- */
 #bulletinPage { display: none; }
@@ -70,29 +148,37 @@ input[type="number"] { -moz-appearance: textfield; }
 #mainPageWrapper { display: flex; flex-direction: column; flex-grow: 1; }
 #mainPageWrapper.hidden-page { display: none; }
 
-/* ---- Animations ---- */
+/* ---- Animations (GPU-only transform/opacity) ---- */
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
+    from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
 }
-.slide-up { animation: slideUp 0.35s ease forwards; }
+.slide-up { animation: slideUp 0.3s ease forwards; }
 
 @keyframes fadeInOut {
-    0%   { opacity: 0; transform: translateY(10px); }
-    20%  { opacity: 1; transform: translateY(0); }
+    0%   { opacity: 0; transform: translateY(8px); }
+    15%  { opacity: 1; transform: translateY(0); }
     80%  { opacity: 1; }
     100% { opacity: 0; }
 }
 .copy-toast { animation: fadeInOut 2.5s ease forwards; }
 
+@keyframes nameFadeIn {
+    0%   { opacity: 0; transform: translateY(5px); }
+    18%  { opacity: 1; transform: translateY(0); }
+    80%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-5px); }
+}
+.name-fade { animation: nameFadeIn 4s ease forwards; }
+
 /* ---- Share button ---- */
-.share-btn { transition: all 0.2s; }
-.share-btn:hover { transform: scale(1.03); }
+.share-btn { transition: transform 0.15s; }
+.share-btn:hover { transform: scale(1.05); }
 
 /* ---- Prompt box ---- */
 .prompt-box {
-    background: rgba(248, 250, 252, 0.6);
-    border: 1.5px dashed rgba(148, 163, 184, 0.8);
+    background: rgba(248,250,252,0.55);
+    border: 1.5px dashed rgba(148,163,184,0.7);
     border-radius: 12px;
     font-family: 'Tajawal', monospace;
     font-size: 13px;
@@ -102,11 +188,10 @@ input[type="number"] { -moz-appearance: textfield; }
     word-break: break-word;
     direction: rtl;
     text-align: right;
-    backdrop-filter: blur(4px);
 }
 
 /* ---- History items ---- */
-.history-item { border-right: 3px solid rgba(226, 232, 240, 0.6); transition: border-color 0.2s; }
+.history-item { border-right: 3px solid rgba(226,232,240,0.55); transition: border-color 0.15s; }
 .history-item:hover { border-right-color: #1e3a8a; }
 
 /* ---- Article textarea ---- */
@@ -121,7 +206,7 @@ textarea.article-input {
 /* ---- Loading overlay ---- */
 #loadingOverlay {
     position: fixed; inset: 0;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.65);
     backdrop-filter: blur(10px);
     z-index: 100;
     display: flex;
@@ -130,7 +215,7 @@ textarea.article-input {
     justify-content: center;
 }
 
-/* ---- Modal display fix: override Tailwind hidden when JS sets display:flex ---- */
+/* ---- Modal display fix ---- */
 [id$="Modal"][style*="display: flex"],
 [id$="Modal"][style*="display:flex"],
 #iframeModal[style*="display: flex"],
@@ -148,12 +233,11 @@ textarea.article-input {
     font-size: 10px;
     font-weight: 700;
     color: #065f46;
-    background: rgba(167,243,208,0.7);
     border: 1px solid rgba(52,211,153,0.5);
     border-radius: 6px;
     padding: 2px 7px;
     margin-top: 4px;
-    backdrop-filter: blur(4px);
+    background: rgba(167,243,208,0.35);
     direction: rtl;
     line-height: 1.5;
 }
@@ -165,30 +249,24 @@ textarea.article-input {
     font-weight: 600;
     margin-top: 6px;
     padding-top: 6px;
-    border-top: 1px solid rgba(203,213,225,0.4);
+    border-top: 1px solid rgba(203,213,225,0.35);
     direction: rtl;
 }
 
-/* ---- Article type tag pill (kept for legacy, not used in new cards) ---- */
-.article-type-pill {
-    display: none;
-}
-
-/* ---- Top contributor fade animation ---- */
-@keyframes nameFadeIn {
-    0%   { opacity: 0; transform: translateY(6px); }
-    20%  { opacity: 1; transform: translateY(0); }
-    80%  { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-6px); }
-}
-.name-fade { animation: nameFadeIn 4s ease forwards; }
-
-/* ---- Admin btn shrink for narrow viewports ---- */
-@media (max-width: 380px) {
-    #adminBtn span { max-width: 120px; }
-}
+.article-type-pill { display: none; }
 
 /* ---- Performance optimizations ---- */
-#branchesCarousel { will-change: scroll-position; }
-.newspaper-card { contain: layout style; }
-.glass-panel { will-change: auto; }
+#branchesCarousel  { will-change: scroll-position; contain: layout; }
+.glass-panel       { will-change: auto; }
+.carousel-card     { contain: layout style paint; }
+
+/* ---- Admin btn shrink ---- */
+@media (max-width: 380px) { #adminBtn span { max-width: 120px; } }
+
+/* ---- نافذة قياس الأداء — خلفية فاتحة جداً ---- */
+#predictionModal > div {
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.9);
+}
