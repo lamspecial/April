@@ -821,12 +821,12 @@ function generateNewspaper() {
             } else if(item.type==='weekly'){
                 const lines=item.article?item.article.split('\n').map(l=>l.trim()).filter(l=>l):[];
                 card.innerHTML=`<div>
-                    <div class="flex justify-between items-start mb-3"><span class="badge badge-emerald">لمح</span>${delBtn}</div>
+                    <div class="flex justify-between items-start mb-3"><span class="badge badge-emerald">لمحة</span>${delBtn}</div>
                     <h3 onclick="openGlobalArticleModal(${item.timestamp})" class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition">${lines[0]||'التحديث الاسبوعي'}</h3>
                     <p class="text-slate-700 text-sm font-bold mb-4 leading-relaxed bg-white/30 p-2 rounded">${lines[1]||''}</p>
                 </div>
                 <div class="mt-auto pt-5 border-t border-white/40 flex justify-between items-center bg-white/40 px-3 py-2 rounded-lg">
-                    <span class="text-sm font-bold text-slate-700"></span><span class="badge badge-emerald text-xs">لمحة</span>
+                    <span class="text-sm font-bold text-slate-700"></span><span class="badge badge-emerald text-xs"></span>
                 </div>`;
             } else if(item.type==='announcement'){
                 const lines=item.article?item.article.split('\n').map(l=>l.trim()).filter(l=>l):[];
