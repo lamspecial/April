@@ -1128,7 +1128,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     let waitingNames = [];
     if (data.mName) waitingNames.push(`المديرة ${data.mName}`);
     if (data.dName) waitingNames.push(`نائبتها ${data.dName}`);
-    let waitingText = waitingNames.length > 0 ? `بانتظار تحركات ${waitingNames.join(' و ')}` : `بانتظار تحركات الإدارة`;
+    let waitingText = waitingNames.length > 0 ? `بانتظار كتابة المقال`;
 
     const articleSection = hasArticle ? `
         <div class="mb-8">
@@ -1143,7 +1143,7 @@ function buildBulletinHTML(data, scores, tier, text, ratingValue, reviewsCount, 
     ` : `
         <div class="mb-8 ${isAdminLoggedIn ? 'bg-amber-50/60 border-amber-200' : 'bg-slate-100/50 border-slate-200'} backdrop-blur border rounded-2xl p-6 shadow-sm">
             <div class="flex items-start gap-4">
-                <span class="text-3xl drop-shadow">${isAdminLoggedIn ? '✍️' : '⏳'}</span>
+                <span class="text-3xl drop-shadow">${isAdminLoggedIn ? '⚠️' : '🪄'}</span>
                 <div>
                     ${isAdminLoggedIn
                         ? `<h3 class="font-black text-amber-900 text-lg mb-1">لم يُكتب مقال هذا الفرع بعد</h3>
@@ -1698,17 +1698,18 @@ function toggleTimeCalc() {
     const btn  = document.getElementById('timeCalcToggleBtn');
     const note = document.getElementById('predictionNote');
 
-    ‏    const label = document.getElementById('timeCalcLabel');
-‏    if (isTimeCalcEnabled) {
-‏        btn.textContent = 'قياس الاداء';
-‏        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-indigo-500 text-indigo-600';
-‏        if (note)  note.classList.remove('hidden');
-        if (label) label.innerHTML = 'قياس الاداء<br>  يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر ';
-‏    } else {
-‏        btn.textContent = 'حساب النتيجة';
-‏        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-slate-400 text-slate-500';
-‏        if (note)  note.classList.add('hidden');
-        if (label) label.innerHTML = 'حساب النتيجة<br>يحسب المعدل الشهري مثال: عند ادخال 50 تقييم سيخبرك ان النتيجة 11 نقطة ';
+    ‏    
+    const label = document.getElementById('timeCalcLabel');    const label = document.getElementById('timeCalcLabel');
+    if (isTimeCalcEnabled) {
+        btn.textContent = 'حاسبة زمنية';
+        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-indigo-500 text-indigo-600';
+        if (note)  note.classList.remove('hidden');
+        if (label) label.innerHTML = 'قياس الاداء<br><span class="font-medium text-slate-400">يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر</span>';
+    } else {
+        btn.textContent = 'حاسبة';
+        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-slate-400 text-slate-500';
+        if (note)  note.classList.add('hidden');
+        if (label) label.innerHTML = 'حساب النتيجة<br><span class="font-medium text-slate-400">يحسب المعدل الشهري. مثال: عند ادخال 50 تقييم سيخبرك ان النتيجة 11 نقطة</span>';
     }
     calculateTrial();
 }
