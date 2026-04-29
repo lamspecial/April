@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>آي أم سبيشل</title>
+
+    <!-- Open Graph -->
     <meta property="og:title"       id="og_title"       content="آي أم سبيشل | تقرير الأداء للفروع">
     <meta property="og:description" id="og_description" content="تابع تقرير الأداء لمجموعة فروع أي آم سبيشل.">
-    <meta property="og:type"    content="website">
-    <meta property="og:site_name" content="أي آم سبيشل">
-    <meta property="og:locale"  content="ar_SA">
-    <meta property="og:url"     id="og_url"   content="">
-    <meta property="og:image"   id="og_image" content="special.png">
+    <meta property="og:type"        content="website">
+    <meta property="og:site_name"   content="أي آم سبيشل">
+    <meta property="og:locale"      content="ar_SA">
+    <meta property="og:url"         id="og_url"         content="">
+    <meta property="og:image"       id="og_image"       content="special.png">
     <meta property="og:image:width"  content="1200">
     <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
     <meta name="twitter:card"        content="summary_large_image">
     <meta name="twitter:title"       id="twitter_title"       content="آي أم سبيشل">
     <meta name="twitter:description" id="twitter_description" content="تقارير الأداء.">
@@ -27,10 +31,12 @@
 </head>
 <body class="text-slate-800 relative min-h-screen flex flex-col">
 
+<!-- Decorative blobs -->
 <div class="bg-blob-1"></div>
 <div class="bg-blob-2"></div>
 <div class="bg-blob-3"></div>
 
+<!-- Loading overlay -->
 <div id="loadingOverlay">
     <div class="w-12 h-12 border-4 border-slate-300 border-t-slate-800 rounded-full animate-spin mb-4"></div>
     <p class="text-slate-700 font-bold">I am Special...</p>
@@ -40,7 +46,9 @@
 <header class="glass-header text-white px-4 py-4 sticky top-0 z-40">
     <div class="max-w-6xl mx-auto flex justify-between items-center gap-2">
         <h1 class="text-xl sm:text-2xl font-black tracking-wide flex items-center gap-1.5 whitespace-nowrap drop-shadow-md flex-shrink-0 cursor-pointer" onclick="goToMainPage()">
-            <span class="text-red-400"    onclick="event.stopPropagation(); openPredictionModal()">أي آم</span>
+            <!-- اللون الأحمر مشبع وزاهي -->
+            <span class="text-red-500"    onclick="event.stopPropagation(); openPredictionModal()">أي</span>
+            <span class="text-white"      onclick="event.stopPropagation(); openPredictionModal()">آم</span>
             <span class="text-yellow-400" onclick="event.stopPropagation(); openPredictionModal()">سبيشل</span>
         </h1>
         <div class="flex gap-2 flex-shrink min-w-0">
@@ -55,6 +63,7 @@
 <!-- ===== MAIN PAGE ===== -->
 <div id="mainPageWrapper">
     <div id="mainApp" class="p-4 md:p-8 max-w-6xl mx-auto w-full flex-grow">
+
         <div class="space-y-2 mb-8 text-center">
             <h2 class="text-3xl font-black text-slate-800 tracking-wide drop-shadow-sm">تعزيز السمعة الرقمية</h2>
             <p class="text-slate-600 font-medium bg-white/40 inline-block px-4 py-1 rounded-full border border-white/50">بروتوكول إدارات الفروع</p>
@@ -99,7 +108,9 @@
                 <span id="bulletinBreadcrumbBranch" class="text-slate-800 font-bold text-sm bg-white/40 px-2 py-0.5 rounded"></span>
             </div>
             <button onclick="shareBulletinPage()" class="share-btn text-[#25D366] bg-white/50 p-2 rounded-full border border-white/50" title="مشاركة عبر واتساب">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
             </button>
         </div>
     </div>
@@ -211,15 +222,15 @@
                 <div class="text-xs text-indigo-600 font-medium">يولّد النظام برومبت للذكاء الاصطناعي بناءً على مؤشرات الفرع</div>
             </button>
             <button onclick="selectArticleType('weekly')" class="w-full text-right p-4 rounded-xl border border-emerald-200/70 bg-transparent hover:bg-emerald-50/40 transition">
-                <div class="font-black text-emerald-800 text-sm mb-1">التحديث الأسبوعي</div>
+                <div class="font-black text-emerald-800 text-sm mb-1">نظرة عن كثب</div>
                 <div class="text-xs text-emerald-600 font-medium">مقال يحتوي أرقام جميع الفروع وأسباب الانخفاض</div>
             </button>
             <button onclick="selectArticleType('announcement')" class="w-full text-right p-4 rounded-xl border border-amber-200/70 bg-transparent hover:bg-amber-50/40 transition">
-                <div class="font-black text-amber-800 text-sm mb-1">إعلان</div>
+                <div class="font-black text-amber-800 text-sm mb-1">إعلان رسمي</div>
                 <div class="text-xs text-amber-600 font-medium">مقال يكتبه المستخدم مباشرةً</div>
             </button>
             <button onclick="selectArticleType('opinion')" class="w-full text-right p-4 rounded-xl border border-rose-200/70 bg-transparent hover:bg-rose-50/40 transition">
-                <div class="font-black text-rose-800 text-sm mb-1">رأي</div>
+                <div class="font-black text-rose-800 text-sm mb-1">مقال رأي</div>
                 <div class="text-xs text-rose-600 font-medium">أنشئ رابطاً خاصاً مرتبطاً باسم الموظفة ونبذتها لكاتب خارجي</div>
             </button>
         </div>
@@ -243,7 +254,7 @@
     <div class="glass-panel rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto relative shadow-2xl border border-white/50">
         <button onclick="closeWeeklyModal()" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition shadow border border-white/60 z-10">✕</button>
         <div class="p-6 border-b border-white/30 bg-white/30 rounded-t-2xl">
-            <h2 class="text-xl font-black text-slate-900 mb-1">التحديث الأسبوعي</h2>
+            <h2 class="text-xl font-black text-slate-900 mb-1">نظرة عن كثب</h2>
             <p class="text-slate-600 text-sm font-bold bg-white/40 inline-block px-2 py-0.5 rounded">أدخل سبب الانخفاض لكل فرع ثم انسخ البرومبت</p>
         </div>
         <div id="weeklyModalBody" class="p-6 space-y-4"></div>
@@ -254,7 +265,7 @@
 <div id="opinionLinkModal" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div class="glass-panel rounded-2xl w-full max-w-md shadow-2xl border border-white/50">
         <div class="p-5 border-b border-white/30 bg-white/30 rounded-t-2xl flex justify-between items-center">
-            <h2 class="text-lg font-black text-slate-900">إنشاء رابط رأي</h2>
+            <h2 class="text-lg font-black text-slate-900">إنشاء رابط مقال رأي</h2>
             <button onclick="closeOpinionLinkModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition border border-white/60">✕</button>
         </div>
         <div class="p-5 space-y-4">
@@ -268,7 +279,7 @@
             </div>
             <button onclick="generateOpinionLink()" class="w-full btn-outline btn-outline-rose py-3 rounded-xl text-sm font-black">إنشاء الرابط</button>
             <div id="opinionLinkResult" class="hidden">
-                <p class="text-xs font-bold text-slate-600 mb-2">الرابط الخاص بالكاتبة:</p>
+                <p class="text-xs font-bold text-slate-600 mb-2">الرابط الخاص بالكاتبة (صالح 7 أيام):</p>
                 <div class="flex gap-2">
                     <input type="text" id="opinionLinkUrl" readonly class="flex-1 p-2 rounded-lg glass-input text-xs font-mono text-slate-700">
                     <button onclick="copyOpinionLink()" class="btn-solid-dark px-3 py-2 rounded-lg text-xs font-bold">نسخ</button>
@@ -324,7 +335,6 @@
             <button onclick="closePredictionModal()" class="text-slate-500 hover:text-slate-800 w-8 h-8 rounded-full bg-white/60 hover:bg-white flex items-center justify-center transition shadow border border-white/60">✕</button>
         </div>
         <div class="px-5 pb-6 pt-4 space-y-4">
-            <!-- زر التبديل + النص -->
             <div class="flex justify-between items-start gap-3">
                 <label id="timeCalcLabel" class="text-[11px] font-bold text-slate-500 leading-relaxed">
                     قياس الأداء<br>
@@ -356,7 +366,6 @@
                 </div>
             </div>
 
-            <!-- نتائج المكوّنات -->
             <div class="grid grid-cols-4 gap-2 text-center">
                 <div class="rounded-xl p-3 border border-slate-200/70 bg-white/50">
                     <p class="text-xs font-bold text-slate-500 mb-1">السلامة</p>
@@ -376,8 +385,7 @@
                 </div>
             </div>
 
-            <!-- صندوق النتيجة -->
-            <div id="rewardBox" class="p-5 rounded-xl  text-center border-2 border-slate-200 bg-slate-50/50">
+            <div id="rewardBox" class="p-5 rounded-xl text-center border-2 border-slate-200 bg-slate-50/50">
                 <p class="text-4xl font-black text-slate-900 mb-1" id="totalPoints">—</p>
                 <div class="w-full bg-slate-200/50 rounded-full h-2.5 my-3 overflow-hidden border border-white/50">
                     <div id="progressBar" class="bg-slate-700 h-2.5 rounded-full transition-all" style="width:0%"></div>
@@ -389,8 +397,6 @@
     </div>
 </div>
 
-<script src="app.js"></script>
-
 <!-- Global Article Read Modal -->
 <div id="globalArticleModal" class="fixed inset-0 bg-slate-900/55 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeGlobalArticleModal(event)">
     <div class="glass-panel rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto hide-scrollbar shadow-2xl border border-white/50" onclick="event.stopPropagation()">
@@ -401,5 +407,6 @@
     </div>
 </div>
 
+<script src="app.js"></script>
 </body>
 </html>

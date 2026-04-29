@@ -19,7 +19,7 @@ body {
     border-radius: 50%;
     z-index: -1;
     pointer-events: none;
-    will-change: transform; /* يحجز طبقة compositor */
+    will-change: transform;
 }
 .bg-blob-1 { top: -10%; right: -5%;  width: 500px; height: 500px; background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%); }
 .bg-blob-2 { bottom: -20%; left: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(236,72,153,0.09) 0%, transparent 70%); }
@@ -70,15 +70,15 @@ body {
     background: transparent;
     line-height: 1.6;
 }
-.badge-green  { color: #059669; border-color: #059669; }
-.badge-yellow { color: #d97706; border-color: #d97706; }
-.badge-red    { color: #dc2626; border-color: #dc2626; }
-.badge-blue   { color: #2563eb; border-color: #2563eb; }
-.badge-indigo { color: #4f46e5; border-color: #4f46e5; }
-.badge-rose   { color: #e11d48; border-color: #e11d48; }
-.badge-amber  { color: #d97706; border-color: #d97706; }
-.badge-emerald{ color: #059669; border-color: #059669; }
-.badge-slate  { color: #475569; border-color: #475569; }
+.badge-green   { color: #059669; border-color: #059669; }
+.badge-yellow  { color: #d97706; border-color: #d97706; }
+.badge-red     { color: #dc2626; border-color: #dc2626; }
+.badge-blue    { color: #2563eb; border-color: #2563eb; }
+.badge-indigo  { color: #4f46e5; border-color: #4f46e5; }
+.badge-rose    { color: #e11d48; border-color: #e11d48; }
+.badge-amber   { color: #d97706; border-color: #d97706; }
+.badge-emerald { color: #059669; border-color: #059669; }
+.badge-slate   { color: #475569; border-color: #475569; }
 
 /* أزرار outline موحّدة */
 .btn-outline {
@@ -97,12 +97,12 @@ body {
 .btn-outline:hover  { opacity: 0.75; }
 .btn-outline:active { transform: scale(0.97); }
 
-.btn-outline-slate  { color: #475569; border-color: #475569; }
-.btn-outline-indigo { color: #4f46e5; border-color: #4f46e5; }
-.btn-outline-emerald{ color: #059669; border-color: #059669; }
-.btn-outline-blue   { color: #2563eb; border-color: #2563eb; }
-.btn-outline-rose   { color: #e11d48; border-color: #e11d48; }
-.btn-outline-amber  { color: #d97706; border-color: #d97706; }
+.btn-outline-slate   { color: #475569; border-color: #475569; }
+.btn-outline-indigo  { color: #4f46e5; border-color: #4f46e5; }
+.btn-outline-emerald { color: #059669; border-color: #059669; }
+.btn-outline-blue    { color: #2563eb; border-color: #2563eb; }
+.btn-outline-rose    { color: #e11d48; border-color: #e11d48; }
+.btn-outline-amber   { color: #d97706; border-color: #d97706; }
 
 /* أزرار solid (للإجراءات الأساسية فقط) */
 .btn-solid-dark {
@@ -119,8 +119,23 @@ body {
 /* ---- Newspaper cards ---- */
 .newspaper-card {
     border-right: 3px solid rgba(30,58,138,0.7);
-    contain: layout style paint; /* تقليل reflows */
+    contain: layout style paint;
 }
+
+/* ---- Carousel cards ---- */
+.carousel-card {
+    contain: layout style paint;
+}
+
+/* ---- Carousel dots ---- */
+.carousel-dot {
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    outline: none;
+    flex-shrink: 0;
+}
+.carousel-dot:hover { opacity: 0.75; }
 
 /* ---- PIN boxes ---- */
 .pin-box { transition: transform 0.15s; }
@@ -147,6 +162,26 @@ input[type="number"] { -moz-appearance: textfield; }
 #bulletinPage.active { display: flex; }
 #mainPageWrapper { display: flex; flex-direction: column; flex-grow: 1; }
 #mainPageWrapper.hidden-page { display: none; }
+
+/* ---- Loading overlay ---- */
+#loadingOverlay {
+    position: fixed; inset: 0;
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---- Copy Toast ---- */
+#copyToast {
+    pointer-events: none;
+}
+#copyToast.show {
+    display: block !important;
+}
 
 /* ---- Animations (GPU-only transform/opacity) ---- */
 @keyframes slideUp {
@@ -203,18 +238,6 @@ textarea.article-input {
     min-height: 180px;
 }
 
-/* ---- Loading overlay ---- */
-#loadingOverlay {
-    position: fixed; inset: 0;
-    background: rgba(255,255,255,0.65);
-    backdrop-filter: blur(10px);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 /* ---- Modal display fix ---- */
 [id$="Modal"][style*="display: flex"],
 [id$="Modal"][style*="display:flex"],
@@ -223,7 +246,25 @@ textarea.article-input {
 #opinionWritePage[style*="display: flex"],
 #opinionWritePage[style*="display:flex"],
 #branchDetailModal[style*="display: flex"],
-#branchDetailModal[style*="display:flex"] {
+#branchDetailModal[style*="display:flex"],
+#articleTypeModal[style*="display: flex"],
+#articleTypeModal[style*="display:flex"],
+#articleModal[style*="display: flex"],
+#articleModal[style*="display:flex"],
+#weeklyModal[style*="display: flex"],
+#weeklyModal[style*="display:flex"],
+#opinionLinkModal[style*="display: flex"],
+#opinionLinkModal[style*="display:flex"],
+#maintenanceAuthModal[style*="display: flex"],
+#maintenanceAuthModal[style*="display:flex"],
+#adminModal[style*="display: flex"],
+#adminModal[style*="display:flex"],
+#historyModal[style*="display: flex"],
+#historyModal[style*="display:flex"],
+#predictionModal[style*="display: flex"],
+#predictionModal[style*="display:flex"],
+#globalArticleModal[style*="display: flex"],
+#globalArticleModal[style*="display:flex"] {
     display: flex !important;
 }
 
@@ -253,17 +294,16 @@ textarea.article-input {
     direction: rtl;
 }
 
+/* ---- Article type pill (hidden by default) ---- */
 .article-type-pill { display: none; }
 
 /* ---- Performance optimizations ---- */
-#branchesCarousel  { will-change: scroll-position; contain: layout; }
-.glass-panel       { will-change: auto; }
-.carousel-card     { contain: layout style paint; }
+#branchesCarousel { will-change: scroll-position; contain: layout; }
+.glass-panel      { will-change: auto; }
 
 /* ---- Admin btn shrink ---- */
 @media (max-width: 380px) { #adminBtn span { max-width: 120px; } }
 
-/* ---- نافذة قياس الأداء — خلفية فاتحة جداً ---- */
 /* ---- نافذة قياس الأداء — خلفية فاتحة جداً ---- */
 #predictionModal > div {
     background: rgba(255,255,255,0.82);
@@ -274,14 +314,90 @@ textarea.article-input {
 
 /* ---- نافذة عرض المقالات العامة (إعلان ورأي) — خلفية فاتحة ---- */
 #globalArticleModal > div {
-    background: rgba(255, 255, 255, 0.88) !important;
+    background: rgba(255,255,255,0.88) !important;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255,255,255,0.9);
 }
 
-/* تفتيح زر الإغلاق داخل النافذة ليتناسب مع الخلفية الفاتحة */
+/* تفتيح زر الإغلاق داخل النافذة */
 #globalArticleModal .sticky.top-0 {
-    background: transparent !important; 
+    background: transparent !important;
 }
 
+/* ---- نافذة المقال (articleModal) — تناسق مع بقية النوافذ ---- */
+#articleModal > div,
+#weeklyModal  > div {
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+/* ---- نافذة Branch Detail — خلفية فاتحة ---- */
+#branchDetailModal > div {
+    background: rgba(255,255,255,0.80);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+/* ---- نافذة كتابة الرأي — overlay داكن ---- */
+#opinionWritePage {
+    background: rgba(15,23,42,0.45);
+}
+
+/* ============================================================
+   Bulletin page — بطاقة المقال الداخلية
+   ============================================================ */
+
+/* تأكيد ظهور محتوى Bulletin */
+#bulletinContent { min-height: 60vh; }
+
+/* ---- صف الإحصائيات في صفحة Bulletin ---- */
+.stat-grid-card {
+    background: rgba(255,255,255,0.50);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.60);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.15s;
+}
+.stat-grid-card:hover { transform: scale(1.01); }
+
+/* ============================================================
+   Weekly reasons inputs
+   ============================================================ */
+.weekly-reason-input {
+    font-family: 'Tajawal', sans-serif;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    resize: none;
+    min-height: 60px;
+    direction: rtl;
+}
+
+/* ============================================================
+   توافق Tailwind — حالات إضافية
+   ============================================================ */
+
+/* تأكيد اتجاه RTL على النوافذ المنبثقة */
+[id$="Modal"] { direction: rtl; }
+#iframeModal  { direction: ltr; } /* الخريطة بالإنجليزي */
+
+/* select عام */
+select.glass-input {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 12px center;
+    padding-left: 36px;
+}
+
+/* ---- نمط شريط التقدم المتحرك (داخل rewardBox) ---- */
+#progressBar {
+    transition: width 0.5s ease;
+}
