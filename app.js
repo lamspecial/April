@@ -891,11 +891,11 @@ function toggleTimeCalc() {
     if(isTimeCalcEnabled){
         btn.textContent='قياس الأداء'; btn.className='w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-emerald-500 text-emerald-600 flex-shrink-0';
         if(note) note.classList.remove('hidden');
-        if(label) label.innerHTML='قياس الأداء<br><span class="font-medium text-slate-400">يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر بناءً على أدائك الحالي. مثال: في يوم 28 إذا كان لديك 34 تقييمًا يتوقع النتيجة 9.7 نقاط — يمكن التبديل بضغط الزر</span>';
+        if(label) label.innerHTML='قياس الأداء<br><span class="font-medium text-slate-400">يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر بناءً على أدائك الحالي. مثال: في يوم 28 إذا كان لديك 34 تقييمًا يتوقع النتيجة 9.7 نقاط — الضغطي الزر للتبديل لوضع كامل الشهر</span>';
     } else {
         btn.textContent='حساب النتيجة'; btn.className='w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-blue-500 text-blue-600 flex-shrink-0';
         if(note) note.classList.add('hidden');
-        if(label) label.innerHTML='الحاسبة<br><span class="font-medium text-slate-400">يحسب بناءً على 30 يوم ويطبق نظام التعويض ويخفض وزن التقييمات السلبية عند ارتفاع الإيجابية</span>';
+        if(label) label.innerHTML='حساب النتيجة<br><span class="font-medium text-slate-400">يحسب بناءً على كامل الشهر ويطبق نظام التعويض وخفض وزن التقييمات السلبية عند ارتفاع الإيجابية</span>';
     }
     calculateTrial();
 }
