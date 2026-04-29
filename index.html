@@ -366,10 +366,10 @@
         <div class="px-5 pb-6 space-y-4">
             <div>
                      
-                <div class="flex justify-between items-center mb-2">
-                    <label class="text-[8.4px] font-bold text-slate-199 leading-relaxed">قياس الاداء : <br> يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر ، يمكن التبديل للوضع الحالي بضغط الزر  </label>
-                    <button id="timeCalcToggleBtn" onclick="toggleTimeCalc()" class="text-xs font-bold px-3 py-1.5 rounded-lg border transition bg-transparent border-indigo-400 text-indigo-700 hover:bg-indigo-50/50 flex-shrink-0 mr-3">قياس الاداء</button>
-                </div>
+                <<div class="flex justify-between items-start mb-2 gap-3">
+    <label id="timeCalcLabel" class="text-[10px] font-bold text-slate-500 leading-relaxed">قياس الاداء<br><span class="font-medium text-slate-400">يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر، يمكن التبديل لوضع الحاسبة بضغط الزر</span></label>
+    <button id="timeCalcToggleBtn" onclick="toggleTimeCalc()" class="w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-emerald-500 text-emerald-600 flex-shrink-0">قياس الاداء</button>
+</div>
                 <select id="trial_branch_select" onchange="loadTrialDataFromDB()" class="w-full p-3 rounded-lg glass-input font-bold focus:outline-none focus:ring-2 focus:ring-slate-400">
                   <option value="1">شرق بلازا</option>
                     <option value="2">الرياض جاليري</option>
