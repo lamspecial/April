@@ -264,9 +264,24 @@ textarea.article-input {
 @media (max-width: 380px) { #adminBtn span { max-width: 120px; } }
 
 /* ---- نافذة قياس الأداء — خلفية فاتحة جداً ---- */
+/* ---- نافذة قياس الأداء — خلفية فاتحة جداً ---- */
 #predictionModal > div {
     background: rgba(255,255,255,0.82);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.9);
 }
+
+/* ---- نافذة عرض المقالات العامة (إعلان ورأي) — خلفية فاتحة ---- */
+#globalArticleModal > div {
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+/* تفتيح زر الإغلاق داخل النافذة ليتناسب مع الخلفية الفاتحة */
+#globalArticleModal .sticky.top-0 {
+    background: transparent !important; 
+}
+
