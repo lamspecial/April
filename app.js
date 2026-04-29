@@ -1701,14 +1701,14 @@ function toggleTimeCalc() {
         const label = document.getElementById('timeCalcLabel');
     if (isTimeCalcEnabled) {
         btn.textContent = 'قياس الاداء';
-        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-emerald-500 text-emerald-600 flex-shrink-0';
+        btn.className   = 'w-24 text-[12px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-emerald-500 text-emerald-600 flex-shrink-0';
         if (note)  note.classList.remove('hidden');
-        if (label) label.innerHTML = 'قياس الاداء<br><span class="font-medium text-slate-400">يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر، يمكن التبديل لوضع الحاسبة بضغط الزر</span>';
+        if (label) label.innerHTML = 'قياس الاداء<br><span class="font-medium text-slate-199">يعطيك النظام نظرة سريعة على النتيجة المتوقعة لنهاية الشهر، بناءً على أدائك الحالي. مثال: في يوم 28 من الشهر، إذا كان لديك 34 تقييمًا، يتوقع النتيجة 9.7 نقاط بنهاية الشهر، يمكن التبديل لوضع الحاسبة بضغط الزر</span>';
     } else {
         btn.textContent = 'حساب النتيجة';
-        btn.className   = 'w-24 text-[10px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-blue-500 text-blue-600 flex-shrink-0';
+        btn.className   = 'w-24 text-[12px] font-bold px-2 py-1 rounded-lg border-2 transition bg-transparent border-blue-500 text-blue-600 flex-shrink-0';
         if (note)  note.classList.add('hidden');
-        if (label) label.innerHTML = 'الحاسبة<br><span class="font-medium text-slate-400">يحسب بناء على 30 يوم ويطبق نظام التعويض ويخفض وزن التقييمات السلبية عند ارتفاع عدد التقييمات الايجابية</span>';
+        if (label) label.innerHTML = 'الحاسبة<br><span class="font-medium text-slate-199">يحسب بناء على 30 يوم ويطبق نظام التعويض ويخفض وزن التقييمات السلبية عند ارتفاع عدد التقييمات الايجابية</span>';
     }
     calculateTrial();
 }
