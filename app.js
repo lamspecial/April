@@ -1507,7 +1507,7 @@ function _resetAuthModal(label) {
     panel.innerHTML = `
         <h3 class="font-black text-xl mb-1 text-slate-900">مرحباً</h3>
         <p id="authStepLabel" class="mb-5 font-medium text-slate-500 text-sm">${label}</p>
-        <div id="authWarning" class="hidden mb-4 bg-rose-50 border border-rose-200 text-rose-700 text-sm font-bold px-4 py-2.5 rounded-xl">بقي لديكِ محاولة واحدة فقط ⚠️</div>
+        <div id="authWarning" class="hidden mb-4 bg-rose-50 border border-rose-200 text-rose-700 text-sm font-bold px-4 py-2.5 rounded-xl">لديك محاولة واحدة فقط ⚠️</div>
         <div id="authEmojiStep" class="grid grid-cols-4 gap-3 mb-5">
             ${['👏🏻','🫱🏻‍🫲🏽','🫶🏻','🙏🏻','✍🏻','👍🏻','🤲🏻','💪🏻'].map(e =>
                 `<button class="auth-emoji-btn text-3xl p-3 rounded-2xl glass-input hover:scale-110 transition-transform active:scale-95" onclick="selectAuthEmoji('${e}')">${e}</button>`
@@ -1518,7 +1518,7 @@ function _resetAuthModal(label) {
                 `<button class="auth-num-btn py-3 px-2 rounded-2xl glass-input font-black text-slate-800 text-base hover:scale-110 transition-transform active:scale-95" onclick="selectAuthNumber('${n}')">${n}</button>`
             ).join('')}
         </div>
-        <button id="authBackBtn" class="hidden w-full mb-3 py-2.5 bg-white/40 hover:bg-white/60 border border-white/60 text-slate-600 font-bold rounded-xl transition text-sm" onclick="authGoBack()">← السابق</button>`;
+        <button id="authBackBtn" class="hidden w-full mb-3 py-2.5 bg-white/40 hover:bg-white/60 border border-white/60 text-slate-600 font-bold rounded-xl transition text-sm" onclick="authGoBack()"> السابق</button>`;
 }
 
 function _showAdminPinStep() {
@@ -1526,13 +1526,13 @@ function _showAdminPinStep() {
     if (!panel) return;
     panel.innerHTML = `
         <h3 class="font-black text-xl mb-2 text-slate-900">الإدارة العليا</h3>
-        <p class="mb-6 font-medium text-slate-500 text-sm">أدخل كلمة مرور اليوم</p>
+        <p class="mb-6 font-medium text-slate-500 text-sm">أدخل PIN  </p>
         <div class="flex gap-3 justify-center mb-8 ltr" dir="ltr">
             ${[0,1,2,3].map(i => `<input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1"
                 class="admin-pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400"
                 oninput="handleAdminBoxInput(this,${i})" onkeydown="handleAdminBoxKey(event,${i})">`).join('')}
         </div>
-        <div id="adminPinError" class="hidden mb-4 text-rose-600 text-sm font-bold text-center">كلمة المرور غير صحيحة</div>
+        <div id="adminPinError" class="hidden mb-4 text-rose-600 text-sm font-bold text-center">  غير صحيح</div>
         <button onclick="closeMaintenanceAuth()" class="w-full py-2.5 bg-white/30 hover:bg-white/50 border border-white/50 text-slate-500 font-bold rounded-xl transition text-sm">إلغاء</button>`;
     setTimeout(() => document.querySelector('.admin-pin-box')?.focus(), 100);
 }
@@ -1619,9 +1619,9 @@ function _showBlockedScreen() {
     if (!panel) return;
     panel.innerHTML = `
         <div class="text-center py-4">
-            <div class="text-5xl mb-4">🚫</div>
+            <div class="text-5xl mb-4">Error</div>
             <h3 class="font-black text-xl mb-2 text-rose-700">تم حظر الدخول</h3>
-            <p class="text-slate-500 text-sm font-medium mb-6">تواصلي مع الإدارة للمساعدة</p>
+            <p class="text-slate-500 text-sm font-medium mb-6">تواصل مع المسؤول  </p>
         </div>`;
 }
 
@@ -1834,11 +1834,11 @@ function selectCommentPerson(ts, personId, personName, personTitle) {
                 <p class="text-xs text-slate-500">${personTitle}</p>
             </div>
         </div>
-        <textarea id="commentTextInput" rows="4" class="w-full p-3 rounded-xl glass-input text-sm leading-relaxed resize-y mb-3" placeholder="اكتبي تعليقك هنا..." style="font-family:'Tajawal',sans-serif;"></textarea>
+        <textarea id="commentTextInput" rows="4" class="w-full p-3 rounded-xl glass-input text-sm leading-relaxed resize-y mb-3" placeholder="اكتبي تعليقك ..." style="font-family:'Tajawal',sans-serif;"></textarea>
         <div class="flex gap-2">
             <button onclick="submitComment(${ts}, '${personId}', '${personName}', '${personTitle}')"
-                class="flex-1 btn-solid-dark py-2.5 rounded-xl text-sm font-black">إضافة التعليق</button>
-            <button onclick="document.getElementById('commentFlowContainer').innerHTML = buildCommentStep1(${ts})" class="btn-outline btn-outline-slate text-xs px-4 py-2 rounded-xl">← السابق</button>
+                class="flex-1 btn-solid-dark py-2.5 rounded-xl text-sm font-black">ارسال  </button>
+            <button onclick="document.getElementById('commentFlowContainer').innerHTML = buildCommentStep1(${ts})" class="btn-outline btn-outline-slate text-xs px-4 py-2 rounded-xl">←</button>
         </div>
     </div>`;
     setTimeout(() => document.getElementById('commentTextInput')?.focus(), 100);
@@ -1852,7 +1852,7 @@ function cancelCommentFlow() {
 function buildCommentAddBtn(ts) {
     return `<button onclick="startCommentFlow(${ts})" class="w-full btn-outline btn-outline-indigo py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        أضيفي تعليقاً على هذه الدراسة
+     شاركي رأيك
     </button>`;
 }
 
@@ -1864,7 +1864,7 @@ function startCommentFlow(ts) {
 
 async function submitComment(ts, personId, personName, personTitle) {
     const text = document.getElementById('commentTextInput')?.value.trim();
-    if (!text) { alert('يرجى كتابة التعليق'); return; }
+    if (!text) { alert(' كتابة التعليق'); return; }
     if (!caseStudyComments[ts]) caseStudyComments[ts] = [];
     const comment = {
         id: 'c_' + Date.now(),
@@ -1885,7 +1885,7 @@ async function submitComment(ts, personId, personName, personTitle) {
 
 async function deleteComment(ts, commentId) {
     if (!caseStudyComments[ts]) return;
-    if (!confirm('هل تريد حذف هذا التعليق؟')) return;
+    if (!confirm('هل تريدين البدء مجددا؟')) return;
     caseStudyComments[ts] = caseStudyComments[ts].filter(c => c.id !== commentId);
     await saveCommentsToFirebase();
     renderComments(ts);
