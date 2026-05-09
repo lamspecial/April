@@ -38,7 +38,7 @@
 
 <!-- Loading overlay -->
 <div id="loadingOverlay">
-    <div class="w-12 h-12 border-4 border-slate-300 border-t-slate-800 rounded-full animate-spin mb-4"></div>
+    <div id="loadingSpinner" class="w-12 h-12 border-4 border-slate-300 border-t-slate-800 rounded-full animate-spin mb-4"></div>
     <p class="text-slate-700 font-bold">I am Special...</p>
 </div>
 
@@ -143,18 +143,10 @@
     تم النسخ
 </div>
 
-<!-- PIN Auth Modal -->
-<div id="maintenanceAuthModal" class="fixed inset-0 bg-slate-900/45 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-    <div class="glass-panel rounded-2xl p-8 shadow-2xl max-w-sm w-full text-center border border-white/50">
-        <h3 class="font-black text-xl mb-2 text-slate-900">الإدارة العليا</h3>
-        <p class="mb-6 font-medium text-slate-600 text-sm bg-white/30 inline-block px-3 py-1 rounded-full">أدخل كلمة المرور</p>
-        <div class="flex gap-4 justify-center mb-8" dir="ltr">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this,0)" onkeydown="handleBoxKey(event,0)">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this,1)" onkeydown="handleBoxKey(event,1)">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this,2)" onkeydown="handleBoxKey(event,2)">
-            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400" oninput="handleBoxInput(this,3)" onkeydown="handleBoxKey(event,3)">
-        </div>
-        <button onclick="closeMaintenanceAuth()" class="w-full py-3 bg-white/50 hover:bg-white/70 border border-white/60 text-slate-800 font-bold rounded-lg transition shadow-sm">إلغاء</button>
+<!-- Auth Modal — يُبنى محتواه ديناميكياً -->
+<div id="maintenanceAuthModal" class="fixed inset-0 bg-slate-900/55 backdrop-blur-md z-[200] hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-7 shadow-2xl max-w-sm w-full text-center border border-white/50">
+        <!-- يُحقن المحتوى عبر JS -->
     </div>
 </div>
 
@@ -190,6 +182,14 @@
             </div>
         </div>
         <div class="p-4 space-y-4">
+            <!-- فك حظر المستخدمين -->
+            <div class="bg-rose-50/60 border border-rose-200/60 rounded-xl p-4">
+                <p class="text-xs font-black text-rose-700 mb-3">🚫 فك حظر مستخدم</p>
+                <div class="flex gap-2 items-center" id="blockedUsersContainer">
+                    <button onclick="loadBlockedUsers()" class="btn-outline btn-outline-rose text-xs px-3 py-2 rounded-lg">عرض المحظورين</button>
+                </div>
+                <div id="blockedUsersList" class="mt-3 space-y-2 hidden"></div>
+            </div>
             <div class="grid grid-cols-3 gap-3">
                 <div><label class="block text-xs mb-1 font-bold text-slate-600">اسم الفرع</label><input type="text" id="admin_bName" class="w-full p-2 rounded-lg glass-input text-sm"></div>
                 <div><label class="block text-xs mb-1 font-bold text-slate-600">اسم المديرة</label><input type="text" id="admin_mName" class="w-full p-2 rounded-lg glass-input text-sm"></div>
@@ -232,6 +232,10 @@
             <button onclick="selectArticleType('opinion')" class="w-full text-right p-4 rounded-xl border border-rose-200/70 bg-transparent hover:bg-rose-50/40 transition">
                 <div class="font-black text-rose-800 text-sm mb-1">مقال رأي</div>
                 <div class="text-xs text-rose-600 font-medium">أنشئ رابطاً خاصاً مرتبطاً باسم الموظفة ونبذتها لكاتب خارجي</div>
+            </button>
+            <button onclick="selectArticleType('caseStudy')" class="w-full text-right p-4 rounded-xl border border-violet-200/70 bg-transparent hover:bg-violet-50/40 transition">
+                <div class="font-black text-violet-800 text-sm mb-1">دراسة حالة</div>
+                <div class="text-xs text-violet-600 font-medium">مقال تفاعلي يشمل جميع الموظفات مع إمكانية التعليق على الحالة</div>
             </button>
         </div>
     </div>

@@ -137,9 +137,24 @@ body {
 }
 .carousel-dot:hover { opacity: 0.75; }
 
-/* ---- PIN boxes ---- */
-.pin-box { transition: transform 0.15s; }
-.pin-box:focus { transform: scale(1.05); }
+/* ---- Auth emoji/number buttons ---- */
+.auth-emoji-btn, .auth-num-btn {
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    user-select: none;
+}
+.auth-emoji-btn:hover, .auth-num-btn:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+#authEmojiStep, #authNumberStep {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+#authNumberStep.hidden, #authEmojiStep.hidden { display: none; }
+
+/* ---- PIN boxes (legacy, kept to avoid errors) ---- */
+.pin-box { display: none; }
 
 /* ---- Hide number spinners ---- */
 input[type="number"]::-webkit-inner-spin-button,
@@ -168,11 +183,13 @@ input[type="number"] { -moz-appearance: textfield; }
     position: fixed; inset: 0;
     background: rgba(255,255,255,0.65);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 100;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: background 0.8s ease, backdrop-filter 0.8s ease, -webkit-backdrop-filter 0.8s ease;
 }
 
 /* ---- Copy Toast ---- */
@@ -401,3 +418,54 @@ select.glass-input {
 #progressBar {
     transition: width 0.5s ease;
 }
+
+/* ---- روابط مضمنة داخل نص المقال ---- */
+.article-inline-link {
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s, opacity 0.15s;
+}
+.article-inline-link:hover {
+    color: #1d4ed8;
+    opacity: 0.85;
+}
+
+/* ---- نص جسم المقال ---- */
+.article-body-text {
+    line-height: 2;
+    font-size: 1rem;
+}
+
+/* ---- تعليقات دراسة الحالة ---- */
+.comment-block {
+    position: relative;
+    padding-right: 1rem;
+}
+.comment-block:not(:last-child)::after {
+    display: none;
+}
+.comment-text {
+    line-height: 2;
+    font-size: 1rem;
+}
+
+/* ---- بطاقة دراسة الحالة — معاينة آخر تعليق ---- */
+.opinion-byline-preview {
+    font-size: 13px;
+    color: #475569;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* ---- وسم دراسة الحالة (violet/indigo) ---- */
+.badge-indigo { color: #4338ca; border-color: #4338ca; }
+
+/* ---- خطوات التعليق ---- */
+.comment-step {
+    animation: slideUp 0.2s ease forwards;
+}
+
+/* ---- modal display caseStudy ---- */
+

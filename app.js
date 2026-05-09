@@ -17,6 +17,9 @@ try {
     if (typeof firebase !== 'undefined') {
         firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
+        // تسريع: تقليل timeout الشبكة وتفعيل cache محلي
+        db.settings({ cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED });
+        db.enablePersistence({ synchronizeTabs: false }).catch(() => {});
     }
 } catch (e) { console.error("Firebase init error:", e); }
 
@@ -53,10 +56,12 @@ let branchArticles = {};
 let globalArticles = [];
 
 // ============================================================
-// Firebase helpers
+// Firebase helpers — مُحسَّنة للسرعة
 // ============================================================
+
+// ✅ إصلاح #1: timeout قصير (3 ثوان بدل 6) لتجنب الانتظار الطويل
 const _fbTimeout  = ms => new Promise((_,rej) => setTimeout(() => rej(new Error('timeout')), ms));
-const _loadDoc    = ref => Promise.race([ref.get(), _fbTimeout(6000)]);
+const _loadDoc    = ref => Promise.race([ref.get(), _fbTimeout(3000)]);
 const _fbSave     = (doc, data) => db ? db.collection('appData').doc(doc).set(data).catch(()=>{}) : null;
 
 const saveBranchesToFirebase       = () => _fbSave('branches',       { data: branchesData });
@@ -64,38 +69,58 @@ const saveHistoryToFirebase        = () => _fbSave('history',        { data: bra
 const saveArticlesToFirebase       = () => _fbSave('articles',       { data: branchArticles });
 const saveGlobalArticlesToFirebase = () => _fbSave('globalArticles', { data: globalArticles });
 
+// ✅ إصلاح #2: تحميل كل documents بالتوازي بدل التسلسل
 async function loadAllDataFromFirebase() {
     if (!db) return;
     try {
-        const bd = await _loadDoc(db.collection('appData').doc('branches'));
-        if (bd.exists) branchesData = bd.data().data;
-        else db.collection('appData').doc('branches').set({ data: branchesData }).catch(()=>{});
+        // تحميل الـ 4 documents في نفس الوقت بدل واحد تلو الآخر
+        const [bd, hd, ad, gd] = await Promise.allSettled([
+            _loadDoc(db.collection('appData').doc('branches')),
+            _loadDoc(db.collection('appData').doc('history')),
+            _loadDoc(db.collection('appData').doc('articles')),
+            _loadDoc(db.collection('appData').doc('globalArticles'))
+        ]);
 
-        try {
-            const h = await _loadDoc(db.collection('appData').doc('history'));
-            if (h.exists) branchHistory = h.data().data;
-        } catch(_) {}
+        // branches
+        if (bd.status === 'fulfilled' && bd.value.exists) {
+            branchesData = bd.value.data().data;
+        } else if (bd.status === 'fulfilled' && !bd.value.exists) {
+            db.collection('appData').doc('branches').set({ data: branchesData }).catch(()=>{});
+        }
 
-        try {
-            const ad = await _loadDoc(db.collection('appData').doc('articles'));
-            if (ad.exists) {
-                const la = ad.data().data;
-                for (const id in la) {
-                    if (!Array.isArray(la[id])) {
-                        const o = la[id], text = typeof o === 'string' ? o : o.text, ts = typeof o === 'object' && o.date ? o.date : Date.now();
-                        la[id] = [{ type:'performance', text, timestamp:ts, dateStr:new Date(ts).toISOString().split('T')[0], snapshot:{...branchesData[id]}, scores:calcScores(branchesData[id]) }];
-                    } else {
-                        la[id] = la[id].map(a => ({ type:'performance', ...a }));
-                    }
+        // history
+        if (hd.status === 'fulfilled' && hd.value.exists) {
+            branchHistory = hd.value.data().data;
+        }
+
+        // articles
+        if (ad.status === 'fulfilled' && ad.value.exists) {
+            const la = ad.value.data().data;
+            for (const id in la) {
+                if (!Array.isArray(la[id])) {
+                    const o = la[id], text = typeof o === 'string' ? o : o.text, ts = typeof o === 'object' && o.date ? o.date : Date.now();
+                    la[id] = [{ type:'performance', text, timestamp:ts, dateStr:new Date(ts).toISOString().split('T')[0], snapshot:{...branchesData[id]}, scores:calcScores(branchesData[id]) }];
+                } else {
+                    la[id] = la[id].map(a => ({ type:'performance', ...a }));
                 }
-                branchArticles = la;
             }
-        } catch(_) {}
+            branchArticles = la;
+        }
 
-        try {
-            const g = await _loadDoc(db.collection('appData').doc('globalArticles'));
-            if (g.exists) globalArticles = g.data().data || [];
-        } catch(_) {}
+        // globalArticles
+        if (gd.status === 'fulfilled' && gd.value.exists) {
+            globalArticles = gd.value.data().data || [];
+        }
+
+    } catch(_) {}
+}
+
+// ✅ إصلاح #3: تحميل التعليقات موازياً مع البيانات الأخرى (لا يُنتظر منفرداً)
+async function loadCommentsFromFirebase() {
+    if (!db) return;
+    try {
+        const doc = await _loadDoc(db.collection('appData').doc('caseComments'));
+        if (doc.exists) caseStudyComments = doc.data().data || {};
     } catch(_) {}
 }
 
@@ -155,7 +180,7 @@ function calcScores(data) {
 function getPerformanceTier(scores) {
     const t = scores.total;
     if (t >= 9)   return { label:"أخضر", headerColor:"text-emerald-700 border-emerald-500", labelBg:"border-emerald-500 text-emerald-700", barColor:"bg-emerald-500", badgeCls:"badge-green" };
-    if (t >= 6.5) return { label:"أصفر", headerColor:"text-amber-700 border-amber-500",   labelBg:"border-amber-500 text-amber-700",   barColor:"bg-amber-500",   badgeCls:"badge-yellow" };
+    if (t >= 6)   return { label:"أصفر", headerColor:"text-amber-700 border-amber-500",   labelBg:"border-amber-500 text-amber-700",   barColor:"bg-amber-500",   badgeCls:"badge-yellow" };
     return             { label:"أحمر", headerColor:"text-rose-700 border-rose-500",     labelBg:"border-rose-500 text-rose-700",     barColor:"bg-rose-500",    badgeCls:"badge-red" };
 }
 
@@ -301,6 +326,30 @@ function selectArticleType(type) {
     else if (type === 'weekly')       openWeeklyModal();
     else if (type === 'announcement') openAnnouncementModal();
     else if (type === 'opinion')      openOpinionLinkModal();
+    else if (type === 'caseStudy')    openCaseStudyModal();
+}
+
+function openCaseStudyModal() {
+    document.getElementById('articleModalTitle').textContent = 'دراسة حالة جديدة';
+    document.getElementById('articleModalSubtitle').textContent = 'مقال تفاعلي مفتوح للتعليق من جميع الموظفات';
+    document.getElementById('articleModalBody').innerHTML = `
+        <div class="bg-indigo-50/50 border border-indigo-200/60 rounded-xl p-4 mb-4">
+            <p class="text-xs font-bold text-indigo-700">💡 يمكن تحويل أي كلمة إلى رابط بالصيغة: <span class="font-mono bg-white/60 px-1 rounded">[الكلمة](الرابط)</span></p>
+            <p class="text-xs font-medium text-indigo-500 mt-1">مثال: <span class="font-mono">[اضغط هنا](https://example.com)</span></p>
+        </div>
+        <div>
+            <label class="block text-sm font-bold text-slate-700 mb-2">عنوان دراسة الحالة</label>
+            <input type="text" id="caseStudyTitle" class="w-full p-3 rounded-lg glass-input text-sm" placeholder="أدخل عنوان دراسة الحالة">
+        </div>
+        <div>
+            <label class="block text-sm font-bold text-slate-700 mb-2">محتوى دراسة الحالة</label>
+            <textarea id="caseStudyBody" rows="10" class="w-full p-4 rounded-xl glass-input text-sm leading-relaxed resize-y" placeholder="اكتب دراسة الحالة هنا...&#10;يمكنك تحويل أي كلمة إلى رابط بالصيغة: [الكلمة](الرابط)" style="font-family:'Tajawal',sans-serif;"></textarea>
+        </div>
+        <div class="flex gap-3 pt-2">
+            <button onclick="generateCaseStudyLink()" class="flex-1 btn-outline btn-outline-indigo py-3 rounded-xl font-black">نشر دراسة الحالة</button>
+            <button onclick="closeArticleModal()" class="bg-white/60 hover:bg-white/80 text-slate-800 font-bold py-3 px-5 rounded-xl border border-white/60 transition">إلغاء</button>
+        </div>`;
+    document.getElementById('articleModal').style.display = 'flex';
 }
 
 function openArticleModal(branchId, ts = null) {
@@ -476,7 +525,7 @@ async function saveWeeklyArticle() {
 function closeWeeklyModal() { document.getElementById('weeklyModal').style.display = 'none'; }
 
 // ============================================================
-// رابط الكاتب الخارجي — نظام جديد بمعرّف قصير مبني على التاريخ
+// رابط الكاتب الخارجي
 // ============================================================
 function openOpinionLinkModal() {
     document.getElementById('opinionAuthorName').value = '';
@@ -498,11 +547,12 @@ async function generateOpinionLink() {
     const linkId = `${dd}-${mm}-${rand}`;
     const exp    = Date.now() + 7 * 24 * 3600 * 1000;
     const token  = `op_${Date.now()}`;
+    const pin = String(Math.floor(1000 + Math.random() * 9000));
 
     if (db) {
         try {
             await db.collection('appData').doc('opinionTokens').set(
-                { [linkId]: { name, bio, token, exp } },
+                { [linkId]: { name, bio, token, exp, pin, submitted: false } },
                 { merge: true }
             );
         } catch(e) { console.error('Error saving opinion token:', e); }
@@ -511,6 +561,17 @@ async function generateOpinionLink() {
     const url = `${location.origin}${location.pathname}#opinion-${linkId}`;
     document.getElementById('opinionLinkUrl').value = url;
     document.getElementById('opinionLinkResult').classList.remove('hidden');
+
+    let pinDisplay = document.getElementById('opinionPinDisplay');
+    if (!pinDisplay) {
+        pinDisplay = document.createElement('div');
+        pinDisplay.id = 'opinionPinDisplay';
+        document.getElementById('opinionLinkResult').appendChild(pinDisplay);
+    }
+    pinDisplay.className = 'mt-3 bg-indigo-50 border border-indigo-200 rounded-xl p-3 text-center';
+    pinDisplay.innerHTML = `<p class="text-xs font-bold text-indigo-600 mb-1">كلمة مرور الكاتب (4 أرقام)</p>
+        <p class="text-3xl font-black text-indigo-800 tracking-widest">${pin}</p>
+        <p class="text-xs text-indigo-400 mt-1">أرسلها للكاتب مع الرابط</p>`;
 }
 
 function copyOpinionLink() {
@@ -518,45 +579,92 @@ function copyOpinionLink() {
     showCopyToast('تم نسخ الرابط');
 }
 
+let currentOpinionSlug   = null;
 let currentOpinionToken  = null;
 let currentOpinionAuthor = null;
 
 async function openOpinionWritePage(slug) {
     let data = null;
+    currentOpinionSlug = slug;
 
-    // محاولة التحميل من Firebase (النظام الجديد — معرّف قصير)
     if (db && /^\d{2}-\d{2}-[a-z0-9]{4}$/.test(slug)) {
         try {
             const doc = await db.collection('appData').doc('opinionTokens').get();
             if (doc.exists) data = (doc.data() || {})[slug];
         } catch(e) {}
     }
-
-    // احتياطي: تنسيق base64 القديم
     if (!data) {
-        try {
-            data = JSON.parse(decodeURIComponent(atob(slug)));
-        } catch(e) {
-            alert('الرابط غير صالح');
-            history.replaceState('', '', location.pathname);
-            return;
+        try { data = JSON.parse(decodeURIComponent(atob(slug))); } catch(e) {
+            alert('الرابط غير صالح'); history.replaceState('', '', location.pathname); return;
         }
     }
-
     if (!data || (data.exp && Date.now() > data.exp)) {
-        alert('انتهت صلاحية هذا الرابط');
-        history.replaceState('', '', location.pathname);
-        return;
+        alert('انتهت صلاحية هذا الرابط'); history.replaceState('', '', location.pathname); return;
     }
 
+    if (data.submitted) {
+        const art = globalArticles.find(a => a.token === data.token);
+        if (art) { openGlobalBulletinPage(art.timestamp); return; }
+    }
+
+    _showOpinionPinGate(slug, data);
+}
+
+function _showOpinionPinGate(slug, data) {
+    const panel = document.querySelector('#maintenanceAuthModal .glass-panel');
+    if (panel) panel.innerHTML = `
+        <h3 class="font-black text-xl mb-1 text-slate-900">كتابة مقال رأي</h3>
+        <p class="text-sm text-slate-500 font-medium mb-5">أدخل كلمة المرور المكونة من 4 أرقام</p>
+        <div class="flex gap-3 justify-center mb-6" dir="ltr">
+            ${[0,1,2,3].map(i => `<input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1"
+                class="opinion-pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-indigo-400"
+                oninput="handleOpinionPinInput(this,${i})" onkeydown="handleOpinionPinKey(event,${i})">`).join('')}
+        </div>
+        <div id="opinionPinError" class="hidden mb-3 text-rose-600 text-sm font-bold text-center">كلمة المرور غير صحيحة</div>
+        <button onclick="closeMaintenanceAuth()" class="w-full py-2.5 bg-white/30 hover:bg-white/50 border border-white/50 text-slate-500 font-bold rounded-xl transition text-sm">إلغاء</button>`;
+    document.getElementById('maintenanceAuthModal').style.display = 'flex';
+    setTimeout(() => document.querySelector('.opinion-pin-box')?.focus(), 100);
     currentOpinionToken  = data.token;
     currentOpinionAuthor = { name: data.name, bio: data.bio };
+    window._pendingOpinionPin = String(data.pin);
+}
+
+function handleOpinionPinInput(el, idx) {
+    el.value = el.value.replace(/[^0-9]/g, '');
+    if (el.value !== '') {
+        const boxes = document.querySelectorAll('.opinion-pin-box');
+        if (idx < 3) boxes[idx + 1].focus();
+        if (idx === 3) _verifyOpinionPin();
+    }
+}
+function handleOpinionPinKey(e, idx) {
+    if (e.key === 'Backspace' && e.target.value === '' && idx > 0) {
+        const boxes = document.querySelectorAll('.opinion-pin-box');
+        boxes[idx - 1].focus(); boxes[idx - 1].value = '';
+    }
+}
+function _verifyOpinionPin() {
+    const boxes = document.querySelectorAll('.opinion-pin-box');
+    const pin   = Array.from(boxes).map(b => b.value).join('');
+    if (pin.length < 4) return;
+    if (pin === window._pendingOpinionPin) {
+        closeMaintenanceAuth();
+        _openOpinionEditor();
+    } else {
+        const err = document.getElementById('opinionPinError');
+        if (err) err.classList.remove('hidden');
+        boxes.forEach(b => b.value = '');
+        setTimeout(() => boxes[0].focus(), 50);
+    }
+}
+
+function _openOpinionEditor() {
     document.getElementById('opinionWriteTitle').textContent    = 'كتابة مقال رأي';
-    document.getElementById('opinionWriteSubtitle').textContent = `الكاتبة: ${data.name} — ${data.bio}`;
+    document.getElementById('opinionWriteSubtitle').textContent = `الكاتبة: ${currentOpinionAuthor.name} — ${currentOpinionAuthor.bio}`;
     document.getElementById('opinionTitleInput').value = '';
     document.getElementById('opinionBodyInput').value  = '';
-    document.getElementById('opinionWritePage').style.display      = 'flex';
-    document.getElementById('mainPageWrapper').style.display       = 'none';
+    document.getElementById('opinionWritePage').style.display = 'flex';
+    document.getElementById('mainPageWrapper').style.display  = 'none';
 }
 
 async function submitOpinionArticle() {
@@ -570,6 +678,15 @@ async function submitOpinionArticle() {
         authorName: currentOpinionAuthor.name, authorBio: currentOpinionAuthor.bio, token: currentOpinionToken
     });
     await saveGlobalArticlesToFirebase();
+
+    if (db && currentOpinionSlug) {
+        try {
+            await db.collection('appData').doc('opinionTokens').set(
+                { [currentOpinionSlug]: { submitted: true, submittedTs: ts } }, { merge: true }
+            );
+        } catch(_) {}
+    }
+
     document.getElementById('opinionWritePage').style.display = 'none';
     document.getElementById('mainPageWrapper').style.display  = 'flex';
     history.replaceState('', '', location.pathname);
@@ -712,7 +829,19 @@ function updateActiveDot() {
 
 function scrollCarousel(dir) {
     const el = document.getElementById('branchesCarousel');
-    if (el) el.scrollBy({ left: dir * -340, behavior:'smooth' });
+    if (el) {
+        clearInterval(carouselInterval);
+        el.scrollBy({ left: dir * -340, behavior:'smooth' });
+        setTimeout(() => {
+            if (!isCarouselPaused) {
+                carouselInterval = setInterval(() => {
+                    const mx = el.scrollWidth - el.clientWidth;
+                    if (Math.abs(el.scrollLeft) >= mx - 10) el.scrollTo({ left:0, behavior:'smooth' });
+                    else el.scrollBy({ left:-340, behavior:'smooth' });
+                }, 6000);
+            }
+        }, 5000);
+    }
 }
 
 function setupCarouselEvents() {
@@ -733,7 +862,7 @@ function setupCarouselEvents() {
     el.addEventListener('mouseenter', () => { if (!isCarouselPaused) clearInterval(carouselInterval); }, { passive:true });
     el.addEventListener('mouseleave', startAuto, { passive:true });
     el.addEventListener('touchstart', () => { if (!isCarouselPaused) clearInterval(carouselInterval); }, { passive:true });
-    el.addEventListener('touchend', startAuto, { passive:true });
+    el.addEventListener('touchend', () => { setTimeout(startAuto, 5000); }, { passive:true });
     startAuto();
 }
 
@@ -763,7 +892,7 @@ function closeIframeModal(e) {
 }
 
 // ============================================================
-// صفحة التقرير التفصيلي — تقارير الفروع
+// صفحة التقرير التفصيلي
 // ============================================================
 function openBulletinPage(branchId, timestamp = null) {
     let data, scores, articleData, dateStr;
@@ -832,7 +961,7 @@ function buildBulletinHTML(data, scores, tier, text, rv, rc, dateStr, pct, branc
             </div>
             <h1 class="text-3xl md:text-4xl font-black text-slate-900 leading-tight mb-4">${text.head}</h1>
             <p class="text-lg text-slate-700 font-bold leading-relaxed mb-3 bg-white/30 p-3 rounded-lg border-l-4 border-slate-300">${text.lead}</p>
-            <p class="text-slate-700 leading-relaxed text-justify font-medium">${text.body}</p>
+            <p class="text-slate-700 leading-relaxed text-justify font-medium article-body-text">${processArticleLinks(text.body)}</p>
         </div>`
         : `<div class="mb-8 ${isAdminLoggedIn ? 'bg-amber-50/50 border-amber-200' : 'bg-slate-100/40 border-slate-200'} border rounded-2xl p-6">
             <div class="flex items-start gap-4">
@@ -934,19 +1063,21 @@ function buildPersonRow(name, role, border) {
 }
 
 // ============================================================
-// صفحة المقالات العامة (أسبوعي / إعلان / رأي) — تُعرض في Bulletin
+// صفحة المقالات العامة
 // ============================================================
 function openGlobalBulletinPage(ts) {
     const art = globalArticles.find(a => a.timestamp === ts);
     if (!art) return;
+
+    currentCaseStudyTs = ts;
 
     const lines   = art.text ? art.text.split('\n').map(l => l.trim()).filter(l => l) : [];
     const head    = lines[0] || art.title || '';
     const bodyTxt = lines.slice(1).join('\n');
     const dateStr = formatFullDateArabic(new Date(art.timestamp));
 
-    const typeLabels = { weekly:'نظرة عن كثب', announcement:'إعلان', opinion:'رأي' };
-    const typeBadges = { weekly:'badge-emerald', announcement:'badge-amber', opinion:'badge-rose' };
+    const typeLabels = { weekly:'نظرة عن كثب', announcement:'إعلان', opinion:'رأي', caseStudy:'دراسة حالة' };
+    const typeBadges = { weekly:'badge-emerald', announcement:'badge-amber', opinion:'badge-rose', caseStudy:'badge-indigo' };
 
     currentBulletinData = {
         branchId: null, bName: typeLabels[art.type] || '',
@@ -964,8 +1095,11 @@ function openGlobalBulletinPage(ts) {
         ? `<button onclick="deleteGlobalArticle(${ts})" class="btn-outline btn-outline-rose text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5">${DEL_SVG}حذف المقال</button>`
         : '';
 
-    // محتوى إضافي حسب النوع
+    const processedBody = processArticleLinks(bodyTxt);
+
     let extraContent = '';
+    let commentsSection = '';
+
     if (art.type === 'weekly' && art.branchSnapshots) {
         const rows = Object.entries(art.branchSnapshots).map(([id, d]) => {
             const s = d.scores || calcScores(d), t = getPerformanceTier(s);
@@ -989,6 +1123,8 @@ function openGlobalBulletinPage(ts) {
                 ${art.authorBio ? `<p class="text-slate-500 text-xs font-medium mt-0.5">${art.authorBio}</p>` : ''}
             </div>
         </div>`;
+    } else if (art.type === 'caseStudy') {
+        commentsSection = buildCaseStudyCommentsSection(ts);
     }
 
     document.getElementById('bulletinContent').innerHTML = `
@@ -1001,8 +1137,9 @@ function openGlobalBulletinPage(ts) {
                 ${delBtn}
             </div>
             <h1 class="text-3xl md:text-4xl font-black text-slate-900 leading-tight mb-6">${head}</h1>
-            <div class="glass-panel rounded-2xl p-6 text-slate-700 leading-relaxed font-medium whitespace-pre-line text-base">${bodyTxt}</div>
+            <div class="article-body-text text-slate-700 leading-relaxed font-medium whitespace-pre-line text-base">${processedBody}</div>
             ${extraContent}
+            ${commentsSection}
         </div>`;
 
     showPage('bulletin');
@@ -1010,6 +1147,10 @@ function openGlobalBulletinPage(ts) {
     cel.classList.remove('slide-up');
     requestAnimationFrame(() => cel.classList.add('slide-up'));
     window.scrollTo({ top:0, behavior:'smooth' });
+
+    if (art.type === 'caseStudy') {
+        renderComments(ts);
+    }
 }
 
 // ============================================================
@@ -1019,7 +1160,6 @@ function generateNewspaper() {
     const tl = document.getElementById('newsTimeline');
     tl.innerHTML = '';
 
-    // جمع كل المقالات
     let all = [];
     for (let i = 1; i <= 6; i++) {
         const arts = branchArticles[i];
@@ -1049,7 +1189,6 @@ function generateNewspaper() {
         return;
     }
 
-    // تجميع حسب اليوم
     const grouped = {};
     all.forEach(r => { if (!grouped[r.dateStr]) grouped[r.dateStr] = []; grouped[r.dateStr].push(r); });
 
@@ -1072,7 +1211,6 @@ function generateNewspaper() {
                 : '';
 
             if (item.type === 'performance' && item.branchId) {
-                // ---- تقرير فرع — يحتفظ بصندوق النقاط ----
                 const tier  = getPerformanceTier(item.scores);
                 const lines = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
                 card.innerHTML = `
@@ -1092,7 +1230,6 @@ function generateNewspaper() {
                     </div>`;
 
             } else if (item.type === 'weekly') {
-                // ---- نظرة عن كثب — بدون تذييل ----
                 const lines   = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
                 const excerpt = (lines.slice(1).join(' ') || '').substring(0, 120);
                 card.innerHTML = `
@@ -1106,7 +1243,6 @@ function generateNewspaper() {
                     </div>`;
 
             } else if (item.type === 'announcement') {
-                // ---- إعلان — بدون تذييل ----
                 const lines   = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
                 const excerpt = (lines.slice(1).join(' ') || '').substring(0, 120);
                 card.innerHTML = `
@@ -1119,8 +1255,30 @@ function generateNewspaper() {
                         <p class="text-slate-700 text-sm font-bold leading-relaxed bg-white/30 p-2 rounded">${excerpt}${excerpt.length >= 120 ? '...' : ''}</p>
                     </div>`;
 
+            } else if (item.type === 'caseStudy') {
+                const lines   = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
+                const rawExcerpt = (lines.slice(1).join(' ') || '').replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+                const excerpt = rawExcerpt.substring(0, 100);
+                const comments = caseStudyComments[item.timestamp] || [];
+                const lastComment = comments.length > 0 ? comments[comments.length - 1] : null;
+                const lastCommentHTML = lastComment
+                    ? `<div class="mt-3 pt-3 border-t border-white/40">
+                        <p class="text-[11px] font-black text-slate-500 mb-1">كتبت ${lastComment.authorName}</p>
+                        <p class="text-slate-700 text-sm font-medium leading-relaxed opinion-byline-preview">${lastComment.text.substring(0, 80)}${lastComment.text.length > 80 ? '...' : ''}</p>
+                       </div>`
+                    : '';
+                card.innerHTML = `
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="badge badge-indigo">دراسة حالة</span>${delBtn}
+                        </div>
+                        <h3 onclick="openGlobalBulletinPage(${item.timestamp})"
+                            class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition">${lines[0] || 'دراسة حالة'}</h3>
+                        <p class="text-slate-700 text-sm font-medium leading-relaxed bg-white/30 p-2 rounded">${excerpt}${excerpt.length >= 100 ? '...' : ''}</p>
+                        ${lastCommentHTML}
+                    </div>`;
+
             } else if (item.type === 'opinion') {
-                // ---- رأي — بدون تذييل، مع بيانات الكاتب فقط ----
                 const lines    = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
                 const bodyRaw  = lines.slice(1).join(' ') || '';
                 const excerpt  = bodyRaw.substring(0, 120);
@@ -1271,46 +1429,209 @@ function calculateTrial() {
 }
 
 // ============================================================
-// Admin
+// Auth — بوابة عامة + صلاحيات مدير
 // ============================================================
-const SESSION_KEY   = 'ispecial_admin_session';
-const saveSession   = () => sessionStorage.setItem(SESSION_KEY, new Date().toISOString().split('T')[0]);
-const checkSession  = () => sessionStorage.getItem(SESSION_KEY) === new Date().toISOString().split('T')[0];
-const pinBoxes      = document.querySelectorAll('.pin-box');
+const SESSION_KEY       = 'ispecial_pub_session';
+const ADMIN_SESSION_KEY = 'ispecial_admin_session';
+const BLOCK_KEY_LOCAL   = 'ispecial_auth_blocked';
+const FAIL_KEY          = 'ispecial_auth_fails';
 
-function handleBoxInput(el, idx) {
+const savePublicSession = () => localStorage.setItem(SESSION_KEY, 'granted');
+const checkPublicSession= () => localStorage.getItem(SESSION_KEY) === 'granted';
+const saveAdminSession  = () => localStorage.setItem(ADMIN_SESSION_KEY, 'forever');
+const checkSession      = () => localStorage.getItem(ADMIN_SESSION_KEY) === 'forever';
+const isBlockedLocally  = () => localStorage.getItem(BLOCK_KEY_LOCAL) === '1';
+const getFailCount      = () => parseInt(localStorage.getItem(FAIL_KEY) || '0');
+const incFail           = () => localStorage.setItem(FAIL_KEY, getFailCount() + 1);
+const clearFails        = () => localStorage.removeItem(FAIL_KEY);
+
+const CORRECT_EMOJI  = '🙏🏻';
+const CORRECT_NUMBER = '78';
+
+let _authEmojiChosen  = null;
+let _isPublicGate     = true;
+
+// ✅ إصلاح #4: فحص الحظر المحلي فقط عند الدخول (لا Firebase)
+// Firebase يُفحص فقط عند محاولة الدخول الفاشلة أو بعد التحميل
+async function checkFirebaseBlock() {
+    if (!db) return isBlockedLocally();
+    try {
+        const doc = await Promise.race([
+            db.collection('appData').doc('blockedIPs').get(),
+            _fbTimeout(2000)  // timeout قصير جداً لهذا الفحص
+        ]);
+        const sid = getCommentSessionId();
+        if (doc.exists && doc.data()[sid]) return true;
+    } catch(_) {}
+    return isBlockedLocally();
+}
+
+async function blockInFirebase() {
+    localStorage.setItem(BLOCK_KEY_LOCAL, '1');
+    if (!db) return;
+    try {
+        const sid = getCommentSessionId();
+        await db.collection('appData').doc('blockedIPs').set({ [sid]: true }, { merge: true });
+    } catch(_) {}
+}
+
+async function unblockInFirebase(sid) {
+    if (!db) return;
+    try {
+        await db.collection('appData').doc('blockedIPs').set({ [sid]: firebase.firestore.FieldValue.delete() }, { merge: true });
+    } catch(_) {}
+}
+
+function openPublicGate() {
+    _isPublicGate = true;
+    _authEmojiChosen = null;
+    _resetAuthModal('اختاري الإيموجي للدخول');
+    document.getElementById('maintenanceAuthModal').style.display = 'flex';
+}
+
+function openMaintenanceAuth() {
+    if (checkSession()) {
+        isAdminLoggedIn = true;
+        document.getElementById('adminModal').style.display = 'flex';
+        loadAdminData(); generateNewspaper();
+        return;
+    }
+    _isPublicGate = false;
+    _showAdminPinStep();
+    document.getElementById('maintenanceAuthModal').style.display = 'flex';
+}
+
+function _resetAuthModal(label) {
+    const panel = document.querySelector('#maintenanceAuthModal .glass-panel');
+    if (!panel) return;
+    panel.innerHTML = `
+        <h3 class="font-black text-xl mb-1 text-slate-900">مرحباً</h3>
+        <p id="authStepLabel" class="mb-5 font-medium text-slate-500 text-sm">${label}</p>
+        <div id="authWarning" class="hidden mb-4 bg-rose-50 border border-rose-200 text-rose-700 text-sm font-bold px-4 py-2.5 rounded-xl">بقي لديكِ محاولة واحدة فقط ⚠️</div>
+        <div id="authEmojiStep" class="grid grid-cols-4 gap-3 mb-5">
+            ${['👏🏻','🫱🏻‍🫲🏽','🫶🏻','🙏🏻','✍🏻','👍🏻','🤲🏻','💪🏻'].map(e =>
+                `<button class="auth-emoji-btn text-3xl p-3 rounded-2xl glass-input hover:scale-110 transition-transform active:scale-95" onclick="selectAuthEmoji('${e}')">${e}</button>`
+            ).join('')}
+        </div>
+        <div id="authNumberStep" class="hidden grid grid-cols-4 gap-3 mb-5">
+            ${['12','23','34','45','56','67','78','98'].map(n =>
+                `<button class="auth-num-btn py-3 px-2 rounded-2xl glass-input font-black text-slate-800 text-base hover:scale-110 transition-transform active:scale-95" onclick="selectAuthNumber('${n}')">${n}</button>`
+            ).join('')}
+        </div>
+        <button id="authBackBtn" class="hidden w-full mb-3 py-2.5 bg-white/40 hover:bg-white/60 border border-white/60 text-slate-600 font-bold rounded-xl transition text-sm" onclick="authGoBack()">← السابق</button>`;
+}
+
+function _showAdminPinStep() {
+    const panel = document.querySelector('#maintenanceAuthModal .glass-panel');
+    if (!panel) return;
+    panel.innerHTML = `
+        <h3 class="font-black text-xl mb-2 text-slate-900">الإدارة العليا</h3>
+        <p class="mb-6 font-medium text-slate-500 text-sm">أدخل كلمة مرور اليوم</p>
+        <div class="flex gap-3 justify-center mb-8 ltr" dir="ltr">
+            ${[0,1,2,3].map(i => `<input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1"
+                class="admin-pin-box glass-input w-12 h-14 text-center text-2xl font-bold rounded-lg focus:ring-2 focus:ring-slate-400"
+                oninput="handleAdminBoxInput(this,${i})" onkeydown="handleAdminBoxKey(event,${i})">`).join('')}
+        </div>
+        <div id="adminPinError" class="hidden mb-4 text-rose-600 text-sm font-bold text-center">كلمة المرور غير صحيحة</div>
+        <button onclick="closeMaintenanceAuth()" class="w-full py-2.5 bg-white/30 hover:bg-white/50 border border-white/50 text-slate-500 font-bold rounded-xl transition text-sm">إلغاء</button>`;
+    setTimeout(() => document.querySelector('.admin-pin-box')?.focus(), 100);
+}
+
+function handleAdminBoxInput(el, idx) {
     el.value = el.value.replace(/[^0-9]/g, '');
-    if (el.value !== '') { if (idx < 3) pinBoxes[idx + 1].focus(); checkAdminPinLength(); }
+    if (el.value !== '') {
+        const boxes = document.querySelectorAll('.admin-pin-box');
+        if (idx < 3) boxes[idx + 1].focus();
+        if (idx === 3) _verifyAdminPin();
+    }
 }
-function handleBoxKey(e, idx) {
-    if (e.key === 'Backspace' && e.target.value === '' && idx > 0) { pinBoxes[idx - 1].focus(); pinBoxes[idx - 1].value = ''; }
+function handleAdminBoxKey(e, idx) {
+    if (e.key === 'Backspace' && e.target.value === '' && idx > 0) {
+        const boxes = document.querySelectorAll('.admin-pin-box');
+        boxes[idx - 1].focus(); boxes[idx - 1].value = '';
+    }
 }
-function checkAdminPinLength() {
-    const pin = Array.from(pinBoxes).map(b => b.value).join('');
-    if (pin.length === 4) verifyMaintenance(pin);
-}
-function verifyMaintenance(pin) {
-    const today = new Date();
+function _verifyAdminPin() {
+    const boxes = document.querySelectorAll('.admin-pin-box');
+    const pin   = Array.from(boxes).map(b => b.value).join('');
+    if (pin.length < 4) return;
+    const today   = new Date();
     const correct = today.getDate().toString().padStart(2, '0') + (today.getMonth() + 1).toString().padStart(2, '0');
     if (pin === correct) {
-        isAdminLoggedIn = true; saveSession(); closeMaintenanceAuth();
+        isAdminLoggedIn = true; saveAdminSession(); closeMaintenanceAuth();
         document.getElementById('adminModal').style.display = 'flex';
         loadAdminData(); generateNewspaper();
         if (currentBulletinData?.branchId) openBulletinPage(currentBulletinData.branchId, currentArticleTimestamp);
     } else {
-        alert("غير صحيح!");
-        pinBoxes.forEach(b => b.value = '');
-        pinBoxes[0].focus();
+        const errEl = document.getElementById('adminPinError');
+        if (errEl) errEl.classList.remove('hidden');
+        boxes.forEach(b => b.value = '');
+        setTimeout(() => boxes[0].focus(), 50);
     }
 }
-function openMaintenanceAuth() {
-    if (checkSession()) { isAdminLoggedIn = true; document.getElementById('adminModal').style.display = 'flex'; loadAdminData(); generateNewspaper(); return; }
-    document.getElementById('maintenanceAuthModal').style.display = 'flex';
-    pinBoxes.forEach(b => b.value = '');
-    setTimeout(() => pinBoxes[0].focus(), 100);
+
+function selectAuthEmoji(emoji) {
+    _authEmojiChosen = emoji;
+    document.getElementById('authEmojiStep').classList.add('hidden');
+    document.getElementById('authNumberStep').classList.remove('hidden');
+    document.getElementById('authBackBtn').classList.remove('hidden');
+    document.getElementById('authStepLabel').textContent = 'اختاري الرقم المناسب';
 }
+
+function authGoBack() {
+    _authEmojiChosen = null;
+    document.getElementById('authNumberStep').classList.add('hidden');
+    document.getElementById('authBackBtn').classList.add('hidden');
+    document.getElementById('authEmojiStep').classList.remove('hidden');
+    document.getElementById('authStepLabel').textContent = 'اختاري الإيموجي للدخول';
+    const w = document.getElementById('authWarning'); if (w) w.classList.add('hidden');
+}
+
+// ✅ إصلاح #5: فحص الحظر في الخلفية بعد الدخول، لا يعيق التحميل
+async function selectAuthNumber(num) {
+    if (_authEmojiChosen === CORRECT_EMOJI && num === CORRECT_NUMBER) {
+        clearFails();
+        savePublicSession();
+        closeMaintenanceAuth();
+        // ✅ إصلاح #8: تأكد من اكتمال تحميل البيانات قبل عرض الواجهة
+        // (البيانات تُحمَّل في الخلفية منذ فتح بوابة الدخول؛ هذا يضمن اكتمالها)
+        await Promise.all([loadAllDataFromFirebase(), loadCommentsFromFirebase()]).catch(()=>{});
+        document.getElementById('loadingOverlay').style.display = 'none';
+        generateNewspaper(); initCarousel(); updateBrandReviewsPanel(); autoSaveDailySnapshot();
+        // فحص Firebase في الخلفية (لا يعيق UI)
+        checkFirebaseBlock().then(blocked => {
+            if (blocked) { _showBlockedScreen(); document.getElementById('maintenanceAuthModal').style.display = 'flex'; }
+        });
+    } else {
+        incFail();
+        if (getFailCount() >= 2) {
+            await blockInFirebase();
+            _showBlockedScreen();
+        } else {
+            const w = document.getElementById('authWarning'); if (w) w.classList.remove('hidden');
+            authGoBack();
+        }
+    }
+}
+
+function _showBlockedScreen() {
+    const panel = document.querySelector('#maintenanceAuthModal .glass-panel');
+    if (!panel) return;
+    panel.innerHTML = `
+        <div class="text-center py-4">
+            <div class="text-5xl mb-4">🚫</div>
+            <h3 class="font-black text-xl mb-2 text-rose-700">تم حظر الدخول</h3>
+            <p class="text-slate-500 text-sm font-medium mb-6">تواصلي مع الإدارة للمساعدة</p>
+        </div>`;
+}
+
 function closeMaintenanceAuth() { document.getElementById('maintenanceAuthModal').style.display = 'none'; }
 function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
+
+function handleBoxInput() {}
+function handleBoxKey()   {}
+function checkAdminPinLength() {}
+function verifyMaintenance()  {}
 
 async function deleteArticle(branchId, ts) {
     if (!confirm('هل تريد حذف هذا المقال نهائياً؟')) return;
@@ -1329,6 +1650,35 @@ async function deleteGlobalArticle(ts) {
     generateNewspaper();
     if (currentBulletinData?.isGlobal && currentBulletinData?.globalTs === ts) goToMainPage();
     showCopyToast('تم حذف المقال');
+}
+
+async function loadBlockedUsers() {
+    if (!db) return;
+    try {
+        const doc = await db.collection('appData').doc('blockedIPs').get();
+        const list = document.getElementById('blockedUsersList');
+        if (!doc.exists || !Object.keys(doc.data()).length) {
+            list.innerHTML = '<p class="text-xs text-slate-500 font-medium">لا يوجد مستخدمون محظورون</p>';
+            list.classList.remove('hidden'); return;
+        }
+        const sessions = Object.keys(doc.data());
+        list.innerHTML = sessions.map(sid => `
+            <div class="flex items-center justify-between bg-white/60 rounded-lg px-3 py-2 border border-white/60">
+                <span class="text-xs font-mono text-slate-600 truncate max-w-[160px]">${sid}</span>
+                <button onclick="unblockUser('${sid}')" class="btn-outline btn-outline-emerald text-xs px-2 py-1 rounded-lg flex-shrink-0">فك الحظر</button>
+            </div>`).join('');
+        list.classList.remove('hidden');
+    } catch(e) { console.error(e); }
+}
+
+async function unblockUser(sid) {
+    await unblockInFirebase(sid);
+    if (sid === getCommentSessionId()) {
+        localStorage.removeItem(BLOCK_KEY_LOCAL);
+        clearFails();
+    }
+    showCopyToast('تم فك الحظر ✓');
+    loadBlockedUsers();
 }
 
 function loadAdminData() {
@@ -1399,43 +1749,275 @@ function openHistoryModal(branchId) {
 function closeHistoryModal() { document.getElementById('historyModal').style.display = 'none'; }
 
 // ============================================================
-// التهيئة
+// تحويل الكلمات إلى روابط
+// ============================================================
+function processArticleLinks(text) {
+    return text.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener" class="article-inline-link">$1</a>');
+}
+
+// ============================================================
+// نظام التعليقات على دراسات الحالة
+// ============================================================
+let caseStudyComments = {};
+let currentCaseStudyTs = null;
+let commentSessionId = null;
+
+function getCommentSessionId() {
+    if (!commentSessionId) {
+        commentSessionId = localStorage.getItem('ispecial_session_id');
+        if (!commentSessionId) {
+            commentSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+            localStorage.setItem('ispecial_session_id', commentSessionId);
+        }
+    }
+    return commentSessionId;
+}
+
+const saveCommentsToFirebase = () => _fbSave('caseComments', { data: caseStudyComments });
+
+function buildCommentStep1(ts) {
+    const branches = Object.entries(branchesData).map(([id, d]) => {
+        const people = [];
+        if (d.mName) people.push({ id: `m_${id}`, name: d.mName, title: `مديرة فرع ${d.bName}`, branchId: id });
+        if (d.dName) people.push({ id: `d_${id}`, name: d.dName, title: `نائبة مديرة فرع ${d.bName}`, branchId: id });
+        return { id, bName: d.bName, people };
+    }).filter(b => b.people.length > 0);
+
+    return `
+    <div id="commentStep1" class="comment-step">
+        <p class="text-sm font-bold text-slate-600 mb-4">اختاري فرعك:</p>
+        <div class="grid grid-cols-2 gap-2">
+            ${branches.map(b => `
+                <button onclick="selectCommentBranch(${ts}, '${b.id}', ${JSON.stringify(b.people).replace(/"/g, '&quot;')})"
+                    class="glass-panel border border-white/60 rounded-xl p-3 text-right hover:-translate-y-0.5 transition-transform cursor-pointer">
+                    <p class="font-black text-slate-900 text-sm">فرع ${b.bName}</p>
+                    <p class="text-xs text-slate-500 mt-0.5">${b.people.map(p=>p.name).join(' — ')}</p>
+                </button>
+            `).join('')}
+        </div>
+        <button onclick="cancelCommentFlow()" class="mt-4 w-full btn-outline btn-outline-slate text-xs py-2 rounded-lg">إلغاء</button>
+    </div>`;
+}
+
+function selectCommentBranch(ts, branchId, people) {
+    const el = document.getElementById('commentFlowContainer');
+    if (!el) return;
+    el.innerHTML = `
+    <div id="commentStep2" class="comment-step">
+        <p class="text-sm font-bold text-slate-600 mb-4">اختاري اسمك:</p>
+        <div class="flex flex-col gap-2">
+            ${people.map(p => `
+                <button onclick="selectCommentPerson(${ts}, '${p.id}', '${p.name}', '${p.title}')"
+                    class="glass-panel border border-white/60 rounded-xl p-3 text-right hover:-translate-y-0.5 transition-transform cursor-pointer flex items-center gap-3">
+                    <div class="w-9 h-9 bg-white/70 rounded-full flex items-center justify-center font-black text-slate-800 text-sm border border-white flex-shrink-0">${p.name.charAt(0)}</div>
+                    <div>
+                        <p class="font-black text-slate-900 text-sm">${p.name}</p>
+                        <p class="text-xs text-slate-500">${p.title}</p>
+                    </div>
+                </button>
+            `).join('')}
+        </div>
+        <button onclick="document.getElementById('commentFlowContainer').innerHTML = buildCommentStep1(${ts})" class="mt-4 w-full btn-outline btn-outline-slate text-xs py-2 rounded-lg">← السابق</button>
+    </div>`;
+}
+
+function selectCommentPerson(ts, personId, personName, personTitle) {
+    const el = document.getElementById('commentFlowContainer');
+    if (!el) return;
+    el.innerHTML = `
+    <div id="commentStep3" class="comment-step">
+        <div class="flex items-center gap-2 mb-3 bg-white/30 px-3 py-2 rounded-lg">
+            <div class="w-8 h-8 bg-white/70 rounded-full flex items-center justify-center font-black text-slate-800 text-sm border border-white flex-shrink-0">${personName.charAt(0)}</div>
+            <div>
+                <p class="font-bold text-slate-900 text-sm">${personName}</p>
+                <p class="text-xs text-slate-500">${personTitle}</p>
+            </div>
+        </div>
+        <textarea id="commentTextInput" rows="4" class="w-full p-3 rounded-xl glass-input text-sm leading-relaxed resize-y mb-3" placeholder="اكتبي تعليقك هنا..." style="font-family:'Tajawal',sans-serif;"></textarea>
+        <div class="flex gap-2">
+            <button onclick="submitComment(${ts}, '${personId}', '${personName}', '${personTitle}')"
+                class="flex-1 btn-solid-dark py-2.5 rounded-xl text-sm font-black">إضافة التعليق</button>
+            <button onclick="document.getElementById('commentFlowContainer').innerHTML = buildCommentStep1(${ts})" class="btn-outline btn-outline-slate text-xs px-4 py-2 rounded-xl">← السابق</button>
+        </div>
+    </div>`;
+    setTimeout(() => document.getElementById('commentTextInput')?.focus(), 100);
+}
+
+function cancelCommentFlow() {
+    const el = document.getElementById('commentFlowContainer');
+    if (el) el.innerHTML = buildCommentAddBtn(currentCaseStudyTs);
+}
+
+function buildCommentAddBtn(ts) {
+    return `<button onclick="startCommentFlow(${ts})" class="w-full btn-outline btn-outline-indigo py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        أضيفي تعليقاً على هذه الدراسة
+    </button>`;
+}
+
+function startCommentFlow(ts) {
+    const el = document.getElementById('commentFlowContainer');
+    if (!el) return;
+    el.innerHTML = buildCommentStep1(ts);
+}
+
+async function submitComment(ts, personId, personName, personTitle) {
+    const text = document.getElementById('commentTextInput')?.value.trim();
+    if (!text) { alert('يرجى كتابة التعليق'); return; }
+    if (!caseStudyComments[ts]) caseStudyComments[ts] = [];
+    const comment = {
+        id: 'c_' + Date.now(),
+        authorId: personId,
+        authorName: personName,
+        authorTitle: personTitle,
+        text,
+        sessionId: getCommentSessionId(),
+        createdAt: Date.now()
+    };
+    caseStudyComments[ts].push(comment);
+    await saveCommentsToFirebase();
+    const el = document.getElementById('commentFlowContainer');
+    if (el) el.innerHTML = buildCommentAddBtn(ts);
+    renderComments(ts);
+    showCopyToast('تم إضافة تعليقك ✓');
+}
+
+async function deleteComment(ts, commentId) {
+    if (!caseStudyComments[ts]) return;
+    if (!confirm('هل تريد حذف هذا التعليق؟')) return;
+    caseStudyComments[ts] = caseStudyComments[ts].filter(c => c.id !== commentId);
+    await saveCommentsToFirebase();
+    renderComments(ts);
+}
+
+function renderComments(ts) {
+    const container = document.getElementById(`comments-list-${ts}`);
+    if (!container) return;
+    const comments = caseStudyComments[ts] || [];
+    const sid = getCommentSessionId();
+    if (!comments.length) {
+        container.innerHTML = '';
+        return;
+    }
+    container.innerHTML = comments.map((c, i) => {
+        const canDel = isAdminLoggedIn || c.sessionId === sid;
+        const delBtn = canDel ? `<button onclick="deleteComment(${ts}, '${c.id}')" class="text-rose-400 hover:text-rose-600 transition" title="حذف">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        </button>` : '';
+        const spacing = i === 0 ? 'mt-8' : 'mt-5';
+        return `<div class="comment-block ${spacing}">
+            <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-slate-800 text-sm font-black">${c.authorName}</span>
+                <span class="text-slate-400 text-xs font-medium">/ ${c.authorTitle}</span>
+                <span class="mr-auto">${delBtn}</span>
+            </div>
+            <p class="text-slate-700 leading-relaxed text-justify font-medium text-base comment-text">${c.text}</p>
+        </div>`;
+    }).join('');
+}
+
+function buildCaseStudyCommentsSection(ts) {
+    return `
+    <div class="mt-10 border-t border-slate-200/50 pt-4">
+        <div id="comments-list-${ts}"></div>
+        <div class="mt-6" id="commentFlowContainer">
+            ${buildCommentAddBtn(ts)}
+        </div>
+    </div>`;
+}
+
+async function generateCaseStudyLink() {
+    const title = document.getElementById('caseStudyTitle')?.value.trim();
+    const body  = document.getElementById('caseStudyBody')?.value.trim();
+    if (!title || !body) { alert('يرجى إدخال العنوان والمحتوى'); return; }
+    const ts = Date.now();
+    const dateStr = new Date(ts).toISOString().split('T')[0];
+    globalArticles.push({ type:'caseStudy', title, body, text:`${title}\n${body}`, timestamp:ts, dateStr });
+    await saveGlobalArticlesToFirebase();
+    closeArticleModal();
+    generateNewspaper();
+    showCopyToast('تم نشر دراسة الحالة ✓');
+}
+
+// ============================================================
+// ✅ إصلاح رئيسي: DOMContentLoaded — منطق تحميل سريع ومحسَّن
 // ============================================================
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadAllDataFromFirebase();
     const lo = document.getElementById('loadingOverlay');
-    if (lo) lo.style.display = 'none';
-    if (checkSession()) isAdminLoggedIn = true;
 
-    const hash = location.hash;
-
-    // صفحة كتابة رأي
-    if (hash && hash.startsWith('#opinion-')) {
-        const slug = hash.replace('#opinion-', '');
-        generateNewspaper(); initCarousel(); updateBrandReviewsPanel(); autoSaveDailySnapshot();
-        openOpinionWritePage(slug);
+    // ---- فحص الحظر المحلي فقط (فوري، بدون Firebase) ----
+    if (isBlockedLocally()) {
+        _showBlockedScreen();
+        document.getElementById('maintenanceAuthModal').style.display = 'flex';
         return;
     }
 
-    // صفحة تقرير فرع
+    // تهيئة session ID مبكراً
+    getCommentSessionId();
+    if (checkSession()) isAdminLoggedIn = true;
+
+    // ---- مستخدم جديد: أظهر بوابة الدخول فوراً ----
+    if (!checkPublicSession()) {
+        // ✅ إصلاح #7: أخفِ loadingOverlay قبل فتح بوابة الدخول
+        // (كان z-index:100 يحجب maintenanceAuthModal z-index:70 بالكامل)
+        if (lo) {
+            lo.style.transition = 'opacity 0.25s ease';
+            lo.style.opacity = '0';
+            setTimeout(() => { if (lo) lo.style.display = 'none'; }, 250);
+        }
+        // حمّل البيانات في الخلفية بشكل متوازٍ أثناء انتظار المصادقة
+        Promise.all([loadAllDataFromFirebase(), loadCommentsFromFirebase()]).catch(()=>{});
+        openPublicGate();
+        return;
+    }
+
+    // ---- مستخدم مسجّل: تحقق من الحظر المحلي فوراً ثم حمّل ----
+    // ✅ إصلاح #6: إزالة minWait — نعرض المحتوى فور انتهاء التحميل
+    const hideOverlay = () => {
+        if (!lo) return;
+        lo.style.transition = 'opacity 0.4s ease';
+        lo.style.opacity = '0';
+        setTimeout(() => { lo.style.display = 'none'; }, 400);
+    };
+
+    // تحميل كل شيء بالتوازي
+    await Promise.all([
+        loadAllDataFromFirebase(),
+        loadCommentsFromFirebase()
+    ]);
+
+    // فحص الحظر في الخلفية بعد التحميل (لا يعيق العرض)
+    checkFirebaseBlock().then(blocked => {
+        if (blocked) {
+            _showBlockedScreen();
+            document.getElementById('maintenanceAuthModal').style.display = 'flex';
+        }
+    });
+
+    const hash = location.hash;
+    if (hash && hash.startsWith('#opinion-')) {
+        const slug = hash.replace('#opinion-', '');
+        generateNewspaper(); initCarousel(); updateBrandReviewsPanel(); autoSaveDailySnapshot();
+        hideOverlay();
+        openOpinionWritePage(slug); return;
+    }
     if (hash && hash.startsWith('#bulletin-')) {
         const parts = hash.split('-'), bid = parseInt(parts[1]), ts = parts.length > 2 ? parseInt(parts[2]) : null;
         if (bid >= 1 && bid <= 6) {
             generateNewspaper(); initCarousel(); updateBrandReviewsPanel(); autoSaveDailySnapshot();
-            setTimeout(() => openBulletinPage(bid, ts), 100);
-            return;
+            hideOverlay();
+            setTimeout(() => openBulletinPage(bid, ts), 50); return;
         }
     }
-
-    // صفحة مقال عام (أسبوعي / إعلان / رأي)
     if (hash && hash.startsWith('#global-')) {
         const ts = parseInt(hash.replace('#global-', ''));
         if (!isNaN(ts)) {
             generateNewspaper(); initCarousel(); updateBrandReviewsPanel(); autoSaveDailySnapshot();
-            setTimeout(() => openGlobalBulletinPage(ts), 100);
-            return;
+            hideOverlay();
+            setTimeout(() => openGlobalBulletinPage(ts), 50); return;
         }
     }
-
     generateNewspaper(); initCarousel(); updateBrandReviewsPanel(); autoSaveDailySnapshot();
+    hideOverlay();
 });
