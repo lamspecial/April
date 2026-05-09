@@ -1485,7 +1485,7 @@ async function unblockInFirebase(sid) {
 function openPublicGate() {
     _isPublicGate = true;
     _authEmojiChosen = null;
-    _resetAuthModal('اختاري الإيموجي للدخول');
+    _resetAuthModal('صفحة خاصة');
     document.getElementById('maintenanceAuthModal').style.display = 'flex';
 }
 
@@ -1575,7 +1575,7 @@ function selectAuthEmoji(emoji) {
     document.getElementById('authEmojiStep').classList.add('hidden');
     document.getElementById('authNumberStep').classList.remove('hidden');
     document.getElementById('authBackBtn').classList.remove('hidden');
-    document.getElementById('authStepLabel').textContent = 'اختاري الرقم المناسب';
+    document.getElementById('authStepLabel').textContent = 'يرجى اختيار الشفرة';
 }
 
 function authGoBack() {
@@ -1583,7 +1583,7 @@ function authGoBack() {
     document.getElementById('authNumberStep').classList.add('hidden');
     document.getElementById('authBackBtn').classList.add('hidden');
     document.getElementById('authEmojiStep').classList.remove('hidden');
-    document.getElementById('authStepLabel').textContent = 'اختاري الإيموجي للدخول';
+    document.getElementById('authStepLabel').textContent = ' شفرة الدخول';
     const w = document.getElementById('authWarning'); if (w) w.classList.add('hidden');
 }
 
@@ -1786,7 +1786,7 @@ function buildCommentStep1(ts) {
 
     return `
     <div id="commentStep1" class="comment-step">
-        <p class="text-sm font-bold text-slate-600 mb-4">اختاري فرعك:</p>
+        <p class="text-sm font-bold text-slate-600 mb-4"> الفرع:</p>
         <div class="grid grid-cols-2 gap-2">
             ${branches.map(b => `
                 <button onclick="selectCommentBranch(${ts}, '${b.id}', ${JSON.stringify(b.people).replace(/"/g, '&quot;')})"
@@ -1805,7 +1805,7 @@ function selectCommentBranch(ts, branchId, people) {
     if (!el) return;
     el.innerHTML = `
     <div id="commentStep2" class="comment-step">
-        <p class="text-sm font-bold text-slate-600 mb-4">اختاري اسمك:</p>
+        <p class="text-sm font-bold text-slate-600 mb-4"> اسمك:</p>
         <div class="flex flex-col gap-2">
             ${people.map(p => `
                 <button onclick="selectCommentPerson(${ts}, '${p.id}', '${p.name}', '${p.title}')"
