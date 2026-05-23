@@ -994,8 +994,8 @@ function buildBulletinHTML(data, scores, tier, text, rv, rc, dateStr, pct, branc
         </div>
         <div class="border-t border-slate-200/40 my-8"></div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="md:col-span-1 bg-slate-800 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden">
- 
+            <div class="md:col-span-1 bg-slate-800/88 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-tr from-slate-900/50 to-transparent z-0"></div>
                 <div class="z-10 relative flex flex-col items-center">
                     <p class="text-slate-300 font-bold text-sm mb-2">الأداء العام</p>
                     <div class="text-7xl font-black mb-1">${scores.total}</div>
@@ -1433,17 +1433,15 @@ function calculateTrial() {
 // ============================================================
 const SESSION_KEY       = 'ispecial_pub_session';
 const ADMIN_SESSION_KEY = 'ispecial_admin_session';
-const BLOCK_KEY_LOCAL   = 'ispecial_auth_blocked';
-const FAIL_KEY          = 'ispecial_auth_fails';
+
+
 
 const savePublicSession = () => localStorage.setItem(SESSION_KEY, 'granted');
 const checkPublicSession= () => localStorage.getItem(SESSION_KEY) === 'granted';
 const saveAdminSession  = () => localStorage.setItem(ADMIN_SESSION_KEY, 'forever');
 const checkSession      = () => localStorage.getItem(ADMIN_SESSION_KEY) === 'forever';
-const isBlockedLocally  = () => localStorage.getItem(BLOCK_KEY_LOCAL) === '1';
-const getFailCount      = () => parseInt(localStorage.getItem(FAIL_KEY) || '0');
-const incFail           = () => localStorage.setItem(FAIL_KEY, getFailCount() + 1);
-const clearFails        = () => localStorage.removeItem(FAIL_KEY);
+
+
 
 const CORRECT_EMOJI  = '🙏🏻';
 const CORRECT_NUMBER = '78';
@@ -1451,36 +1449,6 @@ const CORRECT_NUMBER = '78';
 let _authEmojiChosen  = null;
 let _isPublicGate     = true;
 
-// ✅ إصلاح #4: فحص الحظر المحلي فقط عند الدخول (لا Firebase)
-// Firebase يُفحص فقط عند محاولة الدخول الفاشلة أو بعد التحميل
-async function checkFirebaseBlock() {
-    if (!db) return isBlockedLocally();
-    try {
-        const doc = await Promise.race([
-            db.collection('appData').doc('blockedIPs').get(),
-            _fbTimeout(2000)  // timeout قصير جداً لهذا الفحص
-        ]);
-        const sid = getCommentSessionId();
-        if (doc.exists && doc.data()[sid]) return true;
-    } catch(_) {}
-    return isBlockedLocally();
-}
-
-async function blockInFirebase() {
-    localStorage.setItem(BLOCK_KEY_LOCAL, '1');
-    if (!db) return;
-    try {
-        const sid = getCommentSessionId();
-        await db.collection('appData').doc('blockedIPs').set({ [sid]: true }, { merge: true });
-    } catch(_) {}
-}
-
-async function unblockInFirebase(sid) {
-    if (!db) return;
-    try {
-        await db.collection('appData').doc('blockedIPs').set({ [sid]: firebase.firestore.FieldValue.delete() }, { merge: true });
-    } catch(_) {}
-}
 
 function openPublicGate() {
     _isPublicGate = true;
@@ -1587,41 +1555,19 @@ function authGoBack() {
     const w = document.getElementById('authWarning'); if (w) w.classList.add('hidden');
 }
 
-// ✅ إصلاح #5: فحص الحظر في الخلفية بعد الدخول، لا يعيق التحميل
 async function selectAuthNumber(num) {
     if (_authEmojiChosen === CORRECT_EMOJI && num === CORRECT_NUMBER) {
-        clearFails();
         savePublicSession();
         closeMaintenanceAuth();
-        // ✅ إصلاح #8: تأكد من اكتمال تحميل البيانات قبل عرض الواجهة
-        // (البيانات تُحمَّل في الخلفية منذ فتح بوابة الدخول؛ هذا يضمن اكتمالها)
         await Promise.all([loadAllDataFromFirebase(), loadCommentsFromFirebase()]).catch(()=>{});
         document.getElementById('loadingOverlay').style.display = 'none';
         generateNewspaper(); initCarousel(); updateBrandReviewsPanel(); autoSaveDailySnapshot();
-        // فحص Firebase في الخلفية (لا يعيق UI)
-        checkFirebaseBlock().then(blocked => {
-            if (blocked) { _showBlockedScreen(); document.getElementById('maintenanceAuthModal').style.display = 'flex'; }
-        });
     } else {
-        incFail();
-
-         {
-            const w = document.getElementById('authWarning'); if (w) w.classList.remove('hidden');
-            authGoBack();
-        }
+        const w = document.getElementById('authWarning'); if (w) w.classList.remove('hidden');
+        authGoBack();
     }
 }
 
-function _showBlockedScreen() {
-    const panel = document.querySelector('#maintenanceAuthModal .glass-panel');
-    if (!panel) return;
-    panel.innerHTML = `
-        <div class="text-center py-4">
-            <div class="text-5xl mb-4">Error</div>
-            <h3 class="font-black text-xl mb-2 text-rose-700">تم حظر الدخول</h3>
-            <p class="text-slate-500 text-sm font-medium mb-6">تواصل مع المسؤول  </p>
-        </div>`;
-}
 
 function closeMaintenanceAuth() { document.getElementById('maintenanceAuthModal').style.display = 'none'; }
 function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
@@ -1650,34 +1596,6 @@ async function deleteGlobalArticle(ts) {
     showCopyToast('تم حذف المقال');
 }
 
-async function loadBlockedUsers() {
-    if (!db) return;
-    try {
-        const doc = await db.collection('appData').doc('blockedIPs').get();
-        const list = document.getElementById('blockedUsersList');
-        if (!doc.exists || !Object.keys(doc.data()).length) {
-            list.innerHTML = '<p class="text-xs text-slate-500 font-medium">لا يوجد مستخدمون محظورون</p>';
-            list.classList.remove('hidden'); return;
-        }
-        const sessions = Object.keys(doc.data());
-        list.innerHTML = sessions.map(sid => `
-            <div class="flex items-center justify-between bg-white/60 rounded-lg px-3 py-2 border border-white/60">
-                <span class="text-xs font-mono text-slate-600 truncate max-w-[160px]">${sid}</span>
-                <button onclick="unblockUser('${sid}')" class="btn-outline btn-outline-emerald text-xs px-2 py-1 rounded-lg flex-shrink-0">فك الحظر</button>
-            </div>`).join('');
-        list.classList.remove('hidden');
-    } catch(e) { console.error(e); }
-}
-
-async function unblockUser(sid) {
-    await unblockInFirebase(sid);
-    if (sid === getCommentSessionId()) {
-        localStorage.removeItem(BLOCK_KEY_LOCAL);
-        clearFails();
-    }
-    showCopyToast('تم فك الحظر ✓');
-    loadBlockedUsers();
-}
 
 function loadAdminData() {
     const id = document.getElementById('branchSelector').value, d = branchesData[id];
@@ -1944,13 +1862,6 @@ async function generateCaseStudyLink() {
 document.addEventListener('DOMContentLoaded', async () => {
     const lo = document.getElementById('loadingOverlay');
 
-    // ---- فحص الحظر المحلي فقط (فوري، بدون Firebase) ----
-    if (isBlockedLocally()) {
-        _showBlockedScreen();
-        document.getElementById('maintenanceAuthModal').style.display = 'flex';
-        return;
-    }
-
     // تهيئة session ID مبكراً
     getCommentSessionId();
     if (checkSession()) isAdminLoggedIn = true;
@@ -1986,13 +1897,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     ]);
 
     // فحص الحظر في الخلفية بعد التحميل (لا يعيق العرض)
-    checkFirebaseBlock().then(blocked => {
-        if (blocked) {
-            _showBlockedScreen();
-            document.getElementById('maintenanceAuthModal').style.display = 'flex';
-        }
-    });
-
     const hash = location.hash;
     if (hash && hash.startsWith('#opinion-')) {
         const slug = hash.replace('#opinion-', '');
