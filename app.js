@@ -1071,9 +1071,9 @@ function openGlobalBulletinPage(ts) {
 
     currentCaseStudyTs = ts;
 
-    const lines   = art.text ? art.text.split('\n').map(l => l.trim()): [];
-    const head    = lines[0] || art.title || '';
-    const bodyTxt = lines.slice(1).join('\n');
+    const allLines = art.text ? art.text.split('\n') : [];
+const head     = (allLines[0] || '').trim() || art.title || '';
+const bodyTxt  = allLines.slice(1).join('\n');
     const dateStr = formatFullDateArabic(new Date(art.timestamp));
 
     const typeLabels = { weekly:'نظرة عن كثب', announcement:'إعلان', opinion:'رأي', caseStudy:'دراسة حالة' };
