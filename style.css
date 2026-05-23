@@ -436,6 +436,7 @@ select.glass-input {
 .article-body-text {
     line-height: 2;
     font-size: 1rem;
+    white-space: pre-wrap;
 }
 
 /* ---- تعليقات دراسة الحالة ---- */
