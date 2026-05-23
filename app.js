@@ -1604,10 +1604,8 @@ async function selectAuthNumber(num) {
         });
     } else {
         incFail();
-        if (getFailCount() >= 2) {
-            await blockInFirebase();
-            _showBlockedScreen();
-        } else {
+
+         {
             const w = document.getElementById('authWarning'); if (w) w.classList.remove('hidden');
             authGoBack();
         }
