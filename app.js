@@ -994,8 +994,8 @@ function buildBulletinHTML(data, scores, tier, text, rv, rc, dateStr, pct, branc
         </div>
         <div class="border-t border-slate-200/40 my-8"></div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="md:col-span-1 bg-slate-800/88 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-tr from-slate-900/50 to-transparent z-0"></div>
+            <div class="md:col-span-1 bg-slate-800 text-white rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden">
+ 
                 <div class="z-10 relative flex flex-col items-center">
                     <p class="text-slate-300 font-bold text-sm mb-2">الأداء العام</p>
                     <div class="text-7xl font-black mb-1">${scores.total}</div>
