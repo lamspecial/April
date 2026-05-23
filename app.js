@@ -913,10 +913,10 @@ function openBulletinPage(branchId, timestamp = null) {
     const article = articleData ? articleData.text : null, artTs = articleData ? articleData.timestamp : null;
     let aHead = '', aLead = '', aBody = '';
     if (article) {
-        const lines = article.split('\n').map(l => l.trim());
-        if (lines[0]) aHead = lines[0];
-        if (lines[1]) aLead = lines[1];
-        if (lines.length > 2) aBody = lines.slice(2).join(' ');
+        const rawLines = article.split('\n');
+        if (rawLines[0]) aHead = rawLines[0].trim();
+        if (rawLines[1]) aLead = rawLines[1].trim();
+        if (rawLines.length > 2) aBody = rawLines.slice(2).join('\n');
     }
     currentBulletinData = {
         branchId, bName: data.bName,
@@ -961,7 +961,7 @@ function buildBulletinHTML(data, scores, tier, text, rv, rc, dateStr, pct, branc
             </div>
             <h1 class="text-3xl md:text-4xl font-black text-slate-900 leading-tight mb-4">${text.head}</h1>
             <p class="text-lg text-slate-700 font-bold leading-relaxed mb-3 bg-white/30 p-3 rounded-lg border-l-4 border-slate-300">${text.lead}</p>
-            <p class="text-slate-700 leading-relaxed text-justify font-medium article-body-text">${processArticleLinks(text.body)}</p>
+            <div class="text-slate-700 leading-relaxed font-medium article-body-text whitespace-pre-wrap">${processArticleLinks(text.body)}</div>
         </div>`
         : `<div class="mb-8 ${isAdminLoggedIn ? 'bg-amber-50/50 border-amber-200' : 'bg-slate-100/40 border-slate-200'} border rounded-2xl p-6">
             <div class="flex items-start gap-4">
@@ -1072,8 +1072,8 @@ function openGlobalBulletinPage(ts) {
     currentCaseStudyTs = ts;
 
     const allLines = art.text ? art.text.split('\n') : [];
-const head     = (allLines[0] || '').trim() || art.title || '';
-const bodyTxt  = allLines.slice(1).join('\n');
+    const head     = (allLines[0] || '').trim() || art.title || '';
+    const bodyTxt  = allLines.slice(1).join('\n');
     const dateStr = formatFullDateArabic(new Date(art.timestamp));
 
     const typeLabels = { weekly:'نظرة عن كثب', announcement:'إعلان', opinion:'رأي', caseStudy:'دراسة حالة' };
