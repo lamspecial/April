@@ -511,7 +511,7 @@ async function saveWeeklyArticle() {
     const rm = {};
     for (let i = 1; i <= 6; i++) { const el = document.getElementById(`weeklyReason_${i}`); rm[i] = el ? el.value.trim() : ''; }
     const ts = Date.now(), dateStr = new Date(ts).toISOString().split('T')[0];
-    const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+    const lines = text.split('\n').map(l => l.trim());
     globalArticles.push({
         type: 'weekly', text, title: lines[0] || 'التحديث الاسبوعي', timestamp: ts, dateStr, reasons: rm,
         branchSnapshots: Object.fromEntries(Object.keys(branchesData).map(i => [i, { ...branchesData[i], scores:calcScores(branchesData[i]) }]))
@@ -913,7 +913,7 @@ function openBulletinPage(branchId, timestamp = null) {
     const article = articleData ? articleData.text : null, artTs = articleData ? articleData.timestamp : null;
     let aHead = '', aLead = '', aBody = '';
     if (article) {
-        const lines = article.split('\n').map(l => l.trim()).filter(l => l);
+        const lines = article.split('\n').map(l => l.trim());
         if (lines[0]) aHead = lines[0];
         if (lines[1]) aLead = lines[1];
         if (lines.length > 2) aBody = lines.slice(2).join(' ');
@@ -1071,7 +1071,7 @@ function openGlobalBulletinPage(ts) {
 
     currentCaseStudyTs = ts;
 
-    const lines   = art.text ? art.text.split('\n').map(l => l.trim()).filter(l => l) : [];
+    const lines   = art.text ? art.text.split('\n').map(l => l.trim()): [];
     const head    = lines[0] || art.title || '';
     const bodyTxt = lines.slice(1).join('\n');
     const dateStr = formatFullDateArabic(new Date(art.timestamp));
@@ -1212,7 +1212,7 @@ function generateNewspaper() {
 
             if (item.type === 'performance' && item.branchId) {
                 const tier  = getPerformanceTier(item.scores);
-                const lines = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
+                const lines = item.article ? item.article.split('\n').map(l => l.trim()): [];
                 card.innerHTML = `
                     <div class="flex-1">
                         <div class="flex justify-between items-start mb-3">
@@ -1230,7 +1230,7 @@ function generateNewspaper() {
                     </div>`;
 
             } else if (item.type === 'weekly') {
-                const lines   = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
+                const lines   = item.article ? item.article.split('\n').map(l => l.trim()): [];
                 const excerpt = (lines.slice(1).join(' ') || '').substring(0, 120);
                 card.innerHTML = `
                     <div class="flex-1">
@@ -1243,7 +1243,7 @@ function generateNewspaper() {
                     </div>`;
 
             } else if (item.type === 'announcement') {
-                const lines   = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
+                const lines   = item.article ? item.article.split('\n').map(l => l.trim()): [];
                 const excerpt = (lines.slice(1).join(' ') || '').substring(0, 120);
                 card.innerHTML = `
                     <div class="flex-1">
@@ -1256,7 +1256,7 @@ function generateNewspaper() {
                     </div>`;
 
             } else if (item.type === 'caseStudy') {
-                const lines   = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
+                const lines   = item.article ? item.article.split('\n').map(l => l.trim()) : [];
                 const rawExcerpt = (lines.slice(1).join(' ') || '').replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
                 const excerpt = rawExcerpt.substring(0, 100);
                 const comments = caseStudyComments[item.timestamp] || [];
@@ -1279,7 +1279,7 @@ function generateNewspaper() {
                     </div>`;
 
             } else if (item.type === 'opinion') {
-                const lines    = item.article ? item.article.split('\n').map(l => l.trim()).filter(l => l) : [];
+                const lines    = item.article ? item.article.split('\n').map(l => l.trim()) : [];
                 const bodyRaw  = lines.slice(1).join(' ') || '';
                 const excerpt  = bodyRaw.substring(0, 120);
                 const byline   = item.authorName
