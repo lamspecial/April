@@ -330,7 +330,7 @@ function selectArticleType(type) {
 }
 
 function openCaseStudyModal() {
-    document.getElementById('articleModalTitle').textContent = 'دراسة حالة جديدة';
+    document.getElementById('articleModalTitle').textContent = 'استعراض حالة جديدة';
     document.getElementById('articleModalSubtitle').textContent = 'مقال تفاعلي مفتوح للتعليق من جميع الموظفات';
     document.getElementById('articleModalBody').innerHTML = `
         <div class="bg-indigo-50/50 border border-indigo-200/60 rounded-xl p-4 mb-4">
@@ -338,11 +338,11 @@ function openCaseStudyModal() {
             <p class="text-xs font-medium text-indigo-500 mt-1">مثال: <span class="font-mono">[اضغط هنا](https://example.com)</span></p>
         </div>
         <div>
-            <label class="block text-sm font-bold text-slate-700 mb-2">عنوان دراسة الحالة</label>
-            <input type="text" id="caseStudyTitle" class="w-full p-3 rounded-lg glass-input text-sm" placeholder="أدخل عنوان دراسة الحالة">
+            <label class="block text-sm font-bold text-slate-700 mb-2">عنوان استعراض الحالة</label>
+            <input type="text" id="caseStudyTitle" class="w-full p-3 rounded-lg glass-input text-sm" placeholder="أدخل عنوان استعراض الحالة">
         </div>
         <div>
-            <label class="block text-sm font-bold text-slate-700 mb-2">محتوى دراسة الحالة</label>
+            <label class="block text-sm font-bold text-slate-700 mb-2">محتوى استعراض الحالة</label>
             <textarea id="caseStudyBody" rows="10" class="w-full p-4 rounded-xl glass-input text-sm leading-relaxed resize-y" placeholder="اكتب دراسة الحالة هنا...&#10;يمكنك تحويل أي كلمة إلى رابط بالصيغة: [الكلمة](الرابط)" style="font-family:'Tajawal',sans-serif;"></textarea>
         </div>
         <div class="flex gap-3 pt-2">
@@ -1076,7 +1076,7 @@ function openGlobalBulletinPage(ts) {
     const bodyTxt  = allLines.slice(1).join('\n');
     const dateStr = formatFullDateArabic(new Date(art.timestamp));
 
-    const typeLabels = { weekly:'نظرة عن كثب', announcement:'إعلان', opinion:'رأي', caseStudy:'دراسة حالة' };
+    const typeLabels = { weekly:'نظرة عن كثب', announcement:'إعلان', opinion:'رأي', caseStudy:'استعراض حالة' };
     const typeBadges = { weekly:'badge-emerald', announcement:'badge-amber', opinion:'badge-rose', caseStudy:'badge-indigo' };
 
     currentBulletinData = {
@@ -1270,10 +1270,10 @@ function generateNewspaper() {
                 card.innerHTML = `
                     <div class="flex-1">
                         <div class="flex justify-between items-start mb-3">
-                            <span class="badge badge-indigo">دراسة حالة</span>${delBtn}
+                            <span class="badge badge-indigo">استعراض حالة</span>${delBtn}
                         </div>
                         <h3 onclick="openGlobalBulletinPage(${item.timestamp})"
-                            class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition">${lines[0] || 'دراسة حالة'}</h3>
+                            class="font-black text-xl mt-5 mb-3 leading-snug text-slate-900 cursor-pointer hover:text-blue-700 transition">${lines[0] || 'استعراض حالة'}</h3>
                         <p class="text-slate-700 text-sm font-medium leading-relaxed bg-white/30 p-2 rounded">${excerpt}${excerpt.length >= 100 ? '...' : ''}</p>
                         ${lastCommentHTML}
                     </div>`;
