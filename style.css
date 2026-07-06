@@ -1,5 +1,5 @@
 /* ============================================================
-   style.css — آي أم سبيشل — النسخة الخاصة (دراسة حالة فقط)
+   style.css — آي أم سبيشل — نسخة محسّنة (أداء + هوية بصرية موحّدة)
    ============================================================ */
 
 body {
@@ -11,8 +11,10 @@ body {
     color: #1e293b;
 }
 
-/* ---- Decorative background blobs ---- */
-.bg-blob-1, .bg-blob-2, .bg-blob-3 {
+/* ---- Decorative background blobs (GPU-only, لا repaints) ---- */
+.bg-blob-1,
+.bg-blob-2,
+.bg-blob-3 {
     position: fixed;
     border-radius: 50%;
     z-index: -1;
@@ -31,6 +33,7 @@ body {
     border: 1px solid rgba(255,255,255,0.6);
     box-shadow: 0 4px 20px rgba(31,38,135,0.06);
 }
+
 .glass-header {
     background: rgba(15,23,42,0.22);
     backdrop-filter: blur(18px);
@@ -38,29 +41,70 @@ body {
     border-bottom: 1px solid rgba(255,255,255,0.13);
     box-shadow: 0 2px 16px rgba(0,0,0,0.08);
 }
+
 .glass-input {
     background: rgba(255,255,255,0.48);
     border: 1px solid rgba(255,255,255,0.75);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
 }
-.glass-input:focus { background: rgba(255,255,255,0.75); border-color: #64748b; outline: none; }
+.glass-input:focus {
+    background: rgba(255,255,255,0.75);
+    border-color: #64748b;
+    outline: none;
+}
 
-/* ---- Badges ---- */
-.badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 999px; border: 1.5px solid; background: transparent; line-height: 1.6; }
-.badge-indigo { color: #4338ca; border-color: #4338ca; }
-.badge-slate  { color: #475569; border-color: #475569; }
-.badge-emerald{ color: #059669; border-color: #059669; }
+/* ============================================================
+   هوية بصرية موحّدة — الأوسمة والعلامات (outline فقط)
+   ============================================================ */
 
-/* ---- Buttons ---- */
-.btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 700; border-radius: 10px; border: 2px solid; background: transparent; cursor: pointer; transition: opacity 0.15s, transform 0.15s; line-height: 1.4; }
+/* وسم الأداء العام — أخضر/أصفر/أحمر */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1.5px solid;
+    background: transparent;
+    line-height: 1.6;
+}
+.badge-green   { color: #059669; border-color: #059669; }
+.badge-yellow  { color: #d97706; border-color: #d97706; }
+.badge-red     { color: #dc2626; border-color: #dc2626; }
+.badge-blue    { color: #2563eb; border-color: #2563eb; }
+.badge-indigo  { color: #4f46e5; border-color: #4f46e5; }
+.badge-rose    { color: #e11d48; border-color: #e11d48; }
+.badge-amber   { color: #d97706; border-color: #d97706; }
+.badge-emerald { color: #059669; border-color: #059669; }
+.badge-slate   { color: #475569; border-color: #475569; }
+
+/* أزرار outline موحّدة */
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-weight: 700;
+    border-radius: 10px;
+    border: 2px solid;
+    background: transparent;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+    line-height: 1.4;
+}
 .btn-outline:hover  { opacity: 0.75; }
 .btn-outline:active { transform: scale(0.97); }
+
 .btn-outline-slate   { color: #475569; border-color: #475569; }
 .btn-outline-indigo  { color: #4f46e5; border-color: #4f46e5; }
 .btn-outline-emerald { color: #059669; border-color: #059669; }
+.btn-outline-blue    { color: #2563eb; border-color: #2563eb; }
 .btn-outline-rose    { color: #e11d48; border-color: #e11d48; }
+.btn-outline-amber   { color: #d97706; border-color: #d97706; }
 
+/* أزرار solid (للإجراءات الأساسية فقط) */
 .btn-solid-dark {
     background: rgba(15,23,42,0.88);
     color: #fff;
@@ -72,16 +116,67 @@ body {
 }
 .btn-solid-dark:hover { opacity: 0.85; }
 
-/* ---- Comments / replies ---- */
-.comment-block { position: relative; padding-right: 1rem; border-right: 3px solid rgba(79,70,229,0.25); }
-.comment-text { line-height: 2; font-size: 1rem; }
-.comment-step { animation: slideUp 0.2s ease forwards; }
-.nested-reply { margin-top: 0.75rem; margin-right: 1.5rem; padding-right: 1rem; border-right: 3px solid rgba(225,29,72,0.3); }
-.nested-reply.admin-reply { border-right-color: rgba(217,119,6,0.4); }
+/* ---- Newspaper cards ---- */
+.newspaper-card {
+    border-right: 3px solid rgba(30,58,138,0.7);
+    contain: layout style paint;
+}
+
+/* ---- Carousel cards ---- */
+.carousel-card {
+    contain: layout style paint;
+}
+
+/* ---- Carousel dots ---- */
+.carousel-dot {
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    outline: none;
+    flex-shrink: 0;
+}
+.carousel-dot:hover { opacity: 0.75; }
+
+/* ---- Auth emoji/number buttons ---- */
+.auth-emoji-btn, .auth-num-btn {
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    user-select: none;
+}
+.auth-emoji-btn:hover, .auth-num-btn:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+#authEmojiStep, #authNumberStep {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+#authNumberStep.hidden, #authEmojiStep.hidden { display: none; }
+
+/* ---- PIN boxes (legacy, kept to avoid errors) ---- */
+.pin-box { display: none; }
+
+/* ---- Hide number spinners ---- */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+
+/* ---- Timeline ---- */
+.timeline-border { border-right: 2px dashed rgba(203,213,225,0.65); }
 
 /* ---- Scrollbar hide ---- */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ---- Google stars ---- */
+.google-star       { color: #fbbc04; }
+.google-star-empty { color: rgba(218,220,224,0.55); }
+
+/* ---- Page visibility helpers ---- */
+#bulletinPage { display: none; }
+#bulletinPage.active { display: flex; }
+#mainPageWrapper { display: flex; flex-direction: column; flex-grow: 1; }
+#mainPageWrapper.hidden-page { display: none; }
 
 /* ---- Loading overlay ---- */
 #loadingOverlay {
@@ -97,11 +192,19 @@ body {
     transition: background 0.8s ease, backdrop-filter 0.8s ease, -webkit-backdrop-filter 0.8s ease;
 }
 
-/* ---- Toast ---- */
-#copyToast { pointer-events: none; }
-#copyToast.show { display: block !important; }
+/* ---- Copy Toast ---- */
+#copyToast {
+    pointer-events: none;
+}
+#copyToast.show {
+    display: block !important;
+}
 
-@keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+/* ---- Animations (GPU-only transform/opacity) ---- */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
 .slide-up { animation: slideUp 0.3s ease forwards; }
 
 @keyframes fadeInOut {
@@ -112,16 +215,258 @@ body {
 }
 .copy-toast { animation: fadeInOut 2.5s ease forwards; }
 
-/* ---- Number input spinner hide ---- */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-input[type="number"] { -moz-appearance: textfield; }
+@keyframes nameFadeIn {
+    0%   { opacity: 0; transform: translateY(5px); }
+    18%  { opacity: 1; transform: translateY(0); }
+    80%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-5px); }
+}
+.name-fade { animation: nameFadeIn 4s ease forwards; }
+
+/* ---- Share button ---- */
+.share-btn { transition: transform 0.15s; }
+.share-btn:hover { transform: scale(1.05); }
+
+/* ---- Prompt box ---- */
+.prompt-box {
+    background: rgba(248,250,252,0.55);
+    border: 1.5px dashed rgba(148,163,184,0.7);
+    border-radius: 12px;
+    font-family: 'Tajawal', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #334155;
+    white-space: pre-wrap;
+    word-break: break-word;
+    direction: rtl;
+    text-align: right;
+}
+
+/* ---- History items ---- */
+.history-item { border-right: 3px solid rgba(226,232,240,0.55); transition: border-color 0.15s; }
+.history-item:hover { border-right-color: #1e3a8a; }
+
+/* ---- Article textarea ---- */
+textarea.article-input {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    line-height: 1.9;
+    resize: vertical;
+    min-height: 180px;
+}
 
 /* ---- Modal display fix ---- */
-#pinModal[style*="display: flex"], #pinModal[style*="display:flex"],
-#adminModal[style*="display: flex"], #adminModal[style*="display:flex"] {
+[id$="Modal"][style*="display: flex"],
+[id$="Modal"][style*="display:flex"],
+#iframeModal[style*="display: flex"],
+#iframeModal[style*="display:flex"],
+#opinionWritePage[style*="display: flex"],
+#opinionWritePage[style*="display:flex"],
+#branchDetailModal[style*="display: flex"],
+#branchDetailModal[style*="display:flex"],
+#articleTypeModal[style*="display: flex"],
+#articleTypeModal[style*="display:flex"],
+#articleModal[style*="display: flex"],
+#articleModal[style*="display:flex"],
+#weeklyModal[style*="display: flex"],
+#weeklyModal[style*="display:flex"],
+#opinionLinkModal[style*="display: flex"],
+#opinionLinkModal[style*="display:flex"],
+#maintenanceAuthModal[style*="display: flex"],
+#maintenanceAuthModal[style*="display:flex"],
+#adminModal[style*="display: flex"],
+#adminModal[style*="display:flex"],
+#historyModal[style*="display: flex"],
+#historyModal[style*="display:flex"],
+#predictionModal[style*="display: flex"],
+#predictionModal[style*="display:flex"],
+#globalArticleModal[style*="display: flex"],
+#globalArticleModal[style*="display:flex"] {
     display: flex !important;
 }
 
-#logoClick { transition: transform 0.1s; }
-#logoClick:active { transform: scale(0.96); }
+/* ---- Surplus badge ---- */
+.surplus-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #065f46;
+    border: 1px solid rgba(52,211,153,0.5);
+    border-radius: 6px;
+    padding: 2px 7px;
+    margin-top: 4px;
+    background: rgba(167,243,208,0.35);
+    direction: rtl;
+    line-height: 1.5;
+}
+
+/* ---- Opinion author byline ---- */
+.opinion-byline {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(203,213,225,0.35);
+    direction: rtl;
+}
+
+/* ---- Article type pill (hidden by default) ---- */
+.article-type-pill { display: none; }
+
+/* ---- Performance optimizations ---- */
+#branchesCarousel { will-change: scroll-position; contain: layout; }
+.glass-panel      { will-change: auto; }
+
+/* ---- Admin btn shrink ---- */
+@media (max-width: 380px) { #adminBtn span { max-width: 120px; } }
+
+/* ---- نافذة قياس الأداء — خلفية فاتحة جداً ---- */
+#predictionModal > div {
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.9);
+}
+
+/* ---- نافذة عرض المقالات العامة (إعلان ورأي) — خلفية فاتحة ---- */
+#globalArticleModal > div {
+    background: rgba(255,255,255,0.88) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.9);
+}
+
+/* تفتيح زر الإغلاق داخل النافذة */
+#globalArticleModal .sticky.top-0 {
+    background: transparent !important;
+}
+
+/* ---- نافذة المقال (articleModal) — تناسق مع بقية النوافذ ---- */
+#articleModal > div,
+#weeklyModal  > div {
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+/* ---- نافذة Branch Detail — خلفية فاتحة ---- */
+#branchDetailModal > div {
+    background: rgba(255,255,255,0.80);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+/* ---- نافذة كتابة الرأي — overlay داكن ---- */
+#opinionWritePage {
+    background: rgba(15,23,42,0.45);
+}
+
+/* ============================================================
+   Bulletin page — بطاقة المقال الداخلية
+   ============================================================ */
+
+/* تأكيد ظهور محتوى Bulletin */
+#bulletinContent { min-height: 60vh; }
+
+/* ---- صف الإحصائيات في صفحة Bulletin ---- */
+.stat-grid-card {
+    background: rgba(255,255,255,0.50);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.60);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.15s;
+}
+.stat-grid-card:hover { transform: scale(1.01); }
+
+/* ============================================================
+   Weekly reasons inputs
+   ============================================================ */
+.weekly-reason-input {
+    font-family: 'Tajawal', sans-serif;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    resize: none;
+    min-height: 60px;
+    direction: rtl;
+}
+
+/* ============================================================
+   توافق Tailwind — حالات إضافية
+   ============================================================ */
+
+/* تأكيد اتجاه RTL على النوافذ المنبثقة */
+[id$="Modal"] { direction: rtl; }
+#iframeModal  { direction: ltr; } /* الخريطة بالإنجليزي */
+
+/* select عام */
+select.glass-input {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 12px center;
+    padding-left: 36px;
+}
+
+/* ---- نمط شريط التقدم المتحرك (داخل rewardBox) ---- */
+#progressBar {
+    transition: width 0.5s ease;
+}
+
+/* ---- روابط مضمنة داخل نص المقال ---- */
+.article-inline-link {
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s, opacity 0.15s;
+}
+.article-inline-link:hover {
+    color: #1d4ed8;
+    opacity: 0.85;
+}
+
+/* ---- نص جسم المقال ---- */
+.article-body-text {
+    line-height: 2;
+    font-size: 1rem;
+    white-space: pre-wrap;
+}
+
+/* ---- تعليقات دراسة الحالة ---- */
+.comment-block {
+    position: relative;
+    padding-right: 1rem;
+}
+.comment-block:not(:last-child)::after {
+    display: none;
+}
+.comment-text {
+    line-height: 2;
+    font-size: 1rem;
+}
+
+/* ---- بطاقة دراسة الحالة — معاينة آخر تعليق ---- */
+.opinion-byline-preview {
+    font-size: 13px;
+    color: #475569;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* ---- وسم دراسة الحالة (violet/indigo) ---- */
+.badge-indigo { color: #4338ca; border-color: #4338ca; }
+
+/* ---- خطوات التعليق ---- */
+.comment-step {
+    animation: slideUp 0.2s ease forwards;
+}
+
+/* ---- modal display caseStudy ---- */
+
