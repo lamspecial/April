@@ -3,37 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سجل الإنفاق الإعلاني — يوليو 2026</title>
+<title>تقرير الأداء الإعلاني — المميزون الصغار — يوليو 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F7F3E8;
-    --bg-soft:#EFE9D8;
+    --bg:#FFFFFF;
     --card:#FFFFFF;
-    --card-2:#FBF8F0;
+    --card-2:#F6F5F0;
     --ink:#1E2A24;
-    --ink-2:#24352C;
     --paper:#1E2A24;
     --paper-text:#F3EFE3;
     --gold:#B9812E;
     --gold-soft:#8a6423;
     --teal:#2E8C74;
-    --teal-dim:#cdeadf;
+    --teal-dim:#e2f4ee;
     --rasp:#B23A63;
-    --rasp-dim:#f6dee6;
+    --rasp-dim:#f8e6ec;
     --text:#2B362F;
     --muted:#71807a;
-    --line: rgba(43,54,47,0.13);
+    --line: rgba(43,54,47,0.12);
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
     margin:0;
-    background:
-      radial-gradient(1200px 600px at 85% -10%, rgba(63,168,140,0.08), transparent 60%),
-      radial-gradient(900px 500px at -10% 30%, rgba(217,166,78,0.10), transparent 55%),
-      var(--bg);
+    background:var(--bg);
     color:var(--text);
     font-family:'IBM Plex Sans Arabic', 'Tajawal', sans-serif;
     line-height:1.6;
@@ -43,10 +38,19 @@
   h1,h2,h3{font-family:'Tajawal',sans-serif; margin:0;}
   .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
   a{color:inherit;}
+  svg{display:block;}
+
+  /* ---------- BRAND BAR ---------- */
+  .brand-bar{border-bottom:1px solid var(--line); background:var(--card-2);}
+  .brand-inner{display:flex; align-items:center; justify-content:space-between; padding:12px 28px; flex-wrap:wrap; gap:8px;}
+  .brand-mark{display:flex; align-items:center; gap:10px;}
+  .brand-mark .logo{width:30px; height:30px; flex:none;}
+  .brand-mark .name{font-family:'Tajawal',sans-serif; font-weight:700; font-size:15px; color:var(--ink);}
+  .brand-sub{font-size:12px; color:var(--muted);}
 
   /* ---------- HERO ---------- */
   .hero{
-    padding:64px 0 40px;
+    padding:52px 0 40px;
     border-bottom:1px solid var(--line);
     position:relative;
     overflow:hidden;
@@ -54,18 +58,18 @@
   .eyebrow{
     display:inline-flex; align-items:center; gap:10px;
     font-size:13px; letter-spacing:.4px; color:var(--gold-soft);
-    background:rgba(185,129,46,0.10); border:1px solid rgba(185,129,46,0.32);
+    background:rgba(185,129,46,0.09); border:1px solid rgba(185,129,46,0.30);
     padding:6px 14px; border-radius:999px; margin-bottom:22px;
   }
   .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
   .hero h1{
-    font-size:clamp(30px, 4.2vw, 52px);
+    font-size:clamp(28px, 4.2vw, 50px);
     font-weight:900;
     max-width:820px;
     color:var(--ink);
   }
   .hero p.lead{
-    max-width:640px;
+    max-width:660px;
     color:var(--muted);
     font-size:16px;
     margin-top:16px;
@@ -94,51 +98,63 @@
   }
 
   /* ---------- SECTION SHELL ---------- */
-  section{padding:56px 0; border-bottom:1px solid var(--line);}
-  .section-head{margin-bottom:30px; max-width:720px;}
+  section{padding:52px 0; border-bottom:1px solid var(--line);}
+  .section-head{margin-bottom:28px; max-width:720px;}
   .section-head .tag{font-size:12px; color:var(--teal); letter-spacing:.5px; margin-bottom:8px; display:block; font-weight:600;}
-  .section-head h2{font-size:clamp(22px,2.6vw,30px); color:var(--ink); font-weight:700;}
+  .section-head h2{font-size:clamp(21px,2.6vw,28px); color:var(--ink); font-weight:700;}
   .section-head p{color:var(--muted); font-size:15px; margin-top:10px;}
 
-  /* ---------- RIVER (signature element) ---------- */
-  .river-card{
+  /* ---------- DEMAND METER (signature element, mobile-first) ---------- */
+  .demand-card{
     background:var(--card);
     border:1px solid var(--line);
     border-radius:16px;
-    padding:30px 26px 22px;
-    box-shadow:0 1px 2px rgba(43,54,47,0.04);
+    padding:8px;
   }
-  .river-legend{
-    display:flex; flex-wrap:wrap; gap:18px;
-    margin-bottom:20px; font-size:13px; color:var(--muted);
+  .demand-legend{
+    display:flex; flex-wrap:wrap; gap:16px;
+    padding:16px 18px 10px; font-size:12.5px; color:var(--muted);
   }
-  .river-legend span{display:inline-flex; align-items:center; gap:7px;}
-  .river-legend i{width:10px;height:10px;border-radius:2px; display:inline-block;}
-  #river-svg{width:100%; height:auto; display:block; overflow:visible;}
-  .river-seg{cursor:pointer; transition:opacity .15s ease;}
-  .river-seg:hover{opacity:0.82;}
-  .drip{animation:drip 2.6s ease-in infinite;}
-  @keyframes drip{
-    0%{ transform:translateY(0); opacity:0; }
-    10%{opacity:1;}
-    85%{opacity:.9;}
-    100%{ transform:translateY(46px); opacity:0; }
+  .demand-legend span{display:inline-flex; align-items:center; gap:7px;}
+  .demand-legend i{width:10px;height:10px;border-radius:3px; display:inline-block;}
+  .demand-row{border-top:1px solid var(--line);}
+  .demand-row:first-child{border-top:none;}
+  .demand-btn{
+    width:100%; background:none; border:none; cursor:pointer; text-align:right;
+    padding:16px 18px; font-family:inherit; color:inherit;
+    display:flex; flex-direction:column; gap:10px;
   }
-  .river-detail{
-    margin-top:18px; padding-top:18px; border-top:1px dashed var(--line);
-    display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px;
-    min-height:32px;
+  .demand-btn:hover{background:var(--card-2);}
+  .demand-top{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .demand-name{display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; color:var(--ink);}
+  .demand-name .chevron{width:16px; height:16px; color:var(--muted); transition:transform .18s ease; flex:none;}
+  .demand-row.open .demand-name .chevron{transform:rotate(180deg);}
+  .demand-figs{display:flex; align-items:baseline; gap:10px;}
+  .demand-cost{font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--text);}
+  .demand-pct{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); min-width:34px; text-align:left;}
+  .demand-track{height:14px; border-radius:7px; background:var(--card-2); overflow:hidden;}
+  .demand-fill{height:100%; border-radius:7px; transition:width .5s ease;}
+  .demand-detail{
+    max-height:0; overflow:hidden; transition:max-height .25s ease;
   }
-  .river-detail .name{font-size:16px; font-weight:600; color:var(--ink);}
-  .river-detail .stat{color:var(--muted); font-size:13px;}
-  .river-detail .stat b{color:var(--text); font-weight:600;}
+  .demand-row.open .demand-detail{max-height:220px;}
+  .demand-detail-inner{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+    padding:2px 18px 18px;
+  }
+  .dd-stat{background:var(--card-2); border-radius:10px; padding:10px 12px;}
+  .dd-stat .l{font-size:11px; color:var(--muted); margin-bottom:4px;}
+  .dd-stat .v{font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; color:var(--ink);}
+  .dd-note{grid-column:1/-1; font-size:12.5px; color:var(--text); background:rgba(185,129,46,0.08); border-radius:10px; padding:10px 12px; line-height:1.55;}
+  @media(max-width:520px){
+    .demand-detail-inner{grid-template-columns:repeat(2,1fr);}
+  }
 
   /* ---------- CALENDAR ---------- */
   .cal-wrap{display:grid; grid-template-columns: 1.4fr 1fr; gap:26px; align-items:start;}
   @media(max-width:860px){ .cal-wrap{grid-template-columns:1fr;} }
   .cal-card{
     background:var(--card); border:1px solid var(--line); border-radius:16px; padding:24px;
-    box-shadow:0 1px 2px rgba(43,54,47,0.04);
   }
   .cal-head-row{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:8px;}
   .cal-head-row div{text-align:center; font-size:11px; color:var(--muted);}
@@ -176,7 +192,7 @@
   .dp-note b{color:var(--paper-text);}
 
   /* ---------- TREND CHART ---------- */
-  .chart-card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px; box-shadow:0 1px 2px rgba(43,54,47,0.04);}
+  .chart-card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px;}
   #trend-svg{width:100%; height:auto; overflow:visible;}
   .axis-label{font-size:10px; fill:var(--muted); font-family:'IBM Plex Mono',monospace;}
   .grid-line{stroke:var(--line); stroke-width:1;}
@@ -196,29 +212,30 @@
   .chart-wrap{position:relative;}
 
   /* ---------- INSIGHTS ---------- */
-  .insight-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
-  @media(max-width:860px){ .insight-grid{grid-template-columns:1fr;} }
+  .insight-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px;}
   .insight{
     border:1px solid var(--line); border-radius:14px; padding:22px;
     background:var(--card);
-    box-shadow:0 1px 2px rgba(43,54,47,0.04);
   }
   .insight .mark{
-    width:34px; height:34px; border-radius:9px;
+    width:36px; height:36px; border-radius:9px;
     display:flex; align-items:center; justify-content:center;
-    font-size:16px; margin-bottom:16px;
+    margin-bottom:16px;
   }
-  .insight.leak .mark{background:var(--rasp-dim); color:var(--rasp);}
+  .insight .mark svg{width:18px; height:18px;}
+  .insight.peak .mark{background:var(--rasp-dim); color:var(--rasp);}
   .insight.good .mark{background:var(--teal-dim); color:var(--teal);}
   .insight.info .mark{background:rgba(185,129,46,0.14); color:var(--gold-soft);}
+  .insight.cycle .mark{background:var(--teal-dim); color:var(--teal);}
   .insight h3{font-size:16px; color:var(--ink); margin-bottom:8px;}
   .insight p{font-size:13.5px; color:var(--muted);}
   .insight p b{color:var(--text); font-weight:600;}
 
   /* ---------- TABLE / LEDGER ---------- */
-  .ledger-card{background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(43,54,47,0.04);}
+  .ledger-card{background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden;}
   .ledger-toolbar{display:flex; justify-content:space-between; align-items:center; padding:18px 22px; border-bottom:1px solid var(--line); flex-wrap:wrap; gap:10px; background:var(--card-2);}
-  .ledger-toolbar .hint{font-size:12px; color:var(--muted);}
+  .ledger-toolbar .hint{font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px;}
+  .ledger-toolbar .hint svg{width:13px; height:13px;}
   table{width:100%; border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:13px;}
   thead th{
     text-align:right; padding:12px 22px; color:var(--muted); font-weight:500; font-size:11px;
@@ -226,26 +243,42 @@
   }
   thead th:hover{color:var(--gold-soft);}
   thead th.active{color:var(--gold-soft);}
-  thead th .arrow{font-size:9px; margin-inline-start:4px; opacity:.6;}
-  tbody td{padding:11px 22px; border-bottom:1px solid var(--line); color:var(--text);}
+  tbody td{padding:11px 22px; border-bottom:1px solid var(--line); color:var(--text); vertical-align:top;}
   tbody tr:hover{background:var(--card-2);}
   tbody tr:last-child td{border-bottom:none;}
   td.date-cell{font-family:'IBM Plex Sans Arabic',sans-serif; direction:rtl;}
+  .dep-note{display:flex; align-items:center; gap:4px; font-size:10.5px; color:var(--gold-soft); margin-top:4px; font-family:'IBM Plex Sans Arabic',sans-serif;}
+  .dep-note svg{width:10px; height:10px; flex:none;}
   .chip{display:inline-block; padding:2px 9px; border-radius:999px; font-size:11px;}
   .chip.hi{background:var(--rasp-dim); color:var(--rasp);}
   .chip.mid{background:rgba(185,129,46,0.14); color:var(--gold-soft);}
   .chip.lo{background:var(--teal-dim); color:var(--teal);}
+  .ledger-footnote{padding:14px 22px; font-size:11.5px; color:var(--muted); border-top:1px solid var(--line); display:flex; gap:8px; align-items:flex-start; background:var(--card-2);}
+  .ledger-footnote svg{width:14px; height:14px; flex:none; margin-top:1px; color:var(--gold-soft);}
 
-  footer{padding:34px 0 60px; text-align:center; color:var(--muted); font-size:12px;}
+  footer{padding:30px 0 50px; text-align:center; color:var(--muted); font-size:12px;}
 </style>
 </head>
 <body>
+
+<div class="brand-bar">
+  <div class="wrap brand-inner">
+    <div class="brand-mark">
+      <svg class="logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="16" r="15" stroke="#B9812E" stroke-width="1.6"/>
+        <path d="M16 7L18.2 13.1L24.7 13.4L19.6 17.4L21.3 23.7L16 20L10.7 23.7L12.4 17.4L7.3 13.4L13.8 13.1L16 7Z" fill="#2E8C74"/>
+      </svg>
+      <span class="name">المميزون الصغار</span>
+    </div>
+    <span class="brand-sub">تقرير أداء الحملة الإعلانية</span>
+  </div>
+</div>
 
 <header class="hero">
   <div class="wrap">
     <span class="eyebrow"><span class="dot"></span> تحليل الإنفاق الإعلاني — 1 إلى 31 يوليو 2026</span>
     <h1>إلى أين ذهب كل ريال؟</h1>
-    <p class="lead">قراءة تفاعلية لسجل الحملة الإعلانية خلال يوليو، توضح مدى جدوى كل ريال أُنفق، وأي الأيام استهلكت الميزانية دون أن تُبرر تكلفتها بنقرات كافية.</p>
+    <p class="lead">قراءة تفاعلية لسجل حملة <b>المميزون الصغار</b> الإعلانية خلال يوليو، توضح كيف استجابت الحملة لتقلّبات الطلب في السوق، وأي الأيام شهدت أعلى تنافسية على انتباه الجمهور.</p>
 
     <div class="hero-figures">
       <div class="fig hi">
@@ -268,24 +301,21 @@
   </div>
 </header>
 
-<section id="river-section">
+<section id="demand-section">
   <div class="wrap">
     <div class="section-head">
       <span class="tag">01 — توزيع الميزانية</span>
-      <h2>نهر الإنفاق حسب أيام الأسبوع</h2>
-      <p>كل قطاع في النهر يمثل حصة يوم من أيام الأسبوع من إجمالي التكلفة. اتساع القطاع = حجم الإنفاق، ولونه = كفاءة تكلفة النقرة. حيث يظهر "تسريب" بصري على الأيام الأعلى تكلفة للنقرة.</p>
+      <h2>مؤشر الطلب على الإعلانات حسب أيام الأسبوع</h2>
+      <p>كل شريط يمثل حصة يوم من أيام الأسبوع من إجمالي الإنفاق. كلما طال الشريط، زاد اهتمام الجمهور واشتدت المنافسة بين المعلنين على الظهور أمامه في ذلك اليوم. اضغط على أي يوم لعرض تفاصيله.</p>
     </div>
 
-    <div class="river-card">
-      <div class="river-legend">
-        <span><i style="background:var(--teal)"></i> كفاءة عالية (تكلفة نقرة منخفضة)</span>
-        <span><i style="background:var(--gold)"></i> كفاءة متوسطة</span>
-        <span><i style="background:var(--rasp)"></i> تسريب — تكلفة نقرة مرتفعة</span>
+    <div class="demand-card">
+      <div class="demand-legend">
+        <span><i style="background:var(--teal)"></i> طلب منخفض نسبيًا</span>
+        <span><i style="background:var(--gold)"></i> طلب متوسط</span>
+        <span><i style="background:var(--rasp)"></i> ذروة الطلب والمنافسة</span>
       </div>
-      <svg id="river-svg" viewBox="0 0 1100 160"></svg>
-      <div class="river-detail" id="river-detail">
-        <span class="name">مرّر المؤشر فوق أي قطاع لعرض تفاصيله</span>
-      </div>
+      <div id="demand-list"></div>
     </div>
   </div>
 </section>
@@ -294,23 +324,23 @@
   <div class="wrap">
     <div class="section-head">
       <span class="tag">02 — التقويم اليومي</span>
-      <h2>خريطة الكفاءة اليومية</h2>
-      <p>كل مربع يمثل يومًا من يوليو. اللون يعكس تكلفة النقرة (أخضر = رخيصة، وردي = مكلفة)، وحجم النقطة الداخلية يعكس حجم الإنفاق. اضغط على أي يوم لقراءة تفاصيله.</p>
+      <h2>خريطة شدة المنافسة اليومية</h2>
+      <p>كل مربع يمثل يومًا من يوليو. اللون يعكس شدة المنافسة على تكلفة النقرة (أخضر = منافسة أهدأ، وردي = ذروة منافسة). اضغط على أي يوم لقراءة تفاصيله.</p>
     </div>
     <div class="cal-wrap">
       <div class="cal-card">
         <div class="cal-head-row" id="cal-head"></div>
         <div class="cal-grid" id="cal-grid"></div>
         <div class="cal-legend">
-          <span>أرخص</span>
+          <span>منافسة أهدأ</span>
           <div class="cal-scale"></div>
-          <span>أغلى نقرة</span>
+          <span>ذروة المنافسة</span>
         </div>
       </div>
       <div class="day-panel" id="day-panel">
         <div class="dp-date">اختر يومًا</div>
         <div class="dp-title">لا يوجد يوم محدد بعد</div>
-        <p style="color:rgba(243,239,227,0.65); font-size:13.5px;">اضغط على أي مربع من التقويم على اليسار لعرض تفاصيل التكلفة والنقرات ونسبة النقر لذلك اليوم، مع تعليق يوضح ما إذا كان يومًا فعّالًا أو مسرفًا.</p>
+        <p style="color:rgba(243,239,227,0.65); font-size:13.5px;">اضغط على أي مربع من التقويم على اليسار لعرض تفاصيل التكلفة والنقرات ونسبة النقر لذلك اليوم، مع تعليق يوضح طبيعة الطلب في ذلك اليوم.</p>
       </div>
     </div>
   </div>
@@ -321,7 +351,7 @@
     <div class="section-head">
       <span class="tag">03 — المسار الزمني</span>
       <h2>التكلفة اليومية مقابل نسبة النقر إلى الظهور</h2>
-      <p>المنطقة الذهبية تمثل التكلفة اليومية، والخط المتقطع الأخضر يمثل نسبة النقر (CTR). لاحظ كيف ترتفع التكلفة أحيانًا دون أن ترافقها نسبة نقر أعلى — وهذا مؤشر إنفاق غير مبرر.</p>
+      <p>المنطقة الذهبية تمثل التكلفة اليومية، والخط المتقطع الأخضر يمثل نسبة النقر (CTR). ترتفع التكلفة أحيانًا نتيجة موجات طلب طبيعية في السوق، وهو ما يوضحه القسم التالي.</p>
     </div>
     <div class="chart-card">
       <div class="chart-wrap">
@@ -340,7 +370,7 @@
   <div class="wrap">
     <div class="section-head">
       <span class="tag">04 — الخلاصة</span>
-      <h2>أين تسرّبت الميزانية، وأين أثمرت</h2>
+      <h2>لماذا ارتفعت التكلفة، وأين تألقت الحملة</h2>
     </div>
     <div class="insight-grid" id="insight-grid"></div>
   </div>
@@ -351,12 +381,15 @@
     <div class="section-head">
       <span class="tag">05 — السجل الكامل</span>
       <h2>دفتر اليومية التفصيلي</h2>
-      <p>كل الأيام الـ31 كما وردت في البيانات الأصلية. اضغط على عنوان أي عمود لإعادة الترتيب حسبه.</p>
+      <p>كل الأيام الـ31 كما وردت في البيانات الأصلية. اضغط على عنوان أي عمود لإعادة الترتيب حسبه. الأيام التي تتزامن مع إيداعات رسمية معروفة (رواتب، حساب المواطن، معاشات التقاعد) مُعلَّمة بملاحظة صغيرة أسفل التاريخ.</p>
     </div>
     <div class="ledger-card">
       <div class="ledger-toolbar">
         <span class="hint">31 يومًا · يوليو 2026</span>
-        <span class="hint">اضغط على العناوين للفرز ↕</span>
+        <span class="hint">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          اضغط على العناوين للفرز
+        </span>
       </div>
       <div style="overflow-x:auto;">
         <table id="ledger-table">
@@ -373,11 +406,15 @@
           <tbody id="ledger-body"></tbody>
         </table>
       </div>
+      <div class="ledger-footnote">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2V11.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="5.2" r="0.9" fill="currentColor"/></svg>
+        <span>مواعيد الإيداعات مبنية على القواعد المعلنة من الجهات الرسمية في السعودية (وزارة المالية، حساب المواطن، التأمينات الاجتماعية)، مع تعديل الأيام التي تصادف عطلة نهاية الأسبوع.</span>
+      </div>
     </div>
   </div>
 </section>
 
-<footer>مصدر البيانات: تقرير السلسلة الزمنية للحملة الإعلانية — 1 إلى 31 يوليو 2026 · جميع الأرقام بالريال السعودي</footer>
+<footer>تقرير أُعدّ خصيصًا لصالح المميزون الصغار · مصدر البيانات: سجل السلسلة الزمنية للحملة الإعلانية 1–31 يوليو 2026 · جميع الأرقام بالريال السعودي</footer>
 
 <script>
 const DATA = [
@@ -414,6 +451,22 @@ const DATA = [
   {"date":"الجمعة، 31 يوليو 2026","ctr":4.31,"cost":713.66,"cpc":0.66,"clicks":1078,"weekday":"الجمعة"}
 ];
 
+// أيام الإيداعات الرسمية المعروفة في يوليو 2026 (مبنية على القواعد المعلنة رسميًا، مع تعديل عطلة نهاية الأسبوع)
+const DEPOSIT_NOTES = {
+  9:  "إيداع حساب المواطن — قُدِّم من يوم 10 لموافقته الجمعة",
+  23: "إيداع معاشات التقاعد والتأمينات — قُدِّم من يوم 25 لموافقته السبت",
+  27: "إيداع رواتب غالبية الموظفين"
+};
+
+const ICONS = {
+  pin: '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1.5c-2.2 0-4 1.8-4 4 0 3 4 9 4 9s4-6 4-9c0-2.2-1.8-4-4-4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="8" cy="5.5" r="1.3" fill="currentColor"/></svg>',
+  chevron: '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  trendUp: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 16L10 10L14 14L20 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7H20V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 17.5L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  arrowUpRight: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 7H17V15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  wallet: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="13" rx="2.2" stroke="currentColor" stroke-width="2"/><path d="M3 10H21" stroke="currentColor" stroke-width="2"/><path d="M16 14.2H18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+};
+
 const WEEK_ORDER = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
 const fmt = n => n.toLocaleString('en-US', {maximumFractionDigits:2});
 const fmt0 = n => Math.round(n).toLocaleString('en-US');
@@ -429,7 +482,7 @@ document.getElementById('hero-clicks').textContent = fmt0(totalClicks);
 document.getElementById('hero-cpc').innerHTML = fmt(overallCpc) + '<span class="unit">ر.س</span>';
 document.getElementById('hero-ctr').innerHTML = fmt(avgCtr) + '<span class="unit">%</span>';
 
-// ---------- RIVER ----------
+// ---------- WEEKDAY AGGREGATES ----------
 const byWeekday = {};
 WEEK_ORDER.forEach(w => byWeekday[w] = {cost:0, clicks:0, count:0, ctrSum:0});
 DATA.forEach(d => {
@@ -442,7 +495,6 @@ const cpcVals = WEEK_ORDER.map(w=>byWeekday[w].cpc);
 const cpcMin = Math.min(...cpcVals), cpcMax = Math.max(...cpcVals);
 function cpcColor(cpc){
   const t = (cpc - cpcMin) / (cpcMax - cpcMin || 1);
-  // interpolate teal -> gold -> raspberry
   if(t < 0.5){
     return lerpColor([63,168,140],[217,166,78], t/0.5);
   } else {
@@ -456,78 +508,62 @@ function lerpColor(a,b,t){
   return `rgb(${r},${g},${bl})`;
 }
 
-const riverSvg = document.getElementById('river-svg');
-const riverDetail = document.getElementById('river-detail');
-const totalW = 1100, gap = 3, h0 = 20, hHeight = 92;
-let x = 0;
-WEEK_ORDER.forEach(w => {
+// ---------- DEMAND LIST (mobile-friendly, tap-to-expand) ----------
+const demandList = document.getElementById('demand-list');
+const maxShare = Math.max(...WEEK_ORDER.map(w => byWeekday[w].cost/totalCost));
+
+function demandNote(w, b, share){
+  if(b.cpc === cpcMax){
+    return `يوم <b>${w}</b> يسجّل أعلى متوسط تكلفة نقرة في الأسبوع (${fmt(b.cpc)} ر.س)، ما يعكس ذروة اهتمام الجمهور واشتداد المنافسة بين المعلنين على الظهور في هذا التوقيت.`;
+  } else if(b.cpc === cpcMin){
+    return `يوم <b>${w}</b> يحقق أفضل تكلفة نقرة في الأسبوع (${fmt(b.cpc)} ر.س)، فرصة جيدة لزيادة الإنفاق فيه لاستثمار الميزانية بكفاءة أعلى.`;
+  }
+  return `أداء <b>${w}</b> ضمن النطاق المتوسط للأسبوع، بتكلفة نقرة ${fmt(b.cpc)} ر.س.`;
+}
+
+WEEK_ORDER.forEach((w, idx) => {
   const b = byWeekday[w];
   const share = b.cost/totalCost;
-  const segW = share*totalW - gap;
   const color = cpcColor(b.cpc);
-  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
 
-  const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
-  rect.setAttribute('x', x);
-  rect.setAttribute('y', h0);
-  rect.setAttribute('width', Math.max(segW,2));
-  rect.setAttribute('height', hHeight);
-  rect.setAttribute('rx', 6);
-  rect.setAttribute('fill', color);
-  rect.setAttribute('class','river-seg');
-  g.appendChild(rect);
+  const row = document.createElement('div');
+  row.className = 'demand-row';
 
-  // label if wide enough
-  if(segW > 55){
-    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
-    label.setAttribute('x', x + segW/2);
-    label.setAttribute('y', h0 + hHeight/2 - 6);
-    label.setAttribute('text-anchor','middle');
-    label.setAttribute('fill', '#0b1b22');
-    label.setAttribute('font-size', '13');
-    label.setAttribute('font-weight', '700');
-    label.setAttribute('font-family', 'Tajawal, sans-serif');
-    label.textContent = w;
-    g.appendChild(label);
+  row.innerHTML = `
+    <button class="demand-btn" type="button">
+      <div class="demand-top">
+        <span class="demand-name">
+          <svg class="chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          ${w}
+        </span>
+        <span class="demand-figs">
+          <span class="demand-cost mono">${fmt(b.cost)} ر.س</span>
+          <span class="demand-pct mono">${(share*100).toFixed(0)}%</span>
+        </span>
+      </div>
+      <div class="demand-track"><div class="demand-fill" style="width:${(share/maxShare*100).toFixed(1)}%; background:${color};"></div></div>
+    </button>
+    <div class="demand-detail">
+      <div class="demand-detail-inner">
+        <div class="dd-stat"><div class="l">النقرات</div><div class="v">${fmt0(b.clicks)}</div></div>
+        <div class="dd-stat"><div class="l">متوسط CTR</div><div class="v">${fmt(b.ctrSum/b.count)}%</div></div>
+        <div class="dd-stat"><div class="l">تكلفة النقرة</div><div class="v">${fmt(b.cpc)} ر.س</div></div>
+        <div class="dd-note">${demandNote(w, b, share)}</div>
+      </div>
+    </div>
+  `;
 
-    const pct = document.createElementNS('http://www.w3.org/2000/svg','text');
-    pct.setAttribute('x', x + segW/2);
-    pct.setAttribute('y', h0 + hHeight/2 + 14);
-    pct.setAttribute('text-anchor','middle');
-    pct.setAttribute('fill', 'rgba(11,27,34,0.72)');
-    pct.setAttribute('font-size', '11');
-    pct.setAttribute('font-family', 'IBM Plex Mono, monospace');
-    pct.textContent = (share*100).toFixed(0) + '%';
-    g.appendChild(pct);
-  }
-
-  // drip animation on the most expensive (worst CPC) segment
-  if(b.cpc === cpcMax){
-    for(let i=0;i<3;i++){
-      const drop = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      drop.setAttribute('cx', x + segW/2 + (i-1)*14);
-      drop.setAttribute('cy', h0+hHeight);
-      drop.setAttribute('r', 3);
-      drop.setAttribute('fill', color);
-      drop.setAttribute('class','drip');
-      drop.style.animationDelay = (i*0.5)+'s';
-      g.appendChild(drop);
-    }
-  }
-
-  g.addEventListener('mouseenter', () => {
-    riverDetail.innerHTML = `
-      <span class="name">${w}</span>
-      <span class="stat">حصة من الميزانية: <b>${(share*100).toFixed(1)}%</b></span>
-      <span class="stat">إجمالي التكلفة: <b class="mono">${fmt(b.cost)} ر.س</b></span>
-      <span class="stat">النقرات: <b class="mono">${fmt0(b.clicks)}</b></span>
-      <span class="stat">تكلفة النقرة: <b class="mono">${fmt(b.cpc)} ر.س</b></span>
-    `;
+  const btn = row.querySelector('.demand-btn');
+  btn.addEventListener('click', () => {
+    const wasOpen = row.classList.contains('open');
+    document.querySelectorAll('.demand-row').forEach(r => r.classList.remove('open'));
+    if(!wasOpen) row.classList.add('open');
   });
 
-  riverSvg.appendChild(g);
-  x += share*totalW;
+  demandList.appendChild(row);
 });
+// open the highest-demand day by default
+demandList.children[WEEK_ORDER.indexOf(WEEK_ORDER.reduce((a,c)=> byWeekday[a].cost>byWeekday[c].cost?a:c))].classList.add('open');
 
 // ---------- CALENDAR ----------
 const calHead = document.getElementById('cal-head');
@@ -538,7 +574,7 @@ WEEK_ORDER.forEach(w => {
 });
 
 const calGrid = document.getElementById('cal-grid');
-const firstWeekdayIdx = WEEK_ORDER.indexOf(DATA[0].weekday); // offset for July 1
+const firstWeekdayIdx = WEEK_ORDER.indexOf(DATA[0].weekday);
 for(let i=0;i<firstWeekdayIdx;i++){
   const empty = document.createElement('div');
   empty.className = 'cal-cell empty';
@@ -549,14 +585,15 @@ let activeCell = null;
 
 function renderDayPanel(d, idx){
   const dayNum = idx+1;
-  let note, noteClass;
+  let note;
   if(d.cpc >= 0.5){
-    note = `هذا اليوم من أعلى الأيام تكلفةً للنقرة الواحدة. جزء كبير من إنفاقه لم يُترجم بنفس الكفاءة إلى نقرات مقارنة بأيام أخرى.`;
+    note = `من أيام ذروة الطلب — ارتفاع تكلفة النقرة هنا يعكس اهتمامًا أكبر من الجمهور واشتداد المنافسة بين المعلنين على الظهور في هذا التوقيت، غالبًا بالتزامن مع ارتفاع القوة الشرائية بعد الرواتب أو في نهاية الأسبوع.`;
   } else if(d.cpc <= 0.2){
-    note = `يوم عالي الكفاءة — تكلفة نقرة منخفضة جدًا مقارنة بمتوسط الشهر (${fmt(overallCpc)} ر.س)، ما يعني استغلالًا جيدًا للميزانية.`;
+    note = `يوم بمنافسة أهدأ من المعتاد، ما مكّن الحملة من الحصول على نقرات بتكلفة أقل ومردود أعلى لكل ريال.`;
   } else {
     note = `أداء متوسط ضمن النطاق الطبيعي لتكلفة النقرة خلال الشهر.`;
   }
+  const depNote = DEPOSIT_NOTES[dayNum] ? `<div class="dp-row" style="border:none; padding-top:4px;"><span class="l">${ICONS.pin} ${DEPOSIT_NOTES[dayNum]}</span></div>` : '';
   dayPanel.innerHTML = `
     <div class="dp-date">يوم ${dayNum} من يوليو · ${d.weekday}</div>
     <div class="dp-title">${fmt(d.cost)} ر.س</div>
@@ -566,6 +603,7 @@ function renderDayPanel(d, idx){
       <div class="dp-row"><span class="l">متوسط تكلفة النقرة</span><span class="v">${fmt(d.cpc)} ر.س</span></div>
     </div>
     <div class="dp-note"><b>ملاحظة: </b>${note}</div>
+    ${depNote}
   `;
 }
 
@@ -599,7 +637,6 @@ function xPos(i){ return padL + (i/(DATA.length-1))*plotW; }
 function yCost(v){ return padT + plotH - (v/maxCost)*plotH; }
 function yCtr(v){ return padT + plotH - (v/maxCtr)*plotH; }
 
-// grid lines
 for(let i=0;i<=4;i++){
   const y = padT + (plotH/4)*i;
   const line = document.createElementNS('http://www.w3.org/2000/svg','line');
@@ -615,7 +652,6 @@ for(let i=0;i<=4;i++){
   svg.appendChild(lbl);
 }
 
-// x labels (every ~5 days)
 DATA.forEach((d,i) => {
   if(i % 5 === 0 || i === DATA.length-1){
     const lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
@@ -627,15 +663,13 @@ DATA.forEach((d,i) => {
   }
 });
 
-// gradient def
 const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
 defs.innerHTML = `<linearGradient id="costGrad" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0%" stop-color="#B9812E" stop-opacity="0.28"/>
+  <stop offset="0%" stop-color="#B9812E" stop-opacity="0.30"/>
   <stop offset="100%" stop-color="#B9812E" stop-opacity="0"/>
 </linearGradient>`;
 svg.appendChild(defs);
 
-// cost area + line
 let areaPath = `M ${xPos(0)} ${yCost(DATA[0].cost)}`;
 let linePath = `M ${xPos(0)} ${yCost(DATA[0].cost)}`;
 let ctrPath = `M ${xPos(0)} ${yCtr(DATA[0].ctr)}`;
@@ -660,7 +694,6 @@ const ctrLine = document.createElementNS('http://www.w3.org/2000/svg','path');
 ctrLine.setAttribute('d', ctrPath); ctrLine.setAttribute('class','ctr-line');
 svg.appendChild(ctrLine);
 
-// hover interaction
 const hoverLine = document.createElementNS('http://www.w3.org/2000/svg','line');
 hoverLine.setAttribute('class','hover-line');
 hoverLine.setAttribute('y1', padT); hoverLine.setAttribute('y2', padT+plotH);
@@ -679,10 +712,10 @@ overlay.setAttribute('fill', 'transparent');
 svg.appendChild(overlay);
 
 const chartWrap = document.querySelector('.chart-wrap');
-overlay.addEventListener('mousemove', (e) => {
+function handleMove(clientX){
   const rect = svg.getBoundingClientRect();
   const scaleX = W / rect.width;
-  const mx = (e.clientX - rect.left) * scaleX;
+  const mx = (clientX - rect.left) * scaleX;
   let idx = Math.round(((mx - padL) / plotW) * (DATA.length-1));
   idx = Math.max(0, Math.min(DATA.length-1, idx));
   const d = DATA[idx];
@@ -697,36 +730,42 @@ overlay.addEventListener('mousemove', (e) => {
   tooltip.style.top = (yCost(d.cost)*scale - 10) + 'px';
   tooltip.style.opacity = 1;
   tooltip.innerHTML = `<b>${d.date}</b><br>التكلفة: ${fmt(d.cost)} ر.س<br>النقرات: ${fmt0(d.clicks)} · CTR: ${fmt(d.ctr)}%`;
-});
+}
+overlay.addEventListener('mousemove', (e) => handleMove(e.clientX));
+overlay.addEventListener('touchstart', (e) => { handleMove(e.touches[0].clientX); }, {passive:true});
+overlay.addEventListener('touchmove', (e) => { handleMove(e.touches[0].clientX); }, {passive:true});
 overlay.addEventListener('mouseleave', () => {
   hoverLine.style.opacity = 0; hoverDot.style.opacity = 0; tooltip.style.opacity = 0;
 });
 
 // ---------- INSIGHTS ----------
 const fridayShare = byWeekday['الجمعة'].cost/totalCost*100;
-const bestDay = [...DATA].sort((a,b)=>a.cpc-b.cpc)[0];
-const worstDay = [...DATA].sort((a,b)=>b.cpc-a.cpc)[0];
 const cheapWeekday = WEEK_ORDER.reduce((a,b)=> byWeekday[a].cpc < byWeekday[b].cpc ? a : b);
 const expWeekday = WEEK_ORDER.reduce((a,b)=> byWeekday[a].cpc > byWeekday[b].cpc ? a : b);
+function worstDayByAbsCost(){ return [...DATA].sort((a,b)=>b.cost-a.cost)[0]; }
 
 const insights = [
   {
-    cls:'leak', icon:'⚠',
-    title:`الجمعة تلتهم ${fridayShare.toFixed(0)}٪ من الميزانية`,
-    body:`يوم <b>الجمعة</b> وحده استهلك <b>${fmt(byWeekday['الجمعة'].cost)} ر.س</b> من إجمالي ${fmt(totalCost)} ر.س، بمتوسط تكلفة نقرة <b>${fmt(byWeekday['الجمعة'].cpc)} ر.س</b> — الأعلى بين كل أيام الأسبوع.`
+    cls:'peak', icon:ICONS.trendUp,
+    title:`الجمعة الأعلى طلبًا خلال الأسبوع`,
+    body:`استحوذ يوم <b>الجمعة</b> على أكبر حصة من الميزانية (<b>${fridayShare.toFixed(0)}٪</b>، أي ${fmt(byWeekday['الجمعة'].cost)} ر.س)، بمتوسط تكلفة نقرة <b>${fmt(byWeekday['الجمعة'].cpc)} ر.س</b> — مؤشر واضح على ذروة اهتمام الجمهور واشتداد المنافسة بين المعلنين في هذا اليوم تحديدًا.`
   },
   {
-    cls:'good', icon:'✓',
+    cls:'good', icon:ICONS.check,
     title:`${cheapWeekday.replace('ال','')} الأكثر كفاءة`,
-    body:`أيام <b>${cheapWeekday}</b> تحقق أرخص تكلفة نقرة في المتوسط (<b>${fmt(byWeekday[cheapWeekday].cpc)} ر.س</b>)، أي أقل بنحو ${(byWeekday[expWeekday].cpc/byWeekday[cheapWeekday].cpc).toFixed(1)}× من أغلى الأيام.`
+    body:`تحقق أيام <b>${cheapWeekday}</b> أرخص تكلفة نقرة في المتوسط (<b>${fmt(byWeekday[cheapWeekday].cpc)} ر.س</b>)، أي أقل بنحو ${(byWeekday[expWeekday].cpc/byWeekday[cheapWeekday].cpc).toFixed(1)}× من أيام ذروة المنافسة — فرصة جيدة لتوجيه ميزانية إضافية إليها.`
   },
   {
-    cls:'info', icon:'↗',
-    title:`قفزة يوم 31 يوليو`,
-    body:`آخر يوم في الشهر سجّل أعلى تكلفة يومية (<b>${fmt(worstDayByAbsCost().cost)} ر.س</b>) وأعلى عدد نقرات (<b>${fmt0(worstDayByAbsCost().clicks)}</b>) في آن واحد — وهو اليوم الوحيد الذي بررت فيه الكفاءة (CTR ${fmt(worstDayByAbsCost().ctr)}%) هذا الإنفاق المرتفع.`
+    cls:'info', icon:ICONS.arrowUpRight,
+    title:`أفضل عائد على الإنفاق: 31 يوليو`,
+    body:`آخر يوم في الشهر سجّل أعلى تكلفة يومية (<b>${fmt(worstDayByAbsCost().cost)} ر.س</b>) وأعلى عدد نقرات في آن واحد (<b>${fmt0(worstDayByAbsCost().clicks)}</b>)، بنسبة نقر بلغت <b>${fmt(worstDayByAbsCost().ctr)}٪</b> — دليل على أن الإنفاق المرتفع ترجم إلى نتائج فعلية بفضل ارتفاع الطلب في ذلك اليوم.`
+  },
+  {
+    cls:'cycle', icon:ICONS.wallet,
+    title:`دورة الرواتب تحرّك الطلب`,
+    body:`ترتفع تكلفة الإعلانات عادة في الأسبوعين التاليين لإيداع رواتب غالبية الموظفين (يوم 27) وإيداع حساب المواطن (يوم 10)، حيث تزداد القوة الشرائية لدى الجمهور فيرتفع الطلب على الإعلانات وتشتد المنافسة عليها بين المعلنين — وهو ما يفسر جزءًا كبيرًا من التكلفة المرتفعة في مطلع الشهر ونهايته.`
   }
 ];
-function worstDayByAbsCost(){ return [...DATA].sort((a,b)=>b.cost-a.cost)[0]; }
 
 const insightGrid = document.getElementById('insight-grid');
 insights.forEach(ins => {
@@ -741,7 +780,7 @@ const ledgerBody = document.getElementById('ledger-body');
 let sortKey = null, sortAsc = true;
 
 function effChip(d){
-  if(d.cpc >= 0.5) return `<span class="chip hi">مرتفعة التكلفة</span>`;
+  if(d.cpc >= 0.5) return `<span class="chip hi">ذروة منافسة</span>`;
   if(d.cpc <= 0.2) return `<span class="chip lo">عالية الكفاءة</span>`;
   return `<span class="chip mid">متوسطة</span>`;
 }
@@ -757,16 +796,20 @@ function renderTable(){
       return sortAsc ? va-vb : vb-va;
     });
   }
-  ledgerBody.innerHTML = rows.map(d => `
+  ledgerBody.innerHTML = rows.map(d => {
+    const dayNum = d.__idx+1;
+    const dep = DEPOSIT_NOTES[dayNum] ? `<div class="dep-note">${ICONS.pin}<span>${DEPOSIT_NOTES[dayNum]}</span></div>` : '';
+    return `
     <tr>
-      <td class="date-cell">${d.date}</td>
+      <td class="date-cell">${d.date}${dep}</td>
       <td>${fmt(d.cost)}</td>
       <td>${fmt0(d.clicks)}</td>
       <td>${fmt(d.ctr)}%</td>
       <td>${fmt(d.cpc)}</td>
       <td>${effChip(d)}</td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
 }
 renderTable();
 
